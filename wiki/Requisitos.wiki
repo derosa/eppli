@@ -15,6 +15,6 @@ El emulador debe reflejar paso a paso qué ocurre: Actualización de la priorida
  * Debe poder añadirse una tarea en cualquier momento de la ejecución (_spaw new process_).
  * La aplicación avanzará por "_ticks_" (equivalentes a interrupciones del reloj) o continuamente.
  * La interfaz estará separada de la lógica del _scheduler_ para poder simular varios distintos.
- * En cualquier momento puede pasarse del estado _paused_ a _running_.
+ * En cualquier momento el simulador puede pasar del estado _paused_ a _running_.
  * El programa simulará lo más fidedignamente posible las estructuras de datos internas del _scheduler_ real.
  * *Opcionalmente* se simularán los planificadores para varios núcleos (_SMP_)
