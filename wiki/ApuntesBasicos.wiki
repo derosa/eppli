@@ -15,4 +15,4 @@ La clasificación de los procesos se lleva a cabo mediante algoritmos heurístic
 
 == Reemplazo de procesos (_Process preemption_) ==
 
-Los procesos en Linux son "reemplazables" (_preemptable_). Esto significa que cuando un proceso pasa a estado de ejecución, el kernel comprueba si su prioridad es mayor que el proceso ejecutándose actualmente (_current_). Si lo es, detiene la ejecución de _current_, pone el nuevo proceso en la cola de ejecución y llama al planificador para que seleccione un nuevo proceso (que seguramente será el nuevo). El proceso reemplazado no se suspende ni cambia de estado, sino que continúa en el estado _TASK_RUNNING_
+Los procesos en Linux son "reemplazables" (_preemptable_). Esto significa que cuando un proceso pasa a estado de ejecución, el kernel comprueba si su prioridad es mayor que el proceso ejecutándose actualmente (_current_). Si lo es, detiene la ejecución de _current_, pone el nuevo proceso en la cola de ejecución y llama al planificador para que seleccione un nuevo proceso (que seguramente será el nuevo). El proceso reemplazado no se suspende ni cambia de estado, sino que continúa en el estado _TASK_RUNNING_.
