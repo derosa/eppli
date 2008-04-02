@@ -11,3 +11,8 @@ Conceptos de planificadores de procesos, en especial del kernel linux.
   # I/O _bound_: Son procesos que pasan la mayor parte del tiempo bloqueados esperando un evento de entrada o salida. Por ejemplo un procesador de textos, una aplicación gráfica (calculadora p.ej.) o una consola.
   # Tiempo real (_RT_): Con requerimientos de planificación muy estrictos y un tiempo de respuesta con una muy pequeña variación. Por ejemplo aplicaciones de sonido o de reproducción de vídeo.
 
+La clasificación de los procesos se lleva a cabo mediante algoritmos heurísticos que determinan si un proceso es "I/O _bound_ o CPU _bound_".
+
+== Reemplazo de procesos (_Process preemption_) ==
+
+Los procesos en Linux son "reemplazables" (_preemptable_). Esto significa que cuando un proceso pasa a estado de ejecución, el kernel comprueba si su prioridad es mayor que el proceso ejecutándose actualmente (_current_). Si lo es, detiene la ejecución de _current_, pone el nuevo proceso en la cola de ejecución y llama al planificador para que seleccione un nuevo proceso (que seguramente será el nuevo). El proceso reemplazado no se suspende ni cambia de estado, sino que continúa en el estado _TASK_RUNNING_
