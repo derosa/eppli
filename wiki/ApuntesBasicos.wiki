@@ -42,7 +42,7 @@ Hay tres clases de planificación:
  
 == Planificación de procesos convencionales (SCHED_NORMAL) ==
 
-Cada proceso tiene una prioridad estática que abarca de 100 (la más alta) a 139 (la más baja).
+Cada proceso tiene una prioridad estática que abarca de 100 (la más alta) a 139 (la más baja). La prioridad por defecto es 120.
 Los procesos hijos heredan la prioridad estática del padre.
 
 === Quanto base ===
@@ -64,10 +64,37 @@ El tiempo medio durmiendo (_average sleep time_) es la media de nanosegundos que
 Valores de _bonus_ en p. 264.
 
 Un proceso se considera interactivo si:
-	dyn_prio <= 3 x tatic_prio / 4 + 28
+	dyn_prio <= 3 x static_prio / 4 + 28
 	
 	ó
 	
 	bonus - 5 >= static_prio / 4 + 28
 
+static_prio /4 + 28 se conoce como "delta interactivo"
 
+=== Procesos activos y expirados ===
+
+cuando un proceso agota su tiempo, puede ser sustituido por otro de menor prioridad que no haya consumido todo su tiempo.
+
+Se mantienen dos juegos de procesos: 
+ * Activos: Estos procesos no han consumido su quanto de tiempo y se les permite correr.
+ * Expirados: Han consumiso su quanto de tiepo y no pueden ejecutarse hasta que todos los procesos activos terminen.
+
+El kernel intenta favorecer a los procesos interactivos. Un proceso no interactivo que acabe su quanto de tiempo para a la lista de procesos expirados, pero si un proceso es interactivo y acaba su tiempo es reinsertado en la lista de procesos activos y se le "rellena" su tiempo, para ser ejecutado de nuevo cuando llegue su turno.
+
+De todas formas, el kernel manda un proceso interactivo a la cola de expirados si el proceso expirado más antiguo ha esperado durante mucho tiempo o si un proceso expirado tiene mayor prioridad estática (menor valor) que el proceso interactivo. De esta forma en algún momento la lista de procesos activos se vaciará y la de procesos expirados podrá ejecutarse.
+
+== Planificación de procesos de tiempo real ==
+
+Cada proceso tiene una prioridad de tiempo real (a partir de ahora, rt_prio) que varía de 1 (la más alta) a 99 (la más baja).
+Se favorece el proceso de prioridad alta sobre el de baja mientras se mantenga ejevutable (_runnable_).
+Estos procesos son siempre activos (no expiran).
+El usuario puede cambiar la rt_prio de estos procesos mediante syscalls.
+Un proceso de RT solo es reemplazado por otro si:
+ * Es reemplazado (_preempted_) por otro de mayor rt_prio.
+ * El proceso bloquea/duerme.
+ * El proceso se para o muere.
+ * Libera voluntariamente la CPU.
+ * Es un proceso SCHED_RR y agota su quanto de tiempo.
+ 
+Las llamadas nice() y setpriority() no alteran la rt_prio de un proceso RR, sino que alteran la duración del quanto base.
