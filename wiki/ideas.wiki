@@ -1,0 +1,10 @@
+#summary Ideas para el emulador
+
+= Funcionamiento interno =
+
+ * Cambiar la prioridad de las tareas desde un menú (nice() & setpriority() )
+ * Cambiar ls prioridad RT con sched_setparam() y sched_setscheduler() )
+
+= Interface =
+ 
+ * pygtk
