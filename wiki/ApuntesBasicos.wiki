@@ -56,6 +56,7 @@ La prioridad dinámica abarca de 100 (la más alta) a 139 (la más baja). Este e
 Se relaciona con la prioridad estática por la siguiente fórmula:
 	dyn_prio = max (100, min(static_prio - bonus + 5, 129) )
 _bonus_ abarca de 0 a 10. Un valor menor que 5 penaliza y un valor mayor a 5 recompensa al proceso, elevando su prioridad dinámica. 
+
 El valor de _bonus_ depende del pasado del proceso, de cuánto tiempo haya pasado durmiendo.
 
 El tiempo medio durmiendo (_average sleep time_) es la media de nanosegundos que el proceso ha estado durmiendo. Diferentes estados cuentan de diferente forma a la hora de calcular este valor (TASK_INTERRUPTIBLE != TASK_UNINTERRUPTIBLE). Este tiempo también decrece cuando el proceso está en ejecución y además nunca puede pasar de 1 segundo.
@@ -64,7 +65,9 @@ Valores de _bonus_ en p. 264.
 
 Un proceso se considera interactivo si:
 	dyn_prio <= 3 x tatic_prio / 4 + 28
+	
 	ó
+	
 	bonus - 5 >= static_prio / 4 + 28
 
 
