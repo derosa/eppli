@@ -16,3 +16,54 @@ La clasificación de los procesos se lleva a cabo mediante algoritmos heurístic
 == Reemplazo de procesos (_Process preemption_) ==
 
 Los procesos en Linux son "reemplazables" (_preemptable_). Esto significa que cuando un proceso pasa a estado de ejecución, el kernel comprueba si su prioridad es mayor que el proceso ejecutándose actualmente (_current_). Si lo es, detiene la ejecución de _current_, pone el nuevo proceso en la cola de ejecución y llama al planificador para que seleccione un nuevo proceso (que seguramente será el nuevo). El proceso reemplazado no se suspende ni cambia de estado, sino que continúa en el estado _TASK_RUNNING_.
+
+== Duración del quanto (_quantum_) ==
+
+La duración del quanto no debe ser ni muy pequeña ni muy grande.
+
+Si fuese demasiado corto, p. ej. 5 ms., y el sistema tardara 5 ms. en efectuar un cambio de contexto, el 50% del tiempo de CPU se pasaría haciendo cambios de contexto.
+En cambio, con un quanto demasiado largao, p.ej. 1 segundo, las aplicaciones se ejecutarían durante ese tiempo y tardarían en ejecutarse de nuevo 1 segundo x N procesos. Si en un sistema hubieran 50 procesos, tardaría 50 segundos en recuperar la CPU para seguir ejecutándose. Esto haría que los procesos interactivos fueran no interactivos :).
+
+En linux se adopta el compromiso de hacer el quanto tan largo como sea posible, manteniendo un buen tiempo de respuesta.
+
+== El algoritmo de planificación (_scheduling algorith_) ==
+
+Los planificadores de versiones anteriores de linux eran del orden O(n), pues en cada cambio de contexto, el kernel recorría la lista de procesos eligiendo el más adecuado para ejecutarse.
+
+El algoritmo de la serie 2.6 es más sofisticado, pues :
+ * Elige el proceso a ejecutar en tiempo constante O(1)
+ * Cada CPU tiene su propia cola de procesos ejecutables, lo cual hace que escale muy bien.
+ * El nuevo algoritmo distingue los procesos interactivos mejor.
+ 
+Hay tres clases de planificación:
+ * SCHED_FIFO: Una FIFO de procesos de tiempo real. Cuando un proceso entra en ejecución, tiene la CPU hasta que decida dejarla. Solo un proceso de más prioridad puede arrebatarle la CPU.
+ * SCHED_RR: Procesos en _Round Robin_. Cuando se le asigna la CPU a un proceso, éste se pasa al final de la cola de ejecución.
+ * SCHED_NORMAL: Procesos de tiempo compartido.
+ 
+== Planificación de procesos convencionales (SCHED_NORMAL) ==
+
+Cada proceso tiene una prioridad estática que abarca de 100 (la más alta) a 139 (la más baja).
+Los procesos hijos heredan la prioridad estática del padre.
+
+=== Quanto base ===
+
+El quanto se calcula (pag. 263):
+	quanto base = (140 - static_prio) x N ; N=static_prio<120?20:5
+
+=== Prioridad dinámica y tiempo medio durmiendo ===
+
+La prioridad dinámica abarca de 100 (la más alta) a 139 (la más baja). Este es el valor que el planificador mira realmente cuando elige qué proceso debe ejecutarse a continuación.
+Se relaciona con la prioridad estática por la siguiente fórmula:
+	dyn_prio = max (100, min(static_prio - bonus + 5, 129) )
+_bonus_ abarca de 0 a 10. Un valor menor que 5 penaliza y un valor mayor a 5 recompensa al proceso, elevando su prioridad dinámica. El valor de _bonus_ depende del pasado del proceso, de cuánto tiempo haya pasado durmiendo.
+
+El tiempo medio durmiendo (_average sleep time_) es la media de nanosegundos que el proceso ha estado durmiendo. Diferentes estados cuentan de diferente forma a la hora de calcular este valor (TASK_INTERRUPTIBLE != TASK_UNINTERRUPTIBLE). Este tiempo también decrece cuando el proceso está en ejecución y además nunca puede pasar de 1 segundo.
+
+Valores de _bonus_ en p. 264.
+
+Un proceso se considera interactivo si:
+	dyn_prio <= 3 x tatic_prio / 4 + 28
+	ó
+	bonus - 5 >= static_prio / 4 + 28
+
+
