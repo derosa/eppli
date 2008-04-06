@@ -26,7 +26,7 @@ Saber qué proceso debe ejecutarse a continuación es tan simple como averiguar 
 == _runqueue_ ==
 
 Hay una _runqueue_ (en adelante _rq_) por procesador.
-Contiene dos listas (_prio_array_): de procesos activos y expirados. Cuando la activa se vacía, se intercambia con la de expirados.
+Contiene dos arrays de prioridades (_prio_array_): de procesos activos y expirados. Cuando la activa se vacía, se intercambia con la de expirados.
 Miembros de la estructura:
 
  * *_lock_*: Bloqueo para que solo un proceso pueda modificar la _rq_ en un momento dado.
