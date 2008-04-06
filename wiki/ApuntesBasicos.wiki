@@ -97,4 +97,4 @@ Un proceso de RT solo es reemplazado por otro si:
  * Libera voluntariamente la CPU.
  * Es un proceso SCHED_RR y agota su quanto de tiempo.
  
-Las llamadas nice() y setpriority() no alteran la rt_prio de un proceso RR, sino que alteran la duración del quanto base.
+Las llamadas nice() y setpriority() no alteran la _rt_prio_ de un proceso RR, sino que alteran la duración del quanto base.
