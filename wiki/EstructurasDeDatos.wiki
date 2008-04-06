@@ -19,7 +19,7 @@ MAX_PRIO es 140 y BITMAP_SIZE depende de la arquitectura, pues se calcula como:
  
 Por lo que en máquinas de 32 bits será 5 unsigned long y en máquinas de 64, 3 unsigned long.
 
-Cada vez que una tarea de prioridad N se introduce en esta estructura, se activa el bit N del _bitmap_ y se encola el proceso en _queue[N]_.
+Cada vez que una tarea de prioridad N se introduce en esta estructura, se activa el bit N del _bitmap_ y se encola el proceso en _{{{queue[N]}}}_.
 
 Saber qué proceso debe ejecutarse a continuación es tan simple como averiguar el primer bit activo del _bitmap_ y seleccionar el primer proceso de la lista correspondiente a la posición de ese bit.
 
