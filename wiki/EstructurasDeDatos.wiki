@@ -33,7 +33,7 @@ Miembros de la estructura:
  * *_nr_running_*: Número de procesos ejecutables en la cola.
  * *_cpu_load_*: Carga de la CPU.
  * *_nr_switches_*: Número de cambios de contexto. Solo se usa a efectos estadísticos.
- * *_expired_timestamp_*: tiempo transcurrido desde el último intercambio de los _prio_array_ active <->expided.
+ * *_expired_timestamp_*: tiempo transcurrido desde el último intercambio de los _prio_array_ active <->expired.
  * *_nr_uninterruptible_*: Tareas en estado TASK_UNINTERRUPTIBLE.
  * *_timestamp_last_tick_*: Tiempo del último _scheduler tick_. Se usa para saber si una tarea debería considerarse _cache hot_ (con posibilidades de tener aún datos en la caché de la CPU).
  * *_curr_*: Puntero al proceso actual _current_.
