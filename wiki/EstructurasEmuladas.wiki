@@ -28,6 +28,7 @@ Campos:
 == prio_array ==
 
 Tal como está redactada en [EstructurasDeDatos].
+
 Miembros de la estructura:
 
  * *nr_active*: Número de procesos activos.
@@ -37,6 +38,7 @@ Miembros de la estructura:
 == _runqueue_ ==
 
 Tal como está redactada en [EstructurasDeDatos].
+
 Miembros de la estructura:
 
  * *lock*: Bloqueo para que solo un proceso pueda modificar la _rq_ en un momento dado.
