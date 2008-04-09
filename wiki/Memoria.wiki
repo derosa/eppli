@@ -3,3 +3,7 @@
 
 = Introduction =
 Esta página contiene la memoria del proyecto, para ser formateada y recauchutada luego en el editor.
+
+La memoria debe contener ~60 páginas, junto con una presentación de unas 20.
+
+La primera entrega de la memoria debe tener un índice detallado y algunos capítulos introductorios.
