@@ -1,0 +1,28 @@
+#summary Estructuras de datos a emular
+#labels Phase-Design,Estructuras,Datos
+
+= Introducción =
+
+Estructuras de datos que serán emuladas. Pueden coincidir total o parcialmente con las que aparecen en [EstructurasDeDatos]
+
+= Estructuras =
+
+== Proceso ==
+Contiene los campos de la estructura _task_struct_ utilizados por el planificador. Muchos de sus campos se expondrán en el emulador.
+
+Campos:
+ * *flags*: Contiene un _flag_ que indica si el planificador debe ser invocado.
+ * *state*: Estado del proceso (TASK_RUNNING, TASK_UNINTERRUPTIBLE...)
+ * *prio*: Prioridad dinámica.
+ * *run_list*: Enlaza con el siguiente y anterior proceso de la _rq_ a la que pertenece.
+ * *array *: Apunta al _prio_array_ al que pertenece el proceso.
+ * *sleep_avg*: Tiempo medio durmiendo.
+ * *timestamp*: Marca de tiempo del momento de inserción del proceso en la _rq_, o tiempo del último cambio de proceso que incluyó al proceso.
+ * *last_ran*: Tiempo del último cambio de proceso que reemplazó al proceso.
+ * *activated*: Marca cuando el proceso es "levantado".
+ * *policy*: Tipo de planificación del proceso (_SCHED_NORMAL, SCHED_RR o SCHED_FIFO_).
+ * *time_slice* : Ticks que le quedan al proceso de su quanto.
+ * *first_time_slice*: Vale 1 si el proceso nunca ha agotado su quanto de tiempo.
+ * *rt_priority*: Prioridad de tiempo real del proceso.
+
+== 
