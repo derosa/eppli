@@ -25,4 +25,31 @@ Campos:
  * *first_time_slice*: Vale 1 si el proceso nunca ha agotado su quanto de tiempo.
  * *rt_priority*: Prioridad de tiempo real del proceso.
 
-== 
+== prio_array ==
+
+Tal como está redactada en [EstructurasDeDatos].
+Miembros de la estructura:
+
+ * *nr_active*: Número de procesos activos.
+ * *bitmap{{{[BITMAP_SIZE]}}}*: Mapa de bits indicando para qué prioridades hay procesos en la lista.
+ * *queue{{{[MAX_PRIO]}}}*: Array de listas.
+
+== _runqueue_ ==
+
+Tal como está redactada en [EstructurasDeDatos].
+Miembros de la estructura:
+
+ * *lock*: Bloqueo para que solo un proceso pueda modificar la _rq_ en un momento dado.
+ * *nr_running*: Número de procesos ejecutables en la cola.
+ * *cpu_load*: Carga de la CPU.
+ * *nr_switches*: Número de cambios de contexto. Solo se usa a efectos estadísticos.
+ * *expired_timestamp*: tiempo transcurrido desde el último intercambio de los _prio_array_ active <->expired.
+ * *nr_uninterruptible*: Tareas en estado TASK_UNINTERRUPTIBLE.
+ * *timestamp_last_tick*: Tiempo del último _scheduler tick_. Se usa para saber si una tarea debería considerarse _cache hot_ (con posibilidades de tener aún datos en la caché de la CPU).
+ * *curr*: Puntero al proceso actual _current_.
+ * *idle*: Puntero a la tarea que se ejecuta cuando no hay nada que ejecutar.
+ * *active*: Puntero a _prio_array_  de tareas activas (con tiempo en sus _timeslices_).
+ * *expired*: Puntero a _prio_array_ de tareas que han agotado sus ranuras de tiempo de ejecución.
+ * *arrays{{{[2]}}}*: El array real de _prio_array_.
+ * *best_expired_prio*: La mayor prioridad de las tareas expiradas.
+ * *nr_iowait*: Tareas esperando un evento de I/O.
