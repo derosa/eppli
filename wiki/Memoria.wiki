@@ -19,11 +19,11 @@ La primera entrega de la memoria debe tener un índice detallado y algunos capí
   # El _scheduler_ de linux aplicado a _eppli_.
  # Diseño de _eppli_.
   # Herramientas de construcción.
-  # Estruturas de datos.
+  # Estructuras de datos.
   # Subsistemas.
  # Implementación.
   # Núcleo de emulación.
-  # Interface gráfica.
+  # Interfaz gráfica.
  # Bibliografía.
   # Libros.
   # Internet.
@@ -53,7 +53,7 @@ Puede verse que, por ejemplo, los puntos 1 y 2 son opuestos. No es posible repar
 
 De la misma forma, los puntos 3 y 4 también caen en la contradicción: Si cada proceso debe ejecutarse un mínimo periodo de tiempo, con suficiente número de procesos en ejecución no será posible impedir que un proceso esté demasiado tiempo sin CPU. Por ejemplo, si en un sistema tenemos 10 procesos en ejecución y se ejecutan cada uno de ellos durante 100ms. secuencialmente, habrá un proceso que no podrá usar la CPU hasta que transcurra 1 segundo.
 
-Teniendo en cuenta lo anterior, un planificador de procesos debe tener claro a qué entorno está orientado, pues no es lo mismo un entorno de computación científica donde los procesos usarían la CPU durante horas contínuamente si pudieran, que el equipo de un equipo de producción de video, donde los procesos necesitan capacidad de ejecución y reacción en tiempo real. Es necesario un compromiso entre los procesos interactivos y los que usan intensivamente la CPU.
+Teniendo en cuenta lo anterior, un planificador de procesos debe tener claro a qué entorno está orientado, pues no es lo mismo un entorno de computación científica donde los procesos usarían la CPU durante horas continuamente si pudieran, que el equipo de un equipo de producción de video, donde los procesos necesitan capacidad de ejecución y reacción en tiempo real. Es necesario un compromiso entre los procesos interactivos y los que usan intensivamente la CPU.
 
 Históricamente se han diseñado los planificadores de procesos siguiente esquemas simples, pero el cambio de las necesidades de los usuarios, normalmente orientados a aplicaciones más interactivas) han hecho necesaria la evolución de estos esquemas. Algunos de estos métodos simples son:
 
