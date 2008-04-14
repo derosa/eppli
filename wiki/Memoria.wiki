@@ -45,5 +45,8 @@ interactivo y parejo con la velocidad de proceso de la persona, sino que
 permita indagar en las interioridades del mismo y modificarlo para ver cómo
 afectan los cambios a los resultados.
 
-La resolución de estos problemas es el objetivo de mi TFC, que consiste en la programación de un emulador del planificador de procesos del kernel linux. El nombre del proyecto es _EPPLI_ (*_Emulador del Planificador de Procesos de Linux_*), y puede seguirse desde http://code.google.com/p/eppli
+La resolución de estos problemas es el objetivo de mi TFC, que consiste en la 
+programación de un emulador del planificador de procesos del kernel linux. El 
+nombre del proyecto es _EPPLI_ (*_Emulador del Planificador de Procesos de Linux_*), 
+y puede seguirse desde http://code.google.com/p/eppli
 
