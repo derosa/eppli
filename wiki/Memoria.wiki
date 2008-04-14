@@ -10,9 +10,10 @@ La primera entrega de la memoria debe tener un índice detallado y algunos capí
 
 = Índice =
 
- # Presentación.
- # Introducción a la planificación de procesos.
- # El planificador de procesos de linux.
+ # Introducción
+  # Presentación del proyecto(de qué va el proyecto).
+  # Introducción a la planificación de procesos.
+  # El planificador de procesos de linux.
  # El proyecto _eppli_
   ## Requisitos y funcionalidades de _eppli_
   ## El _scheduler_ de linux aplicado a _eppli_
@@ -27,4 +28,22 @@ La primera entrega de la memoria debe tener un índice detallado y algunos capí
   ## Libros
   ## Internet
 
-= Presentación =
+= Introducción = 
+== Presentación ==
+
+A pesar de la gran cantidad de documentación existente sobre la teoría de
+planificadores de procesos en sistemas operativos, no existen apenas
+aplicaciones prácticas de estos principios más allá de su uso real en SS.OO.
+
+La primera dificultad con que un estudiante se encuentra a la hora de encarar
+estos algoritmos es la falta de resultados prácticos: Ver cómo se evalúan
+procesos reales, saber por qué el planificador cambia de tarea, cómo se
+cambia la prioridad de los procesos, cómo afecta el que un proceso sea CPU
+intensivo o I/O intensivo, etc. Todo esto no es fácilmente mensurable en un
+S.O. en ejecución, por lo que se hace necesario un método que no solo sea más
+interactivo y parejo con la velocidad de proceso de la persona, sino que
+permita indagar en las interioridades del mismo y modificarlo para ver cómo
+afectan los cambios a los resultados.
+
+La resolución de estos problemas es el objetivo de mi TFC, que consiste en la programación de un emulador del planificador de procesos del kernel linux. El nombre del proyecto es _EPPLI_ (*_Emulador del Planificador de Procesos de Linux_*), y puede seguirse desde http://code.google.com/p/eppli
+
