@@ -1,9 +1,28 @@
 #summary Memoria del proyecto
 #labels Phase-Deploy,Memoria
 
-= Introduction =
+= Introducción =
 Esta página contiene la memoria del proyecto, para ser formateada y recauchutada luego en el editor.
 
 La memoria debe contener ~60 páginas, junto con una presentación de unas 20.
 
 La primera entrega de la memoria debe tener un índice detallado y algunos capítulos introductorios.
+
+= Índice =
+
+ # Presentación.
+ # Introducción a la planificación de procesos.
+ # El planificador de procesos de linux.
+ # El proyecto _eppli_
+ ## Requisitos y funcionalidades de _eppli_
+ ## El _scheduler_ de linux aplicado a _eppli_
+ # Diseño de _eppli_
+ ## Herramientas de construcción
+ ## Estruturas de datos
+ ## Subsistemas
+ # Implementación
+ ## Núcleo de emulación.
+ ## Interface gráfica
+ # Bibliografía
+ ## Libros
+ ## Internet
