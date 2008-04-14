@@ -10,26 +10,27 @@ La primera entrega de la memoria debe tener un índice detallado y algunos capí
 
 = Índice =
 
- # Introducción
-  # Presentación del proyecto(de qué va el proyecto).
+ # Introducción.
+  # Presentación del proyecto.
   # Introducción a la planificación de procesos.
   # El planificador de procesos de linux.
- # El proyecto _eppli_
-  ## Requisitos y funcionalidades de _eppli_
-  ## El _scheduler_ de linux aplicado a _eppli_
- # Diseño de _eppli_
-  ## Herramientas de construcción
-  ## Estruturas de datos
-  ## Subsistemas
- # Implementación
-  ## Núcleo de emulación.
-  ## Interface gráfica
- # Bibliografía
-  ## Libros
-  ## Internet
+ # El proyecto _eppli_.
+  # Requisitos y funcionalidades de _eppli_.
+  # El _scheduler_ de linux aplicado a _eppli_.
+ # Diseño de _eppli_.
+  # Herramientas de construcción.
+  # Estruturas de datos.
+  # Subsistemas.
+ # Implementación.
+  # Núcleo de emulación.
+  # Interface gráfica.
+ # Bibliografía.
+  # Libros.
+  # Internet.
 
 = Introducción = 
-== Presentación ==
+
+== Presentación del proyecto ==
 
 A pesar de la gran cantidad de documentación existente sobre la teoría de
 planificadores de procesos en sistemas operativos, no existen apenas
@@ -50,3 +51,19 @@ programación de un emulador del planificador de procesos del kernel linux. El
 nombre del proyecto es _EPPLI_ (*_Emulador del Planificador de Procesos de Linux_*), 
 y puede seguirse desde http://code.google.com/p/eppli
 
+== Introducción a la planificación de procesos ==
+
+El principal cometido de un sistema operativo es gestionar los recursos de la máquina donde se ejecuta. Se gestiona la memoria, las peticiones de I/O, los dispositivos... y se gestionan procesos.
+
+La gestión de procesos recibe el nombre de planificación de procesos y es llevada a cabo por el planificador de procesos (_process scheduler_). Esta parte del SSOO se encarga de decidir qué proceso debe ejecutarse en un momento determinado en función del entorno. Ésta tarea no es fácil, pues debe intentar cumplir con varios objetivos, a veces incongruentes entre sí:
+
+ # El tiempo de CPU debe ser repartido de forma justa entre todos los procesos.
+ # Los procesos interactivos deben seguir siéndolo.
+ # A cada proceso debe permitírsele la ejecución durante un mínimo de tiempo.
+ # Ningún proceso debe estar demasiado tiempo sin usar la CPU (_process starvation_)
+ 
+Puede verse que, por ejemplo, los puntos 1 y 2 son opuestos. No es posible repartir de forma justa el tiempo de CPU entre todos los procesos si se favorecen los procesos interactivos. Cuando se favorece un tipo de procesos, inevitablemente otros procesos "sufren" las consecuencias.
+
+De la misma forma, los puntos 3 y 4 también caen en la contradicción: Si cada proceso debe ejecutarse un mínimo periodo de tiempo, con suficiente número de procesos en ejecución no será posible impedir que un proceso esté demasiado tiempo sin CPU. Por ejemplo, si en un sistema tenemos 10 procesos en ejecución y se ejecutan cada uno de ellos durante 100ms. secuencialmente, habrá un proceso que no podrá usar la CPU hasta que transcurra 1 segundo.
+
+Teniendo en cuenta lo anterior, un planificador de procesos debe tener claro a qué entorno está orientado, pues no es lo mismo un entorno de computación científica donde los procesos usarían la CPU durante horas contínuamente si pudieran, que el equipo de un equipo de producción de video, donde los procesos necesitan capacidad de ejecución y reacción en tiempo real.
