@@ -14,15 +14,15 @@ La primera entrega de la memoria debe tener un índice detallado y algunos capí
  # Introducción a la planificación de procesos.
  # El planificador de procesos de linux.
  # El proyecto _eppli_
- ## Requisitos y funcionalidades de _eppli_
- ## El _scheduler_ de linux aplicado a _eppli_
+  ## Requisitos y funcionalidades de _eppli_
+  ## El _scheduler_ de linux aplicado a _eppli_
  # Diseño de _eppli_
- ## Herramientas de construcción
- ## Estruturas de datos
- ## Subsistemas
+  ## Herramientas de construcción
+  ## Estruturas de datos
+  ## Subsistemas
  # Implementación
- ## Núcleo de emulación.
- ## Interface gráfica
+  ## Núcleo de emulación.
+  ## Interface gráfica
  # Bibliografía
- ## Libros
- ## Internet
+  ## Libros
+  ## Internet
