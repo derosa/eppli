@@ -42,7 +42,9 @@ La resolución de estos problemas es el objetivo de mi TFC, que consiste en la p
 
 El principal cometido de un sistema operativo es gestionar los recursos de la máquina donde se ejecuta. Se gestiona la memoria, las peticiones de I/O, los dispositivos... y se gestionan procesos.
 
-La gestión de procesos recibe el nombre de planificación de procesos y es llevada a cabo por el planificador de procesos (_process scheduler_). Esta parte del SSOO se encarga de decidir qué proceso debe ejecutarse en un momento determinado en función del entorno. Ésta tarea no es fácil, pues debe intentar cumplir con varios objetivos, a veces incongruentes entre sí:
+Un procesador solo puede ejecutar un proceso cada vez, por lo que la aparente ejecución simultánea de muchos procesos (conocida como multitarea), se trata en realidad de un "truco" conjunto del procesador y el SSOO. En realidad lo que ocurre es que el SSOO alterna la ejecución de los procesos de diferentes formas (según el algoritmo de planificación) dando a cada proceso un corto tiempo de CPU de forma que cree la ilusión de ejecución simultánea para el usuario. 
+
+Esta gestión de procesos recibe el nombre de planificación de procesos y es llevada a cabo por el planificador de procesos (_process scheduler_). Esta parte del SSOO se encarga de decidir qué proceso debe ejecutarse en un momento determinado en función del entorno. Ésta tarea no es fácil, pues debe intentar cumplir con varios objetivos, a veces incongruentes entre sí:
 
  # El tiempo de CPU debe ser repartido de forma justa entre todos los procesos.
  # Los procesos interactivos deben seguir siéndolo.
@@ -64,3 +66,16 @@ Históricamente se han diseñado los planificadores de procesos siguiente esquem
  
 Otro concepto necesario para comprender la extensión de la problemática asociada a la planificación de procesos es el de apropiación (_preemption_):
 La apropiación consiste en arrebatar la CPU a un proceso en ejecución mientras aún no la ha cedido voluntariamente. Sistemas operativos monotarea y monousuario, como MS-DOS, carecen del concepto de apropiación, por lo que un proceso continuaba la ejecución hasta que terminaba o cedía voluntariamente la CPU (_cooperative multitasking_). Esto tiene la ventaja de ser un sistema fácil de desarrollar y mantener, pues simplemente se ejecuta la aplicación solicitada, pero implica que el sistema queda a merced del proceso en ejecución. Actualmente la mayoría de SSOO hacen uso de la apropiación, que hace posible retirar la CPU a un proceso cuando se determina que su cuota de tiempo ha finalizado. En el kernel linux es posible incluso apropiarse de la CPU mientras el proceso ejecuta código del kernel. Por ejemplo, puede quitarse la CPU a un proceso mientras está llamando a la función sys_read del sistema.
+
+== El planificador de procesos de linux ==
+
+El planificador de procesos de linux es una de las partes que más reformas sufre a lo largo de las diferentes versiones del núcleo. Empezando por la serie 2.4, en la que el planificador constaba de unas 1.400 líneas de código, hasta la serie 2.6, con más de 5.000 (2.6.11) u 11.000 (2.6.25-rc8). Esta evolución es la responsable de la calidad del planificador, que ha pasado de ser de una eficiencia linear (O(n), serie 2.4) a constante (O(1), serie 2.6).
+
+La principal debilidad del planificador de la serie 2.4 es el algoritmo para determinar la cantidad de tiempo que un proceso podía ejecutarse, que se calculaba iterando sobre toda la lista de procesos. Además, el tiempo medio asignado a los procesos es de 210ms, que contrasta con la media de 100ms de la serie 2.6. Recordemos que con estas cantidades, un servidor con 100 procesos usando todo el tiempo asignado puede hacer esperar hasta 20 segundos al proceso de más baja prioridad del sistema, lo que no es admisible.
+
+El objetivo del planificador en la serie 2.6 es mejorar los puntos débiles de la serie 2.4. Esto se consigue con el que se conoce como "The O(1) Scheduler", o planificador de tiempo constante, que tiene siempre el mismo coste de ejecución, independientemente del número de procesos del sistema.
+
+HABLAR TOCHO 2.6.11
+
+A partir de la versión 2.6.23, linux usa un planificador conocido como CFS (_Completely Fair Scheduler_), que en lugar de colas de ejecución (_run queues_), usa una estructura de datos llamada "árbol Rojo-Negro" (_Red-Black Tree_).
+
