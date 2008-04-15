@@ -4,17 +4,6 @@
 __inline__ uint64_t rdtsc(void);
 
 
-static PyObject * eppli_ffs(PyObject *self, PyObject *args)
-{
-	int res = 0;
-	unsigned long long int val=0;
-	if (!PyArg_ParseTuple(args, "l", &val))
-		return NULL;
-	res = ffs(val);
-	return Py_BuildValue("i", res);
-	
-}
-
 static PyObject *eppli_rdtsc(PyObject *self, PyObject *args)
 {
 	unsigned long long int res = rdtsc();
@@ -39,7 +28,6 @@ __inline__ uint64_t rdtsc() {
 
 
 PyMethodDef methods[] = {
-	{"ffs", eppli_ffs, METH_VARARGS, "Devuelve el primer bit activo de un entero"},
 	{"rdtsc", eppli_rdtsc, METH_VARARGS, "Devuelve TSC de la CPU"},
 	{NULL, NULL, 0, NULL}
 };
