@@ -57,8 +57,7 @@ Teniendo en cuenta lo anterior, un planificador de procesos debe tener claro a q
 
 Históricamente se han diseñado los planificadores de procesos siguiente esquemas simples, pero el cambio de las necesidades de los usuarios, normalmente orientados a aplicaciones más interactivas) han hecho necesaria la evolución de estos esquemas. Algunos de estos métodos simples son:
 
- * FIFO (_First In, First Out_): Consiste en despachar los procesos por orden de llegada y hasta que estos abandonen voluntariamente la CPU. Su uso es 
-más obvio en los primeros sistemas por lotes, en los que no existía interactividad del usuario.
+ * FIFO (_First In, First Out_): Consiste en despachar los procesos por orden de llegada y hasta que estos abandonen voluntariamente la CPU. Su uso es más obvio en los primeros sistemas por lotes, en los que no existía interactividad del usuario.
  * Por rotación (_Round Robin_): Los procesos se ejecutan durante un cuanto de tiempo determinado. Cuando este cuanto expira se pasa directamente al siguiente proceso de la lista, volviendo al primero cuando se termina con el último proceso.
  * Colas multinivel (_Multilevel queues_): Diversas colas administradas por _Round Robin_, cada una de una prioridad. Los procesos pueden pasar de una cola a otra, dependiendo de ciertos factores.
  * Planificador por lotería (_Lottery Scheduling_): Consiste en asignar a cada proceso un número de ticket. Cuando hay que seleccionar un proceso, el planificador selecciona un número al azar y ejecuta el proceso correspondiente.
