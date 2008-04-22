@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from task import task
+import bitutils
 
 class prio_array():
     def __init__ (self):
@@ -10,5 +11,9 @@ class prio_array():
         ## Implemento como un "set" por las operaciones de inserción y eliminado rápido.
         self.queue=()
     
-    def addTask(t):
-            self.bitmap
+    def addTask(self, t):
+        self.queue[t.prio].append(t)
+        bitutils.set_bit(self.bitmap, t.prio)
+        self.nr_active+=1
+    
+    
