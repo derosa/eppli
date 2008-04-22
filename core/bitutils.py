@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+# coding: utf-8
 from math import log
 
 # Fórmula mágica para encontrar el primer bit a 1 de un numero.
