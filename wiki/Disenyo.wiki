@@ -1,0 +1,32 @@
+clase scheduler:
+    - tiene una CPU (potencialmente podría ser cpus=()) sobre la que se ejecuta.
+    - métodos para avanzar el tiempo (scheduler_tick(times=1))
+    - avanza N unidades de tiempo (scheduler_tick(N) )
+    - métodos de acceso rápido a toda info (rq, prio_arrays, tasks...)
+    - Gestiona las tareas (añade, elimina)
+    - El estado de las tareas se comprueba y cambia en scheduler_tick llamando a "advance_tasks" o similar.
+    - Tiene las variables de "tuneo" (HZ, MAX_PRIO, etc).
+    - Tiene el método "scheduler" con toda la pesca.
+
+clase cpu:
+    - tiene una runqueue
+    - mantiene la "hora" del sistema.
+
+clase runqueue:
+    - tiene 2 prio_array.
+    - Métodos para actuar sobre la runqueue
+
+clase prio_array:
+    - estructura prio_array
+    - métodos para modificarlo.
+
+clase task:
+    - Contiene info del proceso.
+
+módulo epplimodule:
+    - Módulo en C
+    - Acceso a funciones no posibles en python
+    - p.ej rdtsd
+
+módulo bitutils:
+    - Funciones para manipulación de bits (ffs, set & clear bit).
