@@ -1,0 +1,44 @@
+Análisis de scheduler_tick:
+
+- Obtiene:
+    - CPU actual.
+    - rq en ejecución.
+    - tarea actual (current).
+- Guarda la "hora" en rq->timestamp_last_tick
+- Si la tarea actual es la "idle":
+    - En UP simplemente vuelve, las funciones llamadas no hacen nada.
+    - En SMP:
+        - Se comprueba si hay más procesos en la rq en que se ejecuta idle.
+        - Se rebalancea la carga de las CPU's.
+    - Se vuelve, pues no se actualizan las stats del proceso idle.
+- Si la tarea ha expirado, pero no sacada de ejecución, se activa el flag de "Se necesita re-planifica" y se salta al final de la función.
+
+- Si la tarea es de tiempo real:
+    - Si es RR y y agota tu time_slice:
+        - Se actualiza su time_slice.
+        - Se indica que no es su primer time_slice.
+        - Se activa el flag de necesidad de re-planificar.
+        - Se coloca la tarea al final de la cola.
+    - Se va al final de la función.
+
+- Si la tarea agota su time_slice:
+    - Se elimina de la prio_array active.
+    - Se establece el flag de re-planificación.
+    - Se recalcula su prioridad efectiva.
+    - Se actuliza su time_slice.
+    - Se indica que no es el primer time_slice.
+    - Si expired_timestamp es 0, se actualiza con los jiffies del sistema.
+    - Si la tarea no es interactiva o hay procesos "ahogándose" en la cola de expirados:
+        - Se pone el proceso en la cola de expirados.
+        - Se actualiza el best_expired_prio de la rq.
+    - Si la tarea es interactiva y no hay procesos "ahogándose" en expired:
+        - Se vuelve a colocar el proceso en la lista de activos.
+
+- Si la tarea NO agota su time_slice:
+    
+
+- Salir:
+    - Rebalanceo, pero no es necesario en UP.
+
+    
+
