@@ -1,4 +1,4 @@
-Análisis de scheduler_tick:
+Análisis de scheduler_tick (sched.c@2412):
 
 - Obtiene:
     - CPU actual.
@@ -34,11 +34,7 @@ Análisis de scheduler_tick:
     - Si la tarea es interactiva y no hay procesos "ahogándose" en expired:
         - Se vuelve a colocar el proceso en la lista de activos.
 
-- Si la tarea NO agota su time_slice:
-    
+- Si la tarea NO agota su time_slice, se comprueba que el time_slice que le queda no es demasiado grande. Si lo es, se elimina de la cabeza de la lista de procesos y se coloca al final (RR entre procesos de la misma prioridad).    
 
 - Salir:
     - Rebalanceo, pero no es necesario en UP.
-
-    
-
