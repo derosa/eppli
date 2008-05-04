@@ -1,3 +1,0 @@
-Análisis de recalc_task_prio (sched.c@649)
-
-- Se calcula sleep_time = min( now - p->timestamp, NS_MAX_SLEEP_AVG)
