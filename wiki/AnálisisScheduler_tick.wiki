@@ -24,7 +24,7 @@ Análisis de scheduler_tick (sched.c@2412):
 - Si la tarea agota su time_slice:
     - Se elimina de la prio_array active.
     - Se establece el flag de re-planificación.
-    - Se recalcula su prioridad efectiva.
+    - Se recalcula su prioridad efectiva (effective_prio).
     - Se actuliza su time_slice.
     - Se indica que no es el primer time_slice.
     - Si expired_timestamp es 0, se actualiza con los jiffies del sistema.
