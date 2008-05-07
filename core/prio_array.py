@@ -8,8 +8,8 @@ class prio_array():
         self.nr_active = 0
         self.bitmap = 0
         ## "queue" es de tipo list_head en el  kernel.
-        ## Implemento como un "set" por las operaciones de inserción y eliminado rápido.
-        self.queue=()
+        ## Implemento como una tupla por las operaciones de inserción y eliminado rápido.
+        self.queue=[]
     
     def addTask(self, t):
         self.queue[t.prio].append(t)
