@@ -2,7 +2,7 @@
 """ Clase para representar tareas del planificador"""
 import const
 
-class Task():
+class task():
     """ Un tarea a partir de un archivo de texto descriptivo"""
     def __init__(self, source):
         """ Crea una nueva tarea a partir de un archivo de texto
@@ -14,29 +14,14 @@ class Task():
         self.timeline = {}
         self.name = ""
         self.localtime = 0
-
-        # Atributos necesarios para el planificador
-        self.state = const.NEED_RESCHED
-        self.prio = 0
-        self.run_list = 0
-        self.array = 0
-        self.sleep_avg = 0
-        self.timestamp = 0
-        self.last_ran = 0
-        self.activated = 0
-        self.policy = const.NORMAL
-        self.time_slice = 0
-        self.first_time_slice = 1
-        self.rt_priority = 0
-
         
         try: 
-            self.fill_timeline(source)
+            self._fill_timeline(source)
         except IOError:
             print "Error al procesar la tarea de fuente %s" % source
             return None
         
-    def fill_timeline(self, source):
+    def _fill_timeline(self, source):
         """Genera una línea de tiempo de ejecución del proceso a partir del
         archivo que se le pasa."""
 
@@ -53,9 +38,11 @@ class Task():
                 self.timeline[when] = what
 
     def update_state(self):
+        """ Comprueba el estado del proceso y lo actualiza si ha cambiado"""
         if self.localtime in self.timeline:
             self.oldstate = self.state
             self.state = self.timeline[self.localtime]
+            self.state = const.NEED_RESCHED
             
             
 
