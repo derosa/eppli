@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-08T00:19:11" xmi.version="1.2" >
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-08T23:06:28" xmi.version="1.2" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -60,11 +60,11 @@
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="f3hLeJAK7ttq" isRoot="false" isAbstract="false" name="map" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="HI2Y9XzC6ESU" isRoot="false" isAbstract="false" name="runqueue" >
        <UML:Classifier.feature>
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="rQiTaBIUwqUd" type="or3IvLj1VPfw" name="cpu" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="peDXfnHXDz0o" type="YEXIS4ihKiGT" name="active" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="SsyfrwR0Ci4H" type="YEXIS4ihKiGT" name="expired" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="LepVMrmlZum1" type="n0cQl8eC5yfs" name="nr_running" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="DKUPMUsZuRXz" type="n0cQl8eC5yfs" name="nr_switches" />
+        <UML:Attribute comment="CPU a la que corresponde la runqueue" isSpecification="false" visibility="private" xmi.id="rQiTaBIUwqUd" type="or3IvLj1VPfw" name="cpu" />
+        <UML:Attribute comment="priority_array de procesos activos" isSpecification="false" visibility="private" xmi.id="peDXfnHXDz0o" type="YEXIS4ihKiGT" name="active" />
+        <UML:Attribute comment="priority_array de procesos expirados" isSpecification="false" visibility="private" xmi.id="SsyfrwR0Ci4H" type="YEXIS4ihKiGT" name="expired" />
+        <UML:Attribute comment="Número de procesos de la runqueue en ejecución (len(active))" isSpecification="false" visibility="private" xmi.id="LepVMrmlZum1" type="n0cQl8eC5yfs" name="nr_running" />
+        <UML:Attribute comment="Número de cambios de contexto." isSpecification="false" visibility="private" xmi.id="DKUPMUsZuRXz" type="n0cQl8eC5yfs" name="nr_switches" />
         <UML:Attribute isSpecification="false" visibility="private" xmi.id="YxYXMjLhN8Ch" type="n0cQl8eC5yfs" name="expired_timestamp" />
         <UML:Attribute isSpecification="false" visibility="private" xmi.id="zxSZrCY5W1Ur" type="n0cQl8eC5yfs" name="timestamp_last_tick" />
         <UML:Attribute isSpecification="false" visibility="private" xmi.id="TKOLjvLHtrmF" type="pgqkZlhM2PrC" name="current" />
@@ -93,39 +93,42 @@
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="EVLZofZjRilZ" isRoot="false" isAbstract="false" name="tuple" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="or3IvLj1VPfw" isRoot="false" isAbstract="false" name="cpu" >
        <UML:Classifier.feature>
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="oQpNSnMaOGmg" type="n0cQl8eC5yfs" name="id" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="T0X2kXhvCpXy" type="n0cQl8eC5yfs" name="clock" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="DLJe6gCUwyAc" type="HI2Y9XzC6ESU" name="rq" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="rnqllzNBroSh" type="pgqkZlhM2PrC" name="idle" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="U3JJpjyMrwgG" isRoot="false" isAbstract="false" isQuery="false" name="start" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="CVOQhRQoOP9U" isRoot="false" isAbstract="false" isQuery="false" name="stop" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="0qRNL5Vq6m9v" isRoot="false" isAbstract="false" isQuery="false" name="advance_tick" />
+        <UML:Attribute comment="Identificación de la CPU" isSpecification="false" visibility="private" xmi.id="oQpNSnMaOGmg" type="n0cQl8eC5yfs" name="id" />
+        <UML:Attribute comment="Lleva la cuenta de los ticks del reloj. Equivale a los jiffies y consultarlo es lo mismo que consultar el TSC en el kernel. Este atributo hace las veces de sched_clock" isSpecification="false" visibility="private" xmi.id="T0X2kXhvCpXy" type="n0cQl8eC5yfs" name="clock" />
+        <UML:Attribute comment="La runqueue de la CPU" isSpecification="false" visibility="private" xmi.id="DLJe6gCUwyAc" type="HI2Y9XzC6ESU" name="rq" />
+        <UML:Attribute comment="Tarea inactiva. Hay que definirla explícitamente en la CPU, por ejemplo, tiempo infinito en IOWAIT" isSpecification="false" visibility="private" xmi.id="rnqllzNBroSh" type="pgqkZlhM2PrC" name="idle" />
+        <UML:Attribute comment="Indica si la CPU está en funcionamiento. Si no lo está, no se permite avanzar ticks, por lo que el comportamiento del emulador sería estático." isSpecification="false" visibility="private" xmi.id="OawIIhUiDlXB" type="9OksdLfcv4N3" name="running" />
+        <UML:Operation comment="Inicializa algunos valores de la CPU como clock=0, rq=*rq y la tarea idle." isSpecification="false" isLeaf="false" visibility="public" xmi.id="U3JJpjyMrwgG" isRoot="false" isAbstract="false" isQuery="false" name="start" />
+        <UML:Operation comment="Detiene la CPU" isSpecification="false" isLeaf="false" visibility="public" xmi.id="CVOQhRQoOP9U" isRoot="false" isAbstract="false" isQuery="false" name="stop" />
+        <UML:Operation comment="Incrementa el reloj si la CPU está activa (self.running==True)" isSpecification="false" isLeaf="false" visibility="public" xmi.id="0qRNL5Vq6m9v" isRoot="false" isAbstract="false" isQuery="false" name="advance_tick" />
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="RZgMRCH1x2Gm" isRoot="false" isAbstract="false" name="scheduler" >
        <UML:Classifier.feature>
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="dqXOUZZi9UJh" type="or3IvLj1VPfw" name="cpus[]" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="daCYcTKDJpcl" type="MBSTflBMIQnq" name="processes" />
+        <UML:Attribute comment="Lista de CPU's del sistema. En el nuestro nos limitamos a un sistema UP, pero mantenemos abierta la puerta al SMP." isSpecification="false" visibility="private" xmi.id="dqXOUZZi9UJh" type="or3IvLj1VPfw" name="cpus[]" />
+        <UML:Attribute comment="Lista con todos los procesos del sistema. Algunos estarán en una runqueue y otros en una waitqueue." isSpecification="false" visibility="private" xmi.id="daCYcTKDJpcl" type="MBSTflBMIQnq" name="processes" />
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="TEFme1cIZOhb" isRoot="false" isAbstract="false" isQuery="false" name="__init__" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="dDBliaov8E21" type="RZgMRCH1x2Gm" />
           <UML:Parameter isSpecification="false" visibility="private" xmi.id="VJDC5MTLows4" value="" type="n0cQl8eC5yfs" name="n_cpus" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="eaoQ17cchoAJ" isRoot="false" isAbstract="false" isQuery="false" name="add_dir_tasks" >
+        <UML:Operation comment="Añade las tareas de un directorio. Añade todos los archivos con extensión .tsk" isSpecification="false" isLeaf="false" visibility="public" xmi.id="eaoQ17cchoAJ" isRoot="false" isAbstract="false" isQuery="false" name="add_dir_tasks" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="2AdGviAOuN8Y" type="n0cQl8eC5yfs" />
           <UML:Parameter isSpecification="false" visibility="private" xmi.id="FSUZF6KbGk5t" value="" type="CmMFlFY2Dj6N" name="dir" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="DZP7vYgHGTDL" isRoot="false" isAbstract="false" isQuery="false" name="do_fork" >
+        <UML:Operation comment="Inicializa los valores de una tarea como si la llamada do_fork del kernel fuera" isSpecification="false" isLeaf="false" visibility="public" xmi.id="DZP7vYgHGTDL" isRoot="false" isAbstract="false" isQuery="false" name="do_fork" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter isSpecification="false" visibility="private" xmi.id="xiwiPhWTteI2" value="" type="pgqkZlhM2PrC" name="t" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="mgI09UK6AGmZ" isRoot="false" isAbstract="false" isQuery="false" name="run" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="Y88gKAh4px3y" isRoot="false" isAbstract="false" isQuery="false" name="scheduler_tick" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="vJ1oxJoYVxKD" isRoot="false" isAbstract="false" isQuery="false" name="check_tasks" />
+        <UML:Operation comment="Inicia el temporizador del planificador." isSpecification="false" isLeaf="false" visibility="public" xmi.id="mgI09UK6AGmZ" isRoot="false" isAbstract="false" isQuery="false" name="run" />
+        <UML:Operation comment="Función llamada por el timer.
+Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" isLeaf="false" visibility="public" xmi.id="WIo0UeVAAeFV" isRoot="false" isAbstract="false" isQuery="false" name="do_tick" />
+        <UML:Operation comment="Análogo a la función del mismo nombre del kernel" isSpecification="false" isLeaf="false" visibility="public" xmi.id="Y88gKAh4px3y" isRoot="false" isAbstract="false" isQuery="false" name="scheduler_tick" />
+        <UML:Operation comment="Comprueba y modifica el estado de la tarea actual en función de su linea temporal." isSpecification="false" isLeaf="false" visibility="public" xmi.id="vJ1oxJoYVxKD" isRoot="false" isAbstract="false" isQuery="false" name="check_tasks" />
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="MBSTflBMIQnq" isRoot="false" isAbstract="false" name="list" />
@@ -133,13 +136,13 @@
      </UML:Namespace.ownedElement>
      <XMI.extension xmi.extender="umbrello" >
       <diagrams>
-       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="Nrzi8mq3c0kH" documentation="" type="1" showops="1" showpackage="0" name="diagrama de clase" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1320" snapy="10" showatts="1" xmi.id="Nrzi8mq3c0kH" documentation="" type="1" showops="1" showpackage="0" name="diagrama de clase" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="913" >
         <widgets>
          <classwidget usesdiagramfillcolor="0" width="150" showattsigs="601" x="1108" fillcolor="#ffffc0" y="327" showopsigs="601" linewidth="none" height="342" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="198" fillcolor="#ffffc0" y="651" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="198" fillcolor="#ffffc0" y="651" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
          <classwidget usesdiagramfillcolor="0" width="167" showattsigs="601" x="706" fillcolor="#ffffc0" y="760" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="221" fillcolor="#ffffc0" y="323" showopsigs="601" linewidth="none" height="144" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="164" fillcolor="#ffffc0" y="89" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="221" fillcolor="#ffffc0" y="323" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="164" fillcolor="#ffffc0" y="89" showopsigs="601" linewidth="none" height="180" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
         </widgets>
         <messages/>
         <associations>
@@ -148,7 +151,7 @@
            <startpoint startx="1108" starty="463" />
            <endpoint endx="381" endy="688" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="61" x="383" fillcolor="none" y="664" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="ykZB7NE05Cnf" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="61" x="383" fillcolor="none" y="664" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="zA3EJjUsEvOZ" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="pgqkZlhM2PrC" xmi.id="bYuEoU24zUVM" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
@@ -156,7 +159,7 @@
            <endpoint endx="873" endy="814" />
            <point x="1183" y="817" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="47" x="875" fillcolor="none" y="816" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="8nbap03Onirw" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="47" x="875" fillcolor="none" y="816" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="fE8scM7SJC7F" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="6" indexa="5" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="peDXfnHXDz0o" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
@@ -164,7 +167,7 @@
            <endpoint endx="706" endy="832" />
            <point x="458" y="837" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="651" fillcolor="none" y="834" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="alFwxLnt5K4A" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="651" fillcolor="none" y="834" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="8tHZjqSgyVuH" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="6" indexa="4" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="SsyfrwR0Ci4H" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
@@ -173,68 +176,51 @@
            <point x="704" y="795" />
            <point x="704" y="773" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="62" x="642" fillcolor="none" y="772" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="hIAlSwObhzBU" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="62" x="642" fillcolor="none" y="772" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="DM7PHWzvi7lK" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="6" indexa="2" visibilityB="200" totalcountb="5" indexb="3" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="TKOLjvLHtrmF" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="381" starty="726" />
            <endpoint endx="1108" endy="532" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="59" x="1047" fillcolor="none" y="534" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="xCtksieSRtPO" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="59" x="1047" fillcolor="none" y="534" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="Srml3r1BlGiS" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="6" indexa="3" visibilityB="200" totalcountb="5" indexb="4" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="uQfnHS0sYsnm" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="381" starty="763" />
            <endpoint endx="1108" endy="600" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="602" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="DAIIUMR9dZs5" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="602" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="6863dyIoKQEZ" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="3" indexa="1" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="HI2Y9XzC6ESU" xmi.id="rQiTaBIUwqUd" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="259" starty="651" />
-           <endpoint endx="262" endy="467" />
+           <endpoint endx="262" endy="485" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="36" x="224" fillcolor="none" y="469" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="VGgBDpfA1Wvr" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="36" x="224" fillcolor="none" y="487" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="uDUaIEvk5fU8" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="or3IvLj1VPfw" xmi.id="DLJe6gCUwyAc" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="303" starty="467" />
+           <startpoint startx="303" starty="485" />
            <endpoint endx="320" endy="651" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="26" x="292" fillcolor="none" y="627" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="FZKgTh3erLuJ" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="26" x="292" fillcolor="none" y="627" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="XTHGjxio5mpg" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="5" indexb="1" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="or3IvLj1VPfw" xmi.id="rnqllzNBroSh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="344" starty="395" />
+           <startpoint startx="344" starty="404" />
            <endpoint endx="1108" endy="395" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="397" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="fLQGtJMOX0Zj" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="397" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="k7T4VhdPs608" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="RZgMRCH1x2Gm" xmi.id="dqXOUZZi9UJh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="281" starty="251" />
+           <startpoint startx="281" starty="269" />
            <endpoint endx="282" endy="323" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="227" fillcolor="none" y="299" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="oDtnjofyMzdn" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="227" fillcolor="none" y="299" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="KtrNYLV3okJV" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
         </associations>
-       </diagram>
-       <diagram snapgrid="1" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="1" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="aRMSZxPnBgA5" documentation="" type="3" showops="1" showpackage="0" name="inicialización del emulador" localid="zP0GTPmrtp1u" showstereotype="0" showscope="1" snapcsgrid="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
-        <widgets>
-         <objectwidget usesdiagramfillcolor="0" width="90" x="110" fillcolor="#ffffc0" y="50" instancename="" linewidth="none" height="30" usefillcolor="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" decon="0" localid="1NwOXA7ixUht" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
-         <objectwidget usesdiagramfillcolor="0" width="50" x="420" fillcolor="#ffffc0" y="50" instancename="" linewidth="none" height="30" usefillcolor="1" isinstance="0" xmi.id="or3IvLj1VPfw" decon="0" localid="MkxXmSnNrAnR" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
-         <boxwidget usesdiagramfillcolor="1" width="20" x="120" fillcolor="none" y="200" linewidth="none" height="20" usefillcolor="1" isinstance="0" xmi.id="jCL7amZ0YsbL" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
-         <floatingtext usesdiagramfillcolor="1" width="90" x="120" fillcolor="none" y="200" linewidth="none" posttext="" role="700" height="30" usefillcolor="1" pretext="" isinstance="0" xmi.id="7ZUMiJ4PWPW4" text="for t in tasks" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
-        </widgets>
-        <messages>
-         <messagewidget usesdiagramfillcolor="1" width="50" x="145" fillcolor="none" y="138" operation="eaoQ17cchoAJ" linewidth="none" widgetbid="1NwOXA7ixUht" height="32" usefillcolor="1" seqnum="" textid="5m33XaNdQORS" widgetaid="1NwOXA7ixUht" isinstance="0" xmi.id="eaoQ17cchoAJ" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
-          <floatingtext usesdiagramfillcolor="1" width="220" x="150" fillcolor="none" y="110" linewidth="none" posttext="" role="705" height="30" usefillcolor="1" pretext="" isinstance="0" xmi.id="5m33XaNdQORS" text=": add_dir_tasks(dir : string) : int" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
-         </messagewidget>
-         <messagewidget usesdiagramfillcolor="1" width="50" x="145" fillcolor="none" y="236" operation="DZP7vYgHGTDL" linewidth="none" widgetbid="1NwOXA7ixUht" height="32" usefillcolor="1" seqnum="" textid="vTLVkT7oFArk" widgetaid="1NwOXA7ixUht" isinstance="0" xmi.id="DZP7vYgHGTDL" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
-          <floatingtext usesdiagramfillcolor="1" width="120" x="150" fillcolor="none" y="210" linewidth="none" posttext="" role="705" height="30" usefillcolor="1" pretext="" isinstance="0" xmi.id="vTLVkT7oFArk" text=": do_fork(t : task)" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
-         </messagewidget>
-        </messages>
-        <associations/>
        </diagram>
       </diagrams>
      </XMI.extension>
@@ -255,17 +241,17 @@
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello" >
-  <docsettings viewid="aRMSZxPnBgA5" documentation="" uniqueid="G7sOwQq7LnHl" />
+  <docsettings viewid="Nrzi8mq3c0kH" documentation="" uniqueid="OawIIhUiDlXB" />
   <listview>
    <listitem open="1" type="800" label="Vistas" >
     <listitem open="1" type="801" id="Logical View" >
      <listitem open="0" type="807" id="Nrzi8mq3c0kH" label="diagrama de clase" />
-     <listitem open="0" type="810" id="aRMSZxPnBgA5" label="inicialización del emulador" />
-     <listitem open="0" type="813" id="or3IvLj1VPfw" >
+     <listitem open="1" type="813" id="or3IvLj1VPfw" >
       <listitem open="0" type="814" id="oQpNSnMaOGmg" />
       <listitem open="0" type="814" id="T0X2kXhvCpXy" />
       <listitem open="0" type="814" id="DLJe6gCUwyAc" />
       <listitem open="0" type="814" id="rnqllzNBroSh" />
+      <listitem open="0" type="814" id="OawIIhUiDlXB" />
       <listitem open="0" type="815" id="U3JJpjyMrwgG" />
       <listitem open="0" type="815" id="CVOQhRQoOP9U" />
       <listitem open="0" type="815" id="0qRNL5Vq6m9v" />
@@ -293,13 +279,14 @@
       <listitem open="0" type="814" id="HjfpbRZVrYRJ" />
       <listitem open="0" type="814" id="HG1KxUe0Zhmd" />
      </listitem>
-     <listitem open="0" type="813" id="RZgMRCH1x2Gm" >
+     <listitem open="1" type="813" id="RZgMRCH1x2Gm" >
       <listitem open="0" type="814" id="dqXOUZZi9UJh" />
       <listitem open="0" type="814" id="daCYcTKDJpcl" />
       <listitem open="0" type="815" id="TEFme1cIZOhb" />
       <listitem open="0" type="815" id="eaoQ17cchoAJ" />
       <listitem open="0" type="815" id="DZP7vYgHGTDL" />
       <listitem open="0" type="815" id="mgI09UK6AGmZ" />
+      <listitem open="0" type="815" id="WIo0UeVAAeFV" />
       <listitem open="0" type="815" id="Y88gKAh4px3y" />
       <listitem open="0" type="815" id="vJ1oxJoYVxKD" />
      </listitem>

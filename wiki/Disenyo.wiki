@@ -14,7 +14,7 @@
 
   * clase cpu:
     * tiene una runqueue
-    * mantiene la "hora" del sistema.
+    * mantiene la "hora" del sistema (equivale al tsc).
 
   * clase runqueue:
     * tiene 2 prio_array.
@@ -38,5 +38,5 @@
   * módulo bitutils:
     * Funciones para manipulación de bits (ffs, set & clear bit).
 
-= Formato del XML de procesos =
+
 

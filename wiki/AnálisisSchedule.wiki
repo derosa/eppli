@@ -1,2 +1,16 @@
 Análisis de la función schedule (sched.c@2662):
 
+	- Se comprueba si estamos en medio de una operación atómica y vuelca la pila 
+	si es así (para depurar),excepto si el proceso está en estado de terminación.
+need_resched:
+	- Se desabilita la apropiación.
+	- El proceso anterior es el actual (prev = current)
+need_resched_nonpreemtible:
+	- Obtiene la rq.
+	- Si el proceso actual era "idle" y además no estaba en ejecución, vuelca la 
+	pila.
+	- "now" = reloj
+	- run_time = min(now - prev->timestamp, NS_MAX_SLEEP_AVG)
+	- Se ajusta el run_time según un bonus.
+	- Con el flag PF_DEAD, el proceso entra en estado EXIT_DEAD
+	- 
