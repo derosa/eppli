@@ -279,7 +279,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">CPU a la que corresponde la runqueue</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -288,7 +288,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">priority_array de procesos activos</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -297,7 +297,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">priority_array de procesos expirados</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -306,7 +306,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Número de procesos de la runqueue en ejecución (len(active))</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -315,7 +315,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Número de cambios de contexto.</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -521,7 +521,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Identificación de la CPU</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -530,7 +530,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Lleva la cuenta de los ticks del reloj. Equivale a los jiffies y consultarlo es lo mismo que consultar el TSC en el kernel. Este atributo hace las veces de sched_clock</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -539,7 +539,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">La runqueue de la CPU</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -548,7 +548,16 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Tarea inactiva. Hay que definirla explícitamente en la CPU, por ejemplo, tiempo infinito en IOWAIT</entry>
+            </row>
+            <row>
+              <entry role="feature-detail">private</entry>
+              <entry role="feature-detail"/>
+              <entry role="feature-detail">running</entry>
+            </row>
+            <row>
+              <entry role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Indica si la CPU está en funcionamiento. Si no lo está, no se permite avanzar ticks, por lo que el comportamiento del emulador sería estático.</entry>
             </row>
             <row>
               <entry role="info-title" namest="c1" nameend="c3">
@@ -575,7 +584,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Inicializa algunos valores de la CPU como clock=0, rq=*rq y la tarea idle.</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -586,7 +595,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Detiene la CPU</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -597,7 +606,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Incrementa el reloj si la CPU está activa (self.running==True)</entry>
             </row>
           </tbody>
         </tgroup>
@@ -633,7 +642,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Lista de CPU's del sistema. En el nuestro nos limitamos a un sistema UP, pero mantenemos abierta la puerta al SMP.</entry>
             </row>
             <row>
               <entry role="feature-detail">private</entry>
@@ -642,7 +651,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Lista con todos los procesos del sistema. Algunos estarán en una runqueue y otros en una waitqueue.</entry>
             </row>
             <row>
               <entry role="info-title" namest="c1" nameend="c3">
@@ -676,7 +685,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Añade las tareas de un directorio. Añade todos los archivos con extensión .tsk</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -687,7 +696,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Inicializa los valores de una tarea como si la llamada do_fork del kernel fuera</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -698,7 +707,18 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Inicia el temporizador del planificador.</entry>
+            </row>
+            <row>
+              <entry role="feature-detail">public</entry>
+              <entry role="feature-detail">
+                <para role="datatype">void</para>
+              </entry>
+              <entry role="feature-detail">do_tick</entry>
+            </row>
+            <row>
+              <entry role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Función llamada por el timer. Se encarga de ejecutar check_tasks() y scheduler_tick</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -709,7 +729,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Análogo a la función del mismo nombre del kernel</entry>
             </row>
             <row>
               <entry role="feature-detail">public</entry>
@@ -720,7 +740,7 @@
             </row>
             <row>
               <entry role="comment"/>
-              <entry namest="c2" nameend="c3" role="comment"/>
+              <entry namest="c2" nameend="c3" role="comment">Comprueba y modifica el estado de la tarea actual en función de su linea temporal.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -738,6 +758,30 @@
             <row>
               <entry role="class-title">Class</entry>
               <entry role="class-name" namest="c2" nameend="c3">list</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry namest="c1" nameend="c3">
+                <para/>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>nueva_clase</title>
+      <table frame="all">
+        <title/>
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="c1"/>
+          <colspec colname="c2"/>
+          <colspec colname="c3"/>
+          <thead>
+            <row>
+              <entry role="class-title">Class</entry>
+              <entry role="class-name" namest="c2" nameend="c3">nueva_clase</entry>
             </row>
           </thead>
           <tbody>
