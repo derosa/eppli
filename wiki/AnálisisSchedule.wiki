@@ -13,4 +13,13 @@ need_resched_nonpreemtible:
 	- run_time = min(now - prev->timestamp, NS_MAX_SLEEP_AVG)
 	- Se ajusta el run_time según un bonus.
 	- Con el flag PF_DEAD, el proceso entra en estado EXIT_DEAD
-	- 
+	- Si el proceso previo era InTERRUPTIBLE y tiene señales pendientes, se cambia su estado a RUNNING. Si era UNINTERRUPTIBLE, se desactiva la tarea.
+    - Si la cpu no tiene procesos en estado running, se intenta balancear las cpus y se comprueba de nuevo. si sigue siendo así, se cambia a la tarea idle de la cpu, se resetea el expired timestamp y se intenta despertar procesos durmientes. En UP esta llamada no hace nada, en SMP busca procesos factibles de ser despertados, por lo que se vuelve a comprobar a comprobar si hay tareas que puedan ejecutarse. De ser así se vuelve a switch_tasks:.
+    - En otro caso (la cpu tiene procesos "runnables"), se comprueban los procesos dependientes, que de nuevo en UP devolverá 0.
+        - Si no hay procesos runnables, se salta a go_idle para conmutar al proceso idle de la cpu.
+    - Si el prio_array active no tiene procesos activos, se intercambia con expired y se resetea el expired_timestamp de la rq y se pone la best_expired_prio a MAX_PRIO.
+    - Si hay procesos activos se incrementa la estadística de número de cambios de contexto.
+    - Se busca el primer bit activado del bitmap.
+    - Se obtiene la cola correspondiente a ese bit y se obtiene la siguiente tarea de la lista (en RR): "next"
+@2783:
+    - Si la tarea no es de tiempo real y está activada, se 
