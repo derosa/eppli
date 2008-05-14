@@ -1,0 +1,19 @@
+shceduler.run:
+
+while 1:
+	* do_tick():
+		* check_tasks():
+			- Por cada tarea durmiente, comprueba si su nuevo estado según la línea
+			temporal es != durmiente. Si es así se llama a try_to_wake_up. (Con esto 
+			se emula una waitqueue).
+
+			- Comprueba si current ha cambiado de estado a durmiente. Si es así, 
+			se llama echa a dormir y se activa NEED_RESCHED.
+		* scheduler_tick()
+	* Si NEED_RESCHED o !(tick%HZ): schedule()
+	* do_tick:
+		- cpu.advance_tick()
+		- current.localtime++
+		- para cada tarea durmiendo:
+			tarea.localtime++
+	* sleep(1/HZ)
