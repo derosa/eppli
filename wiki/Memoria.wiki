@@ -2,6 +2,8 @@
 #labels Phase-Deploy,Memoria
 
 = Introducción =
+= *El contenido de la memoria ya no se actualiza aquí, sino en el 
+documento propio de la memoria* =
 Esta página contiene la memoria del proyecto, para ser formateada y recauchutada luego en el editor.
 
 La memoria debe contener ~60 páginas, junto con una presentación de unas 20.
