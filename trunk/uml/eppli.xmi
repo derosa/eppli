@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-08T23:06:28" xmi.version="1.2" >
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-14T17:44:28" xmi.version="1.2" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -29,35 +29,47 @@
         <UML:DataType stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Datatypes" xmi.id="5B7FvvwznHiV" isRoot="false" isAbstract="false" name="unsigned long" />
         <UML:DataType stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Datatypes" xmi.id="CmMFlFY2Dj6N" isRoot="false" isAbstract="false" name="string" />
         <UML:DataType stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Datatypes" xmi.id="iZHTZEnyoTKD" isRoot="false" isAbstract="false" name="cpu[]" elementReference="or3IvLj1VPfw" />
+        <UML:DataType stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Datatypes" xmi.id="s2rSfesU4eid" isRoot="false" isAbstract="false" name="undef" />
        </UML:Namespace.ownedElement>
       </UML:Package>
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="pgqkZlhM2PrC" isRoot="false" isAbstract="false" name="task" >
        <UML:Classifier.feature>
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="BSuOyxbf1z5B" type="f3hLeJAK7ttq" name="timeline" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="YDrw435FT0bR" type="CmMFlFY2Dj6N" name="name" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="vD7wAC7pFn9r" type="n0cQl8eC5yfs" name="localtime" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="4H99800hDpdH" type="n0cQl8eC5yfs" name="flags" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="sgUMg6lbHsVR" type="n0cQl8eC5yfs" name="state" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="3bGGON8SfFZn" type="n0cQl8eC5yfs" name="prio" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="GXUTM5jDmDXQ" type="HI2Y9XzC6ESU" name="run_list" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="bYuEoU24zUVM" type="YEXIS4ihKiGT" name="array" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="EDfKP6nzchDO" type="n0cQl8eC5yfs" name="sleep_avg" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="2CIMtYo5jTP9" type="n0cQl8eC5yfs" name="timestamp" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="XA6AsHYzVz6B" type="n0cQl8eC5yfs" name="last_ran" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="vXN5VrgX1ysu" type="n0cQl8eC5yfs" name="activated" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="UgzD7NKdXOlN" type="n0cQl8eC5yfs" name="policy" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="gHLBGRK9xhDS" type="n0cQl8eC5yfs" name="timeslice" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="YtyXpoSJSPUZ" type="n0cQl8eC5yfs" name="first_time_slice" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="mnAIBvfrD00R" type="n0cQl8eC5yfs" name="rt_priority" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="QKZNzmnXdj3S" isRoot="false" isAbstract="false" isQuery="false" name="activate" >
+        <UML:Attribute isSpecification="false" visibility="private" xmi.id="FwSEoPfk1pH4" type="n0cQl8eC5yfs" name="pid" />
+        <UML:Attribute comment="Nombre del proceso" isSpecification="false" visibility="private" xmi.id="YDrw435FT0bR" type="CmMFlFY2Dj6N" name="name" />
+        <UML:Attribute comment="Mapa con el instante de tiempo en que la tarea cambia de estado." isSpecification="false" visibility="private" xmi.id="BSuOyxbf1z5B" type="s2rSfesU4eid" name="timeline" />
+        <UML:Attribute comment="Mantiene un contador con la &quot;hora&quot; local del proceso. " isSpecification="false" visibility="private" xmi.id="vD7wAC7pFn9r" type="n0cQl8eC5yfs" name="localtime" />
+        <UML:Attribute comment="Para el flag TIF_NEED_RESCHED" isSpecification="false" visibility="private" xmi.id="4H99800hDpdH" type="n0cQl8eC5yfs" name="flags" />
+        <UML:Attribute comment="TASK_RUNNNING
+TASK_INTERRUPTIBLE
+TASL_UNINTERRUPTIBLE" isSpecification="false" visibility="private" xmi.id="sgUMg6lbHsVR" type="n0cQl8eC5yfs" name="state" />
+        <UML:Attribute comment="Indica el anterior estado del proceso, para hacer más sencillo detectar el cambio de estado." isSpecification="false" visibility="private" xmi.id="Lgxu5e4VrnVA" type="n0cQl8eC5yfs" name="old_state" />
+        <UML:Attribute comment="Prioridad estádica del proceso." isSpecification="false" visibility="private" xmi.id="3bGGON8SfFZn" type="n0cQl8eC5yfs" name="prio" />
+        <UML:Attribute comment="Rq a la que pertenece el proceso." isSpecification="false" visibility="private" xmi.id="GXUTM5jDmDXQ" type="HI2Y9XzC6ESU" name="run_list" />
+        <UML:Attribute comment="prio_array al que pertenece el proceso." isSpecification="false" visibility="private" xmi.id="bYuEoU24zUVM" type="YEXIS4ihKiGT" name="array" />
+        <UML:Attribute comment="Tiempo medio durmiendo" isSpecification="false" visibility="private" xmi.id="EDfKP6nzchDO" type="n0cQl8eC5yfs" name="sleep_avg" />
+        <UML:Attribute comment="Hora del proceso." isSpecification="false" visibility="private" xmi.id="2CIMtYo5jTP9" type="n0cQl8eC5yfs" name="timestamp" />
+        <UML:Attribute comment="Hora de la última vez que se ejecutó" isSpecification="false" visibility="private" xmi.id="XA6AsHYzVz6B" type="n0cQl8eC5yfs" name="last_ran" />
+        <UML:Attribute comment="Indica de qué estado viene un proceso cuando se reactiva." isSpecification="false" visibility="private" xmi.id="vXN5VrgX1ysu" type="n0cQl8eC5yfs" name="activated" />
+        <UML:Attribute comment="Tipo de planificadción aplicada al proceso:
+SCHED_RR
+SCHED_FIFO
+SCHED_NORMAL" isSpecification="false" visibility="private" xmi.id="UgzD7NKdXOlN" type="n0cQl8eC5yfs" name="policy" />
+        <UML:Attribute comment="Tiempo de CPU restante." isSpecification="false" visibility="private" xmi.id="gHLBGRK9xhDS" type="n0cQl8eC5yfs" name="timeslice" />
+        <UML:Attribute comment="Indica si es la primera porción de tiempo que usa la tarea." isSpecification="false" visibility="private" xmi.id="YtyXpoSJSPUZ" type="n0cQl8eC5yfs" name="first_time_slice" />
+        <UML:Attribute comment="Prioridad de tiempo real." isSpecification="false" visibility="private" xmi.id="mnAIBvfrD00R" type="n0cQl8eC5yfs" name="rt_priority" />
+        <UML:Operation comment="Activa la tarea, equivale a activate_task()" isSpecification="false" isLeaf="false" visibility="public" xmi.id="QKZNzmnXdj3S" isRoot="false" isAbstract="false" isQuery="false" name="activate" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="bYzmX0DvImGI" type="n0cQl8eC5yfs" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="XTjzsBXdyhvA" isRoot="false" isAbstract="false" isQuery="false" name="recalc_prio" />
+        <UML:Operation comment="Recalcula la prioridad de este proceso." isSpecification="false" isLeaf="false" visibility="public" xmi.id="XTjzsBXdyhvA" isRoot="false" isAbstract="false" isQuery="false" name="recalc_prio" />
+        <UML:Operation comment="Carga un proceso desde un archivo." isSpecification="false" isLeaf="false" visibility="public" xmi.id="QDl2Kw9QunCZ" isRoot="false" isAbstract="false" isQuery="false" name="load_from_file" >
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter isSpecification="false" visibility="private" xmi.id="YfE0YxdNLdWd" value="" type="CmMFlFY2Dj6N" name="file" />
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="f3hLeJAK7ttq" isRoot="false" isAbstract="false" name="map" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="HI2Y9XzC6ESU" isRoot="false" isAbstract="false" name="runqueue" >
        <UML:Classifier.feature>
         <UML:Attribute comment="CPU a la que corresponde la runqueue" isSpecification="false" visibility="private" xmi.id="rQiTaBIUwqUd" type="or3IvLj1VPfw" name="cpu" />
@@ -75,22 +87,21 @@
       </UML:Class>
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="YEXIS4ihKiGT" isRoot="false" isAbstract="false" name="prio_array" >
        <UML:Classifier.feature>
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="xmB2AE6pdQLm" type="n0cQl8eC5yfs" name="nr_active" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="wpMXDhHjAxTN" type="n0cQl8eC5yfs" name="bitmap" />
-        <UML:Attribute isSpecification="false" visibility="private" xmi.id="WUgkDq2M5WO5" type="EVLZofZjRilZ" name="queue" />
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="nVhq03vEYFlL" isRoot="false" isAbstract="false" isQuery="false" name="add_task" >
+        <UML:Attribute comment="Número de procesos activos" isSpecification="false" visibility="private" xmi.id="xmB2AE6pdQLm" type="n0cQl8eC5yfs" name="nr_active" />
+        <UML:Attribute comment="Bitmap de prioridades con tareas" isSpecification="false" visibility="private" xmi.id="wpMXDhHjAxTN" type="n0cQl8eC5yfs" name="bitmap" />
+        <UML:Attribute comment="Lista de colas de procesos ordenados por prioridades" isSpecification="false" visibility="private" xmi.id="WUgkDq2M5WO5" type="lFzOpvWEGTPi" name="queue" />
+        <UML:Operation comment="Añade un objeto task al prio_array" isSpecification="false" isLeaf="false" visibility="public" xmi.id="nVhq03vEYFlL" isRoot="false" isAbstract="false" isQuery="false" name="add_task" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter isSpecification="false" visibility="private" xmi.id="uL4J3oqydCTr" value="" type="pgqkZlhM2PrC" name="t" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="ulY2g0PST4IT" isRoot="false" isAbstract="false" isQuery="false" name="remove_task" >
+        <UML:Operation comment="Elimina una tarea del prio_array" isSpecification="false" isLeaf="false" visibility="public" xmi.id="ulY2g0PST4IT" isRoot="false" isAbstract="false" isQuery="false" name="remove_task" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter isSpecification="false" visibility="private" xmi.id="7CgeRRzJk3cm" value="" type="pgqkZlhM2PrC" name="t" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="EVLZofZjRilZ" isRoot="false" isAbstract="false" name="tuple" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="or3IvLj1VPfw" isRoot="false" isAbstract="false" name="cpu" >
        <UML:Classifier.feature>
         <UML:Attribute comment="Identificación de la CPU" isSpecification="false" visibility="private" xmi.id="oQpNSnMaOGmg" type="n0cQl8eC5yfs" name="id" />
@@ -106,7 +117,7 @@
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="RZgMRCH1x2Gm" isRoot="false" isAbstract="false" name="scheduler" >
        <UML:Classifier.feature>
         <UML:Attribute comment="Lista de CPU's del sistema. En el nuestro nos limitamos a un sistema UP, pero mantenemos abierta la puerta al SMP." isSpecification="false" visibility="private" xmi.id="dqXOUZZi9UJh" type="or3IvLj1VPfw" name="cpus[]" />
-        <UML:Attribute comment="Lista con todos los procesos del sistema. Algunos estarán en una runqueue y otros en una waitqueue." isSpecification="false" visibility="private" xmi.id="daCYcTKDJpcl" type="MBSTflBMIQnq" name="processes" />
+        <UML:Attribute comment="Lista con todos los procesos del sistema. Algunos estarán en una runqueue y otros en una waitqueue." isSpecification="false" visibility="private" xmi.id="daCYcTKDJpcl" type="6dYspr6hSz2D" name="processes" />
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="TEFme1cIZOhb" isRoot="false" isAbstract="false" isQuery="false" name="__init__" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="dDBliaov8E21" type="RZgMRCH1x2Gm" />
@@ -125,102 +136,171 @@
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
         <UML:Operation comment="Inicia el temporizador del planificador." isSpecification="false" isLeaf="false" visibility="public" xmi.id="mgI09UK6AGmZ" isRoot="false" isAbstract="false" isQuery="false" name="run" />
+        <UML:Operation comment="Detiene la emulación deteniendo la cpu." isSpecification="false" isLeaf="false" visibility="public" xmi.id="z8qS8sdKgxiM" isRoot="false" isAbstract="false" isQuery="false" name="stop" />
         <UML:Operation comment="Función llamada por el timer.
 Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" isLeaf="false" visibility="public" xmi.id="WIo0UeVAAeFV" isRoot="false" isAbstract="false" isQuery="false" name="do_tick" />
         <UML:Operation comment="Análogo a la función del mismo nombre del kernel" isSpecification="false" isLeaf="false" visibility="public" xmi.id="Y88gKAh4px3y" isRoot="false" isAbstract="false" isQuery="false" name="scheduler_tick" />
-        <UML:Operation comment="Comprueba y modifica el estado de la tarea actual en función de su linea temporal." isSpecification="false" isLeaf="false" visibility="public" xmi.id="vJ1oxJoYVxKD" isRoot="false" isAbstract="false" isQuery="false" name="check_tasks" />
+        <UML:Operation comment="Por cada tarea durmiente, comprueba si su nuevo estado según la línea temporal es != durmiente. Si es así se llama a try_to_wake_up. (Con esto se emula una waitqueue).
+
+Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a dormir el proceso y se activa NEED_RESCHED." isSpecification="false" isLeaf="false" visibility="public" xmi.id="vJ1oxJoYVxKD" isRoot="false" isAbstract="false" isQuery="false" name="check_tasks" />
+        <UML:Operation comment="Análogo a la función del mismo nombre del kernel." isSpecification="false" isLeaf="false" visibility="public" xmi.id="wbAZ5idCLA48" isRoot="false" isAbstract="false" isQuery="false" name="try_to_wake_up" />
+        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="EqJOgKF8zszT" isRoot="false" isAbstract="false" isQuery="false" name="schedule" />
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="MBSTflBMIQnq" isRoot="false" isAbstract="false" name="list" />
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="TzNvIKrxmX4K" isRoot="false" isAbstract="false" name="nueva_clase" />
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="6dYspr6hSz2D" isRoot="false" isAbstract="false" name="map" />
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="lFzOpvWEGTPi" isRoot="false" isAbstract="false" name="list" />
      </UML:Namespace.ownedElement>
      <XMI.extension xmi.extender="umbrello" >
       <diagrams>
-       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1320" snapy="10" showatts="1" xmi.id="Nrzi8mq3c0kH" documentation="" type="1" showops="1" showpackage="0" name="diagrama de clase" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="913" >
+       <diagram snapgrid="1" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="1" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="Nrzi8mq3c0kH" documentation="" type="1" showops="1" showpackage="0" name="diagrama de clase" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
         <widgets>
-         <classwidget usesdiagramfillcolor="0" width="150" showattsigs="601" x="1108" fillcolor="#ffffc0" y="327" showopsigs="601" linewidth="none" height="342" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="198" fillcolor="#ffffc0" y="651" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="167" showattsigs="601" x="706" fillcolor="#ffffc0" y="760" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="221" fillcolor="#ffffc0" y="323" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="164" fillcolor="#ffffc0" y="89" showopsigs="601" linewidth="none" height="180" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="201" showattsigs="601" x="510" fillcolor="#ffffc0" y="60" showopsigs="601" linewidth="none" height="396" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="200" fillcolor="#ffffc0" y="570" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="167" showattsigs="601" x="560" fillcolor="#ffffc0" y="520" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="180" fillcolor="#ffffc0" y="330" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="120" fillcolor="#ffffc0" y="30" showopsigs="601" linewidth="none" height="234" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
         </widgets>
         <messages/>
         <associations>
-         <assocwidget totalcounta="5" indexa="2" visibilityB="200" totalcountb="6" indexb="1" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="pgqkZlhM2PrC" xmi.id="GXUTM5jDmDXQ" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="4" indexa="2" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="peDXfnHXDz0o" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="1108" starty="463" />
-           <endpoint endx="381" endy="688" />
+           <startpoint startx="383" starty="680" />
+           <endpoint endx="620" endy="628" />
+           <point x="620" y="680" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="61" x="383" fillcolor="none" y="664" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="zA3EJjUsEvOZ" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="570" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="tHHNpEECTQ4D" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="pgqkZlhM2PrC" xmi.id="bYuEoU24zUVM" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="4" indexa="3" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="SsyfrwR0Ci4H" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="1183" starty="669" />
-           <endpoint endx="873" endy="814" />
-           <point x="1183" y="817" />
+           <startpoint startx="383" starty="740" />
+           <endpoint endx="670" endy="628" />
+           <point x="670" y="740" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="47" x="875" fillcolor="none" y="816" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="fE8scM7SJC7F" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="62" x="670" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="PR2d8b0Q4ZrF" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="6" indexa="5" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="peDXfnHXDz0o" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="5" indexa="4" visibilityB="200" totalcountb="4" indexb="3" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="TKOLjvLHtrmF" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="381" starty="838" />
-           <endpoint endx="706" endy="832" />
-           <point x="458" y="837" />
+           <startpoint startx="350" starty="570" />
+           <endpoint endx="510" endy="360" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="651" fillcolor="none" y="834" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="8tHZjqSgyVuH" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="59" x="450" fillcolor="none" y="360" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="lNrW3xDxCSI1" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="6" indexa="4" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="SsyfrwR0Ci4H" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="5" indexa="3" visibilityB="200" totalcountb="4" indexb="2" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="uQfnHS0sYsnm" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="381" starty="801" />
-           <endpoint endx="706" endy="796" />
-           <point x="704" y="795" />
-           <point x="704" y="773" />
+           <startpoint startx="310" starty="570" />
+           <endpoint endx="510" endy="260" />
+           <point x="310" y="440" />
+           <point x="440" y="440" />
+           <point x="440" y="260" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="62" x="642" fillcolor="none" y="772" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="DM7PHWzvi7lK" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="260" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="fWB8uELKfNxn" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="6" indexa="2" visibilityB="200" totalcountb="5" indexb="3" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="TKOLjvLHtrmF" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="5" indexa="1" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="HI2Y9XzC6ESU" xmi.id="rQiTaBIUwqUd" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="381" starty="726" />
-           <endpoint endx="1108" endy="532" />
+           <startpoint startx="240" starty="570" />
+           <endpoint endx="220" endy="492" />
+           <point x="240" y="550" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="59" x="1047" fillcolor="none" y="534" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="Srml3r1BlGiS" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="36" x="180" fillcolor="none" y="490" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="xvC1S3HEO6iS" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="6" indexa="3" visibilityB="200" totalcountb="5" indexb="4" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="uQfnHS0sYsnm" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="5" indexb="2" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="or3IvLj1VPfw" xmi.id="DLJe6gCUwyAc" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="381" starty="763" />
-           <endpoint endx="1108" endy="600" />
+           <startpoint startx="260" starty="492" />
+           <endpoint endx="270" endy="570" />
+           <point x="255" y="441" />
+           <point x="265" y="519" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="602" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="6863dyIoKQEZ" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="26" x="260" fillcolor="none" y="510" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="1vNDLfC09L93" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
-         <assocwidget totalcounta="3" indexa="1" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="HI2Y9XzC6ESU" xmi.id="rQiTaBIUwqUd" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+         <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="4" indexb="1" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="or3IvLj1VPfw" xmi.id="rnqllzNBroSh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="259" starty="651" />
-           <endpoint endx="262" endy="485" />
+           <startpoint startx="303" starty="410" />
+           <endpoint endx="510" endy="160" />
+           <point x="380" y="410" />
+           <point x="380" y="160" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="36" x="224" fillcolor="none" y="487" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="uDUaIEvk5fU8" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
-         </assocwidget>
-         <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="or3IvLj1VPfw" xmi.id="DLJe6gCUwyAc" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
-          <linepath>
-           <startpoint startx="303" starty="485" />
-           <endpoint endx="320" endy="651" />
-          </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="26" x="292" fillcolor="none" y="627" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="XTHGjxio5mpg" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
-         </assocwidget>
-         <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="5" indexb="1" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="or3IvLj1VPfw" xmi.id="rnqllzNBroSh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
-          <linepath>
-           <startpoint startx="344" starty="404" />
-           <endpoint endx="1108" endy="395" />
-          </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="1069" fillcolor="none" y="397" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="k7T4VhdPs608" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="160" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="ZSLEoJ0lECmf" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="RZgMRCH1x2Gm" xmi.id="dqXOUZZi9UJh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="281" starty="269" />
-           <endpoint endx="282" endy="323" />
+           <startpoint startx="240" starty="264" />
+           <endpoint endx="240" endy="330" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="227" fillcolor="none" y="299" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="KtrNYLV3okJV" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="190" fillcolor="none" y="310" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="D1tb5Z16SMJn" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </assocwidget>
+         <assocwidget totalcounta="3" indexa="1" visibilityB="200" totalcountb="4" indexb="1" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="pgqkZlhM2PrC" xmi.id="GXUTM5jDmDXQ" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+          <linepath>
+           <startpoint startx="580" starty="456" />
+           <endpoint endx="383" endy="630" />
+           <point x="580" y="490" />
+           <point x="470" y="490" />
+           <point x="470" y="630" />
+          </linepath>
+          <floatingtext usesdiagramfillcolor="1" width="61" x="380" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="zTo8pvAONVbB" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </assocwidget>
+         <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="pgqkZlhM2PrC" xmi.id="bYuEoU24zUVM" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
+          <linepath>
+           <startpoint startx="640" starty="456" />
+           <endpoint endx="640" endy="520" />
+          </linepath>
+          <floatingtext usesdiagramfillcolor="1" width="47" x="590" fillcolor="none" y="500" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="obw1lhewgXVm" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
         </associations>
+       </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="8SjRjGFLEv62" documentation="" type="3" showops="1" showpackage="0" name="Secuencia - Núcleo de emulación" localid="dkwiVxVvgQBC" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <objectwidget usesdiagramfillcolor="0" width="85" x="85" fillcolor="#ffffc0" y="48" instancename="" linewidth="none" height="28" usefillcolor="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" decon="0" localid="TqYbRtKZ5BJF" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+         <objectwidget usesdiagramfillcolor="0" width="50" x="338" fillcolor="#ffffc0" y="279" instancename="" linewidth="none" height="28" usefillcolor="1" isinstance="0" xmi.id="pgqkZlhM2PrC" decon="0" localid="hpdkyw0TfGJP" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+         <boxwidget usesdiagramfillcolor="1" width="306" x="90" fillcolor="none" y="239" linewidth="none" height="114" usefillcolor="1" isinstance="0" xmi.id="o0KjX2qSovbb" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+         <objectwidget usesdiagramfillcolor="0" width="50" x="388" fillcolor="#ffffc0" y="48" instancename="" linewidth="none" height="28" usefillcolor="1" isinstance="0" xmi.id="or3IvLj1VPfw" decon="0" localid="VSfsnj2NbFHB" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+         <floatingtext usesdiagramfillcolor="1" width="55" x="67" fillcolor="none" y="422" linewidth="none" posttext="" role="700" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="wuHMKD1yUQNg" text="Repetir" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         <floatingtext usesdiagramfillcolor="1" width="102" x="83" fillcolor="none" y="219" linewidth="none" posttext="" role="700" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="5NlU94MB2UC7" text="Por cada tarea" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         <boxwidget usesdiagramfillcolor="1" width="316" x="69" fillcolor="none" y="440" linewidth="none" height="395" usefillcolor="1" isinstance="0" xmi.id="Ir1BBYef2GqB" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+         <objectwidget usesdiagramfillcolor="0" width="83" x="473" fillcolor="#ffffc0" y="48" instancename="" linewidth="none" height="28" usefillcolor="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" decon="0" localid="hRrhv4oieEX1" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+         <objectwidget usesdiagramfillcolor="0" width="88" x="590" fillcolor="#ffffc0" y="48" instancename="" linewidth="none" height="28" usefillcolor="1" isinstance="0" xmi.id="YEXIS4ihKiGT" decon="0" localid="dkwiVxVvgQBC" multipleinstance="0" drawasactor="0" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+        </widgets>
+        <messages>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="175" operation="eaoQ17cchoAJ" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="32" usefillcolor="1" seqnum="" textid="3YmGUqIveoV5" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="eaoQ17cchoAJ" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="211" x="130" fillcolor="none" y="153" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3YmGUqIveoV5" text=": add_dir_tasks(dir : string) : int" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="209" x="128" fillcolor="none" y="293" operation="QDl2Kw9QunCZ" linewidth="none" widgetbid="hpdkyw0TfGJP" height="8" usefillcolor="1" seqnum="" textid="JjZwX21Drexp" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="QDl2Kw9QunCZ" sequencemessagetype="1002" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="190" x="141" fillcolor="none" y="271" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="JjZwX21Drexp" text=": load_from_file(file : string)" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="234" x="128" fillcolor="none" y="332" operation="DZP7vYgHGTDL" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="8" usefillcolor="1" seqnum="" textid="wuvn5FDQNtsH" widgetaid="hpdkyw0TfGJP" isinstance="0" xmi.id="DZP7vYgHGTDL" sequencemessagetype="1001" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="120" x="175" fillcolor="none" y="310" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="wuvn5FDQNtsH" text=": do_fork(t : task)" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="445" operation="mgI09UK6AGmZ" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="338" usefillcolor="1" seqnum="" textid="wZiwPAiJkHR4" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="mgI09UK6AGmZ" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="47" x="130" fillcolor="none" y="423" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="wZiwPAiJkHR4" text=": run()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="294" x="127" fillcolor="none" y="112" operation="__init__()" linewidth="none" widgetbid="VSfsnj2NbFHB" height="32" usefillcolor="1" seqnum="" textid="CWni3FCZhrPS" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="xEY6uroCGst7" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="75" x="132" fillcolor="none" y="90" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="CWni3FCZhrPS" text=": __init__()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="294" x="127" fillcolor="none" y="394" operation="U3JJpjyMrwgG" linewidth="none" widgetbid="VSfsnj2NbFHB" height="32" usefillcolor="1" seqnum="" textid="dJRRB6tHJ90K" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="U3JJpjyMrwgG" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="56" x="352" fillcolor="none" y="372" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="dJRRB6tHJ90K" text=": start()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="474" operation="WIo0UeVAAeFV" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="274" usefillcolor="1" seqnum="" textid="KpZJ8HBeCnG1" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="WIo0UeVAAeFV" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="73" x="130" fillcolor="none" y="452" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="KpZJ8HBeCnG1" text=": do_tick()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="500" operation="vJ1oxJoYVxKD" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="28" usefillcolor="1" seqnum="" textid="kKdq2OYKB6dJ" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="vJ1oxJoYVxKD" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="106" x="130" fillcolor="none" y="478" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="kKdq2OYKB6dJ" text=": check_tasks()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="551" operation="Y88gKAh4px3y" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="32" usefillcolor="1" seqnum="" textid="7vjcph4XzgN1" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="Y88gKAh4px3y" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="120" x="130" fillcolor="none" y="529" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="7vjcph4XzgN1" text=": scheduler_tick()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="609" operation="wbAZ5idCLA48" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="32" usefillcolor="1" seqnum="" textid="37MNL1p1PXfa" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="wbAZ5idCLA48" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="129" x="130" fillcolor="none" y="587" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="37MNL1p1PXfa" text=": try_to_wake_up()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="50" x="125" fillcolor="none" y="681" operation="EqJOgKF8zszT" linewidth="none" widgetbid="TqYbRtKZ5BJF" height="32" usefillcolor="1" seqnum="" textid="PjvIYErdZc7i" widgetaid="TqYbRtKZ5BJF" isinstance="0" xmi.id="EqJOgKF8zszT" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="84" x="130" fillcolor="none" y="659" linewidth="none" posttext="" role="705" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="PjvIYErdZc7i" text=": schedule()" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="109" x="413" fillcolor="none" y="146" operation="__init__" linewidth="none" widgetbid="hRrhv4oieEX1" height="32" usefillcolor="1" seqnum="" textid="jmvLyTLaBHIh" widgetaid="VSfsnj2NbFHB" isinstance="0" xmi.id="c2nBeusJKh0D" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="65" x="418" fillcolor="none" y="124" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="jmvLyTLaBHIh" text=": __init__" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+         <messagewidget usesdiagramfillcolor="1" width="128" x="514" fillcolor="none" y="162" operation="__init__" linewidth="none" widgetbid="dkwiVxVvgQBC" height="32" usefillcolor="1" seqnum="" textid="koj4UhHDSDXO" widgetaid="hRrhv4oieEX1" isinstance="0" xmi.id="DoatCl4nnrwP" sequencemessagetype="1000" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+          <floatingtext usesdiagramfillcolor="1" width="65" x="519" fillcolor="none" y="140" linewidth="none" posttext="" role="704" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="koj4UhHDSDXO" text=": __init__" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+         </messagewidget>
+        </messages>
+        <associations/>
        </diagram>
       </diagrams>
      </XMI.extension>
@@ -241,12 +321,13 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello" >
-  <docsettings viewid="Nrzi8mq3c0kH" documentation="" uniqueid="OawIIhUiDlXB" />
+  <docsettings viewid="Nrzi8mq3c0kH" documentation="" uniqueid="i1XfJcMp3rh0" />
   <listview>
    <listitem open="1" type="800" label="Vistas" >
     <listitem open="1" type="801" id="Logical View" >
      <listitem open="0" type="807" id="Nrzi8mq3c0kH" label="diagrama de clase" />
-     <listitem open="1" type="813" id="or3IvLj1VPfw" >
+     <listitem open="0" type="810" id="8SjRjGFLEv62" label="Secuencia - Núcleo de emulación" />
+     <listitem open="0" type="813" id="or3IvLj1VPfw" >
       <listitem open="0" type="814" id="oQpNSnMaOGmg" />
       <listitem open="0" type="814" id="T0X2kXhvCpXy" />
       <listitem open="0" type="814" id="DLJe6gCUwyAc" />
@@ -256,9 +337,8 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
       <listitem open="0" type="815" id="CVOQhRQoOP9U" />
       <listitem open="0" type="815" id="0qRNL5Vq6m9v" />
      </listitem>
-     <listitem open="1" type="813" id="MBSTflBMIQnq" />
-     <listitem open="1" type="813" id="f3hLeJAK7ttq" />
-     <listitem open="1" type="813" id="TzNvIKrxmX4K" />
+     <listitem open="1" type="813" id="lFzOpvWEGTPi" />
+     <listitem open="1" type="813" id="6dYspr6hSz2D" />
      <listitem open="0" type="813" id="YEXIS4ihKiGT" >
       <listitem open="0" type="814" id="xmB2AE6pdQLm" />
       <listitem open="0" type="814" id="wpMXDhHjAxTN" />
@@ -266,7 +346,7 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
       <listitem open="0" type="815" id="nVhq03vEYFlL" />
       <listitem open="0" type="815" id="ulY2g0PST4IT" />
      </listitem>
-     <listitem open="0" type="813" id="HI2Y9XzC6ESU" >
+     <listitem open="1" type="813" id="HI2Y9XzC6ESU" >
       <listitem open="0" type="814" id="rQiTaBIUwqUd" />
       <listitem open="0" type="814" id="peDXfnHXDz0o" />
       <listitem open="0" type="814" id="SsyfrwR0Ci4H" />
@@ -279,23 +359,28 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
       <listitem open="0" type="814" id="HjfpbRZVrYRJ" />
       <listitem open="0" type="814" id="HG1KxUe0Zhmd" />
      </listitem>
-     <listitem open="1" type="813" id="RZgMRCH1x2Gm" >
+     <listitem open="0" type="813" id="RZgMRCH1x2Gm" >
       <listitem open="0" type="814" id="dqXOUZZi9UJh" />
       <listitem open="0" type="814" id="daCYcTKDJpcl" />
       <listitem open="0" type="815" id="TEFme1cIZOhb" />
       <listitem open="0" type="815" id="eaoQ17cchoAJ" />
       <listitem open="0" type="815" id="DZP7vYgHGTDL" />
       <listitem open="0" type="815" id="mgI09UK6AGmZ" />
+      <listitem open="0" type="815" id="z8qS8sdKgxiM" />
       <listitem open="0" type="815" id="WIo0UeVAAeFV" />
       <listitem open="0" type="815" id="Y88gKAh4px3y" />
       <listitem open="0" type="815" id="vJ1oxJoYVxKD" />
+      <listitem open="0" type="815" id="wbAZ5idCLA48" />
+      <listitem open="0" type="815" id="EqJOgKF8zszT" />
      </listitem>
      <listitem open="0" type="813" id="pgqkZlhM2PrC" >
-      <listitem open="0" type="814" id="BSuOyxbf1z5B" />
+      <listitem open="0" type="814" id="FwSEoPfk1pH4" />
       <listitem open="0" type="814" id="YDrw435FT0bR" />
+      <listitem open="0" type="814" id="BSuOyxbf1z5B" />
       <listitem open="0" type="814" id="vD7wAC7pFn9r" />
       <listitem open="0" type="814" id="4H99800hDpdH" />
       <listitem open="0" type="814" id="sgUMg6lbHsVR" />
+      <listitem open="0" type="814" id="Lgxu5e4VrnVA" />
       <listitem open="0" type="814" id="3bGGON8SfFZn" />
       <listitem open="0" type="814" id="GXUTM5jDmDXQ" />
       <listitem open="0" type="814" id="bYuEoU24zUVM" />
@@ -309,8 +394,8 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
       <listitem open="0" type="814" id="mnAIBvfrD00R" />
       <listitem open="0" type="815" id="QKZNzmnXdj3S" />
       <listitem open="0" type="815" id="XTjzsBXdyhvA" />
+      <listitem open="0" type="815" id="QDl2Kw9QunCZ" />
      </listitem>
-     <listitem open="1" type="813" id="EVLZofZjRilZ" />
      <listitem open="0" type="830" id="Datatypes" >
       <listitem open="1" type="829" id="9OksdLfcv4N3" />
       <listitem open="1" type="829" id="7YrB3E02x6ml" />
@@ -321,6 +406,7 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
       <listitem open="1" type="829" id="AtJe4kDTBkoh" />
       <listitem open="1" type="829" id="9Bx4FI6vqDX1" />
       <listitem open="1" type="829" id="CmMFlFY2Dj6N" />
+      <listitem open="0" type="829" id="s2rSfesU4eid" />
       <listitem open="1" type="829" id="5uNliu4r51tI" />
       <listitem open="1" type="829" id="5B7FvvwznHiV" />
       <listitem open="1" type="829" id="HzB5Ci6LZNzd" />
@@ -333,7 +419,7 @@ Se encarga de ejecutar check_tasks() y scheduler_tick" isSpecification="false" i
    </listitem>
   </listview>
   <codegeneration>
-   <codegenerator language="C++" />
+   <codegenerator language="Python" />
   </codegeneration>
  </XMI.extensions>
 </XMI>
