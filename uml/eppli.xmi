@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-14T17:44:28" xmi.version="1.2" >
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-05-14T20:01:53" xmi.version="1.2" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -57,17 +57,24 @@ SCHED_NORMAL" isSpecification="false" visibility="private" xmi.id="UgzD7NKdXOlN"
         <UML:Attribute comment="Tiempo de CPU restante." isSpecification="false" visibility="private" xmi.id="gHLBGRK9xhDS" type="n0cQl8eC5yfs" name="timeslice" />
         <UML:Attribute comment="Indica si es la primera porción de tiempo que usa la tarea." isSpecification="false" visibility="private" xmi.id="YtyXpoSJSPUZ" type="n0cQl8eC5yfs" name="first_time_slice" />
         <UML:Attribute comment="Prioridad de tiempo real." isSpecification="false" visibility="private" xmi.id="mnAIBvfrD00R" type="n0cQl8eC5yfs" name="rt_priority" />
+        <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="WuMMR7z016eZ" isRoot="false" isAbstract="false" isQuery="false" name="__init__" >
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter isSpecification="false" visibility="private" xmi.id="d4Hqr1aUeQ7U" value="" type="CmMFlFY2Dj6N" name="file" />
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation comment="Carga un proceso desde un archivo." isSpecification="false" isLeaf="false" visibility="public" xmi.id="QDl2Kw9QunCZ" isRoot="false" isAbstract="false" isQuery="false" name="load_from_file" >
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter isSpecification="false" visibility="private" xmi.id="YfE0YxdNLdWd" value="" type="CmMFlFY2Dj6N" name="file" />
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
         <UML:Operation comment="Activa la tarea, equivale a activate_task()" isSpecification="false" isLeaf="false" visibility="public" xmi.id="QKZNzmnXdj3S" isRoot="false" isAbstract="false" isQuery="false" name="activate" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="bYzmX0DvImGI" type="n0cQl8eC5yfs" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
         <UML:Operation comment="Recalcula la prioridad de este proceso." isSpecification="false" isLeaf="false" visibility="public" xmi.id="XTjzsBXdyhvA" isRoot="false" isAbstract="false" isQuery="false" name="recalc_prio" />
-        <UML:Operation comment="Carga un proceso desde un archivo." isSpecification="false" isLeaf="false" visibility="public" xmi.id="QDl2Kw9QunCZ" isRoot="false" isAbstract="false" isQuery="false" name="load_from_file" >
-         <UML:BehavioralFeature.parameter>
-          <UML:Parameter isSpecification="false" visibility="private" xmi.id="YfE0YxdNLdWd" value="" type="CmMFlFY2Dj6N" name="file" />
-         </UML:BehavioralFeature.parameter>
-        </UML:Operation>
+        <UML:Operation comment="Primero llama a update_state y luego lo devuelve. Así nos aseguramos de que el estado siempre está actualizado." isSpecification="false" isLeaf="false" visibility="public" xmi.id="6B78Ilftnxke" isRoot="false" isAbstract="false" isQuery="false" name="get_state" />
+        <UML:Operation comment="Actualiza el estado del proceso según su timeline." isSpecification="false" isLeaf="false" visibility="public" xmi.id="byS6Mpfqh1C8" isRoot="false" isAbstract="false" isQuery="false" name="update_state" />
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="HI2Y9XzC6ESU" isRoot="false" isAbstract="false" name="runqueue" >
@@ -154,11 +161,11 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
       <diagrams>
        <diagram snapgrid="1" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="1" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="Nrzi8mq3c0kH" documentation="" type="1" showops="1" showpackage="0" name="diagrama de clase" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
         <widgets>
-         <classwidget usesdiagramfillcolor="0" width="201" showattsigs="601" x="510" fillcolor="#ffffc0" y="60" showopsigs="601" linewidth="none" height="396" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="200" fillcolor="#ffffc0" y="570" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="167" showattsigs="601" x="560" fillcolor="#ffffc0" y="520" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="180" fillcolor="#ffffc0" y="330" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
-         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="120" fillcolor="#ffffc0" y="30" showopsigs="601" linewidth="none" height="234" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="201" showattsigs="601" x="510" fillcolor="#ffffc0" y="0" showopsigs="601" linewidth="none" height="450" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="183" showattsigs="601" x="200" fillcolor="#ffffc0" y="570" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="167" showattsigs="601" x="560" fillcolor="#ffffc0" y="520" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="123" showattsigs="601" x="180" fillcolor="#ffffc0" y="330" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
+         <classwidget usesdiagramfillcolor="0" width="235" showattsigs="601" x="120" fillcolor="#ffffc0" y="30" showopsigs="601" linewidth="none" height="234" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="0" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="#ff0000" />
         </widgets>
         <messages/>
         <associations>
@@ -168,7 +175,7 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
            <endpoint endx="620" endy="628" />
            <point x="620" y="680" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="570" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="tHHNpEECTQ4D" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="570" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="zCKVXtlZJg2q" text="active" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="4" indexa="3" visibilityB="200" totalcountb="3" indexb="2" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="HI2Y9XzC6ESU" xmi.id="SsyfrwR0Ci4H" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
@@ -176,24 +183,24 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
            <endpoint endx="670" endy="628" />
            <point x="670" y="740" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="62" x="670" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="PR2d8b0Q4ZrF" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="62" x="670" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="JgtakYpvbMZM" text="expired" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="5" indexa="4" visibilityB="200" totalcountb="4" indexb="3" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="TKOLjvLHtrmF" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="350" starty="570" />
-           <endpoint endx="510" endy="360" />
+           <endpoint endx="510" endy="340" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="59" x="450" fillcolor="none" y="360" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="lNrW3xDxCSI1" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="59" x="450" fillcolor="none" y="340" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="oJ1jJSSGckl9" text="current" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="5" indexa="3" visibilityB="200" totalcountb="4" indexb="2" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="HI2Y9XzC6ESU" xmi.id="uQfnHS0sYsnm" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="310" starty="570" />
-           <endpoint endx="510" endy="260" />
+           <endpoint endx="510" endy="230" />
            <point x="310" y="440" />
            <point x="440" y="440" />
-           <point x="440" y="260" />
+           <point x="440" y="230" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="260" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="fWB8uELKfNxn" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="226" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="eUgv9gmSKd04" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="5" indexa="1" visibilityB="200" totalcountb="3" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="HI2Y9XzC6ESU" xmi.id="rQiTaBIUwqUd" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
@@ -201,49 +208,48 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
            <endpoint endx="220" endy="492" />
            <point x="240" y="550" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="36" x="180" fillcolor="none" y="490" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="xvC1S3HEO6iS" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="36" x="180" fillcolor="none" y="490" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="BpxnCU7yo6g5" text="cpu" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="5" indexb="2" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="or3IvLj1VPfw" xmi.id="DLJe6gCUwyAc" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="260" starty="492" />
            <endpoint endx="270" endy="570" />
-           <point x="255" y="441" />
-           <point x="265" y="519" />
+           <point x="270" y="520" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="26" x="260" fillcolor="none" y="510" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="1vNDLfC09L93" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="26" x="240" fillcolor="none" y="550" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="Z8MBq7JSazOj" text="rq" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="4" indexb="1" linewidth="none" widgetbid="pgqkZlhM2PrC" widgetaid="or3IvLj1VPfw" xmi.id="rnqllzNBroSh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="303" starty="410" />
-           <endpoint endx="510" endy="160" />
+           <endpoint endx="510" endy="110" />
            <point x="380" y="410" />
-           <point x="380" y="160" />
+           <point x="380" y="110" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="160" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="ZSLEoJ0lECmf" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="37" x="470" fillcolor="none" y="106" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="e89ylA3xzyk9" text="idle" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="2" indexa="1" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="or3IvLj1VPfw" widgetaid="RZgMRCH1x2Gm" xmi.id="dqXOUZZi9UJh" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
            <startpoint startx="240" starty="264" />
            <endpoint endx="240" endy="330" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="53" x="190" fillcolor="none" y="310" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="D1tb5Z16SMJn" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="53" x="190" fillcolor="none" y="310" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="Rp6FvmKSsgei" text="cpus[]" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="3" indexa="1" visibilityB="200" totalcountb="4" indexb="1" linewidth="none" widgetbid="HI2Y9XzC6ESU" widgetaid="pgqkZlhM2PrC" xmi.id="GXUTM5jDmDXQ" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="580" starty="456" />
+           <startpoint startx="580" starty="450" />
            <endpoint endx="383" endy="630" />
            <point x="580" y="490" />
            <point x="470" y="490" />
            <point x="470" y="630" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="61" x="380" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="zTo8pvAONVbB" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="61" x="380" fillcolor="none" y="630" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="mv9KuX1YfAVQ" text="run_list" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
          <assocwidget totalcounta="3" indexa="2" visibilityB="200" totalcountb="2" indexb="1" linewidth="none" widgetbid="YEXIS4ihKiGT" widgetaid="pgqkZlhM2PrC" xmi.id="bYuEoU24zUVM" type="510" changeabilityA="900" changeabilityB="900" linecolor="none" visibilityA="200" >
           <linepath>
-           <startpoint startx="640" starty="456" />
+           <startpoint startx="640" starty="450" />
            <endpoint endx="640" endy="520" />
           </linepath>
-          <floatingtext usesdiagramfillcolor="1" width="47" x="590" fillcolor="none" y="500" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="obw1lhewgXVm" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+          <floatingtext usesdiagramfillcolor="1" width="47" x="590" fillcolor="none" y="500" linewidth="none" posttext="" role="710" height="22" usefillcolor="1" pretext="-" isinstance="0" xmi.id="KWLIU3PvsV8m" text="array" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
          </assocwidget>
         </associations>
        </diagram>
@@ -302,6 +308,41 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
         </messages>
         <associations/>
        </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="miZbcHr3pOWg" documentation="" type="1" showops="1" showpackage="0" name="task" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <classwidget usesdiagramfillcolor="1" width="201" showattsigs="601" x="88" fillcolor="none" y="74" showopsigs="601" linewidth="none" height="450" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="pgqkZlhM2PrC" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="PzxlynkL0vZs" documentation="" type="1" showops="1" showpackage="0" name="prio_array" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <classwidget usesdiagramfillcolor="1" width="167" showattsigs="601" x="95" fillcolor="none" y="246" showopsigs="601" linewidth="none" height="108" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="YEXIS4ihKiGT" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="BOt4wl1F7l4S" documentation="" type="1" showops="1" showpackage="0" name="runqueue" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <classwidget usesdiagramfillcolor="1" width="183" showattsigs="601" x="116" fillcolor="none" y="283" showopsigs="601" linewidth="none" height="225" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="HI2Y9XzC6ESU" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="1TsmWKYvpTud" documentation="" type="1" showops="1" showpackage="0" name="cpu" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <classwidget usesdiagramfillcolor="1" width="123" showattsigs="601" x="84" fillcolor="none" y="234" showopsigs="601" linewidth="none" height="162" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="or3IvLj1VPfw" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
+       <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1336" snapy="10" showatts="1" xmi.id="N3Xqw81CLD8J" documentation="" type="1" showops="1" showpackage="0" name="scheduler" localid="" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="888" >
+        <widgets>
+         <classwidget usesdiagramfillcolor="1" width="235" showattsigs="601" x="55" fillcolor="none" y="309" showopsigs="601" linewidth="none" height="234" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="RZgMRCH1x2Gm" showoperations="1" showpackage="0" showscope="1" usesdiagramusefillcolor="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
       </diagrams>
      </XMI.extension>
     </UML:Model>
@@ -321,11 +362,16 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello" >
-  <docsettings viewid="Nrzi8mq3c0kH" documentation="" uniqueid="i1XfJcMp3rh0" />
+  <docsettings viewid="Nrzi8mq3c0kH" documentation="" uniqueid="6B78Ilftnxke" />
   <listview>
    <listitem open="1" type="800" label="Vistas" >
     <listitem open="1" type="801" id="Logical View" >
+     <listitem open="0" type="807" id="1TsmWKYvpTud" label="cpu" />
      <listitem open="0" type="807" id="Nrzi8mq3c0kH" label="diagrama de clase" />
+     <listitem open="0" type="807" id="PzxlynkL0vZs" label="prio_array" />
+     <listitem open="0" type="807" id="BOt4wl1F7l4S" label="runqueue" />
+     <listitem open="0" type="807" id="N3Xqw81CLD8J" label="scheduler" />
+     <listitem open="0" type="807" id="miZbcHr3pOWg" label="task" />
      <listitem open="0" type="810" id="8SjRjGFLEv62" label="Secuencia - Núcleo de emulación" />
      <listitem open="0" type="813" id="or3IvLj1VPfw" >
       <listitem open="0" type="814" id="oQpNSnMaOGmg" />
@@ -346,7 +392,7 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
       <listitem open="0" type="815" id="nVhq03vEYFlL" />
       <listitem open="0" type="815" id="ulY2g0PST4IT" />
      </listitem>
-     <listitem open="1" type="813" id="HI2Y9XzC6ESU" >
+     <listitem open="0" type="813" id="HI2Y9XzC6ESU" >
       <listitem open="0" type="814" id="rQiTaBIUwqUd" />
       <listitem open="0" type="814" id="peDXfnHXDz0o" />
       <listitem open="0" type="814" id="SsyfrwR0Ci4H" />
@@ -373,7 +419,7 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
       <listitem open="0" type="815" id="wbAZ5idCLA48" />
       <listitem open="0" type="815" id="EqJOgKF8zszT" />
      </listitem>
-     <listitem open="0" type="813" id="pgqkZlhM2PrC" >
+     <listitem open="1" type="813" id="pgqkZlhM2PrC" >
       <listitem open="0" type="814" id="FwSEoPfk1pH4" />
       <listitem open="0" type="814" id="YDrw435FT0bR" />
       <listitem open="0" type="814" id="BSuOyxbf1z5B" />
@@ -392,9 +438,12 @@ Comprueba si current ha cambiado de estado a durmiente. Si es así, se echa a do
       <listitem open="0" type="814" id="gHLBGRK9xhDS" />
       <listitem open="0" type="814" id="YtyXpoSJSPUZ" />
       <listitem open="0" type="814" id="mnAIBvfrD00R" />
+      <listitem open="0" type="815" id="WuMMR7z016eZ" />
+      <listitem open="0" type="815" id="QDl2Kw9QunCZ" />
       <listitem open="0" type="815" id="QKZNzmnXdj3S" />
       <listitem open="0" type="815" id="XTjzsBXdyhvA" />
-      <listitem open="0" type="815" id="QDl2Kw9QunCZ" />
+      <listitem open="0" type="815" id="6B78Ilftnxke" />
+      <listitem open="0" type="815" id="byS6Mpfqh1C8" />
      </listitem>
      <listitem open="0" type="830" id="Datatypes" >
       <listitem open="1" type="829" id="9OksdLfcv4N3" />
