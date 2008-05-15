@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed May 14 16:03:16 2008 -->
+<!--Generated with glade3 3.4.5 on Thu May 15 01:54:28 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="mainWindow">
+    <property name="width_request">800</property>
+    <property name="height_request">500</property>
     <property name="title">EPPLI 0.1</property>
-    <property name="resizable">False</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mainWindow_destroy"/>
     <child>
@@ -18,32 +19,26 @@
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">False</property>
           </packing>
         </child>
         <child>
           <widget class="GtkHBox" id="hbox2">
             <property name="visible">True</property>
-            <property name="homogeneous">True</property>
             <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+              <widget class="GtkScrolledWindow" id="scrollWinActive">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                 <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                 <child>
-                  <widget class="GtkTreeView" id="treeActive">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="headers_clickable">True</property>
-                    <property name="enable_tree_lines">True</property>
-                  </widget>
+                  <placeholder/>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="homogeneous">True</property>
                 <child>
                   <widget class="GtkTextView" id="textSelectedProcess">
                     <property name="visible">True</property>
@@ -79,26 +74,93 @@
                         <property name="editable">False</property>
                         <property name="wrap_mode">GTK_WRAP_WORD</property>
                         <property name="cursor_visible">False</property>
-                        <property name="text" translatable="yes">Información sobre el planificador en general</property>
+                        <property name="text" translatable="yes">Información general del planificador:
+
+Ticks: 1662728
+nr_running: 35
+nr_switches: 23451
+expired_timestamp: 1662724
+timestamp_last_tick: 1662727
+current: PID
+best_expired_prio: 44
+nr_iowait: 2</property>
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="botonSalir">
+                      <widget class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Dice que _sale...</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_botonSalir_clicked"/>
+                        <child>
+                          <widget class="GtkVBox" id="vbox4">
+                            <property name="visible">True</property>
+                            <property name="homogeneous">True</property>
+                            <child>
+                              <widget class="GtkLabel" id="label1">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">prio_array active</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkDrawingArea" id="drawActive">
+                                <property name="width_request">140</property>
+                                <property name="height_request">15</property>
+                                <property name="visible">True</property>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label3">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Procesos: 23</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkDrawingArea" id="drawBitmapExpired">
+                      <widget class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkVBox" id="vbox5">
+                            <property name="visible">True</property>
+                            <property name="homogeneous">True</property>
+                            <child>
+                              <widget class="GtkLabel" id="label2">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">prio_array expired</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkDrawingArea" id="drawExpired">
+                                <property name="width_request">140</property>
+                                <property name="height_request">15</property>
+                                <property name="visible">True</property>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label4">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Procesos: 12</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="position">2</property>
@@ -106,6 +168,7 @@
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -115,18 +178,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow2">
+              <widget class="GtkScrolledWindow" id="scrollWinExpired">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                 <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                 <child>
-                  <widget class="GtkTreeView" id="treeExpired">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="headers_clickable">True</property>
-                    <property name="enable_tree_lines">True</property>
-                  </widget>
+                  <placeholder/>
                 </child>
               </widget>
               <packing>
