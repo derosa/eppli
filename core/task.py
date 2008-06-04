@@ -6,18 +6,35 @@ from time import sleep
 class task():
     """ Un tarea a partir de un archivo de texto descriptivo"""
     def __init__(self, source):
-        """ Crea una nueva tarea a partir de un archivo de texto
-        el formato del archivo es:
+        """ Crea una nueva tarea a partir de un archivo de texto. 
+        Asumimos que todas las tareas comienzan en el estado RUNNING
+        El formato del archivo es:
         ^NAME=nombre del proceso$
         ^PRIO=[0-9]*$
         ^CLASS=FIFO|RR|NORMAL
         ^[0-9]*=[INTERRUPTIBLE|UNINTERRUPTIBLE|RUNNING|EXIT]$"""
+        
         print "Iniciando tarea desde fuente:", source
         # Atributos para el emulador
         self.timeline = {}
         self.name = ""
-        self.localtime = 0
+        self.localtime = -1
         self.state = None
+        self.prio = 0
+        self.static_prio = 0
+        self.run_list = None
+        self.array = None 
+        self.sleep_avg = None
+        self.timestamp = None
+        self.last_ran = None
+        self.activated = None
+        self.policy = const.policy["NORMAL"]
+        # En sched_fork() se asigna la mitad del timeslice del proceso padre, 
+        # del que carecemos, por lo que uso un time_slice por defecto.
+        self.time_slice = 100
+        self.first_time_slice = 1
+        self.rt_priority = None
+        self.flags = 0
         
         try: 
             self._fill_timeline(source)
@@ -26,11 +43,13 @@ class task():
             return None
 
     def __str__(self):
+        """ Representación en texto de una tarea"""
         tmp =""
         tmp += "Nombre: %s\n" % self.name
         tmp += "Prioridad: %d\n" % self.static_prio
         tmp += "Clase: %d\n" % self.policy
         tmp += "Linea temporal: %s\n" % self.timeline
+        tmp += "Estado: %d\n" % self.state
         return tmp
             
     def _fill_timeline(self, source):
@@ -58,19 +77,33 @@ class task():
             self.oldstate = self.state
             self.state = const.state[self.timeline[self.localtime]]
             self.flags = const.NEED_RESCHED
-            print "%d: Cambio de estado: %s -> %s" % (self.localtime, self.oldstate, self.state)
-            
+            print "%s[%d]: Cambio de estado: %s -> %s" % (self.name, self.localtime, self.oldstate, self.state)
+        self.flags = None
+        
     def tick(self):
         self.update_state()
         self.localtime+=1
-            
+        
+    def task_timeslice(self):
+        ## TODO: Rellenar esta funcion
+        return 100
+    
+    def effective_prio(self):
+        ## TODO Devuelve la prioridad efectiva.
+        return 100
+    
+    def interactive(self):
+        # TODO: Indica si la tarea es interactiva
+        return False
+
+    def recalc_task_prio(self):
+        # TODO: Rellenar esta función :P
+        self.prio = self.static_prio
+
 
 if __name__ == "__main__":
-    tmp = task("task1.tsk")
-    print "Nombre: %s" % tmp.name
-    print "Prioridad:", tmp.static_prio
-    print "Clase:", tmp.policy
-    print "Linea temporal: ", tmp.timeline
+    tmp = task("tasks/task1.tsk")
+    print tmp
     
     print "Demo de ejecución y cambio de estado"
     while tmp.state != const.state["EXIT"]:

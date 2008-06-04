@@ -17,7 +17,6 @@ de 140 bits que son necesarios en el BITMAP_SIZE."""
 	
 def set_bit(i, j):
     """Establecer el bit siempre es posible."""
-
     return i + (1<<j)
 
 def clear_bit(i, j):

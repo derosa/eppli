@@ -3,6 +3,8 @@
 
 NEED_RESCHED = 1
 
+STARVATION_LIMIT = 1000
+
 RT_RR = 0
 RT_FIFO = 1
 NORMAL = 2
@@ -13,3 +15,4 @@ policy = {"RR": 0, "FIFO": 1, "NORMAL": 2}
 HZ = 100
 
 TASK_DIR = "tasks"
+TASK_IDLE = "idle.tsk"
