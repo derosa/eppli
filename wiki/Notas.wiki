@@ -1,19 +1,39 @@
-shceduler.run:
+Se inicia el programa:
 
+* Crea Scheduler:
+	- scheduler crea cpu.
+	- cpu crea runqueue
+	- runqueue crea 2 prio_array.
+* Se llama a scheduler.add_dir_tasks(directorio):
+	- Por cada fichero en el dir
+		- Crea una nueva task(file) y llama a do_fork(task)
+			- Inicializa los valores iniciales de la tarea
+			- Inserta el proceso en la lista global de procesos.
+			- Llama a task.activate() si su estado es RUNNING
+
+* Se llama a run():
+	
 while 1:
-	* do_tick():
-		* check_tasks():
-			- Por cada tarea durmiente, comprueba si su nuevo estado según la línea
-			temporal es != durmiente. Si es así se llama a try_to_wake_up. (Con esto 
-			se emula una waitqueue).
-
-			- Comprueba si current ha cambiado de estado a durmiente. Si es así, 
-			se llama echa a dormir y se activa NEED_RESCHED.
-		* scheduler_tick()
-	* Si NEED_RESCHED o !(tick%HZ): schedule()
-	* do_tick:
-		- cpu.advance_tick()
-		- current.localtime++
-		- para cada tarea durmiendo:
-			tarea.localtime++
-	* sleep(1/HZ)
+	* comprueba flags de ejecución:
+		si normal_run = False:
+			- avanzar solo un tick: N = ticks
+			- pausar: N = 1
+    * Si no normal_run && N != 0:
+		* do_tick(N):
+		  - Mientras N--:
+			* check_tasks():
+				- Por cada tarea durmiente, comprueba si su nuevo estado según la línea
+				temporal es != durmiente. Si es así se llama a try_to_wake_up. (Con esto 
+				se emula una waitqueue).
+				- Comprueba si current ha cambiado de estado a durmiente. Si es así, 
+				se llama echa a dormir (cambiando el estado) y se activa NEED_RESCHED.
+			* scheduler_tick()
+		* Si NEED_RESCHED o !(tick%HZ): 
+			* schedule()
+		* do_tick():
+			- cpu.advance_tick()
+			- current.localtime++
+			- para cada tarea durmiendo:
+				tarea.localtime++
+ 	* sleep(1/HZ)
+	* Si normal_run = False, avanzar solo N ticks: N--
