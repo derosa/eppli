@@ -105,9 +105,9 @@ boton_pause = gtk.ToolButton(gtk.STOCK_MEDIA_PAUSE)
 boton_pause.set_label("Pausar")
 boton_pause.connect("clicked", botonSalir_clicked)
 
-boton_stop = gtk.ToolButton(gtk.STOCK_MEDIA_STOP)
-boton_stop.set_label("Detener")
-boton_stop.connect("clicked", botonSalir_clicked)
+boton_step = gtk.ToolButton(gtk.STOCK_MEDIA_NEXT)
+boton_step.set_label("Avanzar")
+boton_step.connect("clicked", botonSalir_clicked)
 
 boton_new = gtk.ToolButton(gtk.STOCK_ADD)
 boton_new.set_label("Nuevo proceso")
@@ -115,8 +115,9 @@ boton_new.connect("clicked", botonSalir_clicked)
 
 toolbar.add(boton_new)
 toolbar.add(boton_play)
+toolbar.add(boton_step)
 toolbar.add(boton_pause)
-toolbar.add(boton_stop)
+
 
 tv1 = crear_treeView("Activos")
 tv2 = crear_treeView("Expirados")
