@@ -10,6 +10,7 @@ class prio_array():
         ## "queue" es de tipo list_head en el  kernel.
         ## Implemento como una tupla por las operaciones de inserción y eliminado rápido.
         self.queue=[]
+        print "Prio array creado"
     
     def addTask(self, t):
         self.queue[t.prio].append(t)

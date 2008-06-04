@@ -7,6 +7,9 @@ RT_RR = 0
 RT_FIFO = 1
 NORMAL = 2
 
-# Vamos a agrupar INTERRUPTIBLE & UNINTERRUPTIBLE en un solo estado
-INTERRUPTIBLE = 0
-RUNNING = 1
+state = {"INTERRUPTIBLE": 0, "UNINTERRUPTIBLE" : 1, "RUNNING" : 2, "EXIT" : 3}
+policy = {"RR": 0, "FIFO": 1, "NORMAL": 2}
+
+HZ = 100
+
+TASK_DIR = "tasks"
