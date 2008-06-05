@@ -1,5 +1,5 @@
 # coding utf-8
-import const
+from const import *
 from prio_array import prio_array
 from runqueue import runqueue
 from task import task
@@ -14,11 +14,11 @@ class cpu():
         self.id = id
         self.clock = 0
         self.rq = runqueue(self)
-        self.idle_task = task(path.join(const.TASK_DIR, const.TASK_IDLE))
+        self.idle_task = task(path.join(TASK_DIR, TASK_IDLE))
         self.init_idle_task(self.idle_task)
         
     def init_idle_task(self, task):
-        task.state = const.state["RUNNING"]
+        task.state = state["RUNNING"]
         task.prio = None
         task.run_list = self.rq
         task.array = self.rq.active
@@ -26,7 +26,7 @@ class cpu():
         task.timestamp = self.clock
         task.last_ran = None
         task.activated = None
-        task.policy = const.policy["NORMAL"]
+        task.policy = policy["NORMAL"]
         # En sched_fork() se asigna la mitad del timeslice del proceso padre, 
         # del que carecemos, por lo que uso un time_slice por defecto.
         task.time_slice = 100
@@ -44,4 +44,4 @@ class cpu():
     def tick(self):
         if self.running:
             self.clock+=1
-            print "CPU(%d)[%d]: tick!" % (self.id, self.clock)
+            #print "CPU(%d)[%d]: tick!" % (self.id, self.clock)

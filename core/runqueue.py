@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from prio_array import prio_array
-import const
+from const import *
 
 class runqueue():
     def __init__(self, CPU):
@@ -20,7 +20,9 @@ class runqueue():
         print "Priority Arrays creados"
         
     def starving(self):
-        s = const.STARVATION_LIMIT and self.expired_timestamp \
-        and (cpu.clock - self.expired_timestamp >=  consts.STARVATION_LIMIT * 
-        this.nr_running + 1) or (this.current.static_prio > this.best_expired_prio)
-        return s
+        s1 = STARVATION_LIMIT and self.expired_timestamp \
+            and (cpu.clock - self.expired_timestamp >= STARVATION_LIMIT * 
+                 this.nr_running + 1)
+        s2 = this.current.static_prio > this.best_expired_prio
+        print "starving: s1: %d, s2 (%d > %d): %d" % (s1, this.current.static_prio, this.best_expired_prio, s2)
+        return s1 or s2
