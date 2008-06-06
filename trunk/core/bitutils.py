@@ -8,16 +8,22 @@ def ffs(i):
     """Fórmula mágica para encontrar el primer bit a 1 de un numero.
 Se usa esto en lugar de la función ffsl de C por la longitud de los números
 de 140 bits que son necesarios en el BITMAP_SIZE."""
-
+    print "ffs(%d)" % i
     try:
-        res = int(log(i & (~i+1)) / log(2))
-    except OverflowError:
+        res = int(round(log(i & (~i+1)) / log(2)))
+    except:
         res = -1
     return res
 	
 def set_bit(i, j):
     """Establecer el bit siempre es posible."""
-    return i + (1<<j)
+    res = 0
+    if not (i&(1<<j)):
+        res = i + (1<<j)
+    else:
+        res = i
+        
+    return res
 
 def clear_bit(i, j):
     """Si el bit está establecido, se limpia. 
