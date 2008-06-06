@@ -43,15 +43,15 @@ class task():
             print "Error al procesar la tarea de fuente %s" % source
             return None
 
-#    def __str__(self):
-#        """ Representación en texto de una tarea"""
-#        tmp =""
-#        tmp += "Nombre: %s\n" % self.name
-#        tmp += "Prioridad: %d\n" % self.static_prio
-#        tmp += "Clase: %d\n" % self.policy
-#        tmp += "Linea temporal: %s\n" % self.timeline
-#        tmp += "Estado: %d\n" % self.state
-#        return tmp
+    def __str__(self):
+        """ Representación en texto de una tarea"""
+        tmp =""
+        tmp += "Nombre: %s\n" % self.name
+        tmp += "Prioridad: %d\n" % self.static_prio
+        tmp += "Clase: %d\n" % self.policy
+        tmp += "Linea temporal: %s\n" % self.timeline
+        tmp += "Estado: %d\n" % self.state
+        return tmp
             
     def _fill_timeline(self, source):
         """Genera una línea de tiempo de ejecución del proceso a partir del
@@ -65,6 +65,7 @@ class task():
                 self.name = tmp[1].strip()
             elif tmp[0] == "PRIO":
                 self.static_prio = int(tmp[1].strip())
+                self.prio =self.effective_prio()
             elif tmp[0] == "CLASS":
                 self.policy = policy[tmp[1].strip()]
             else:
@@ -74,12 +75,13 @@ class task():
 
     def update_state(self):
         """ Comprueba el estado del proceso y lo actualiza si ha cambiado"""
+        self.oldstate = self.state
         if self.localtime in self.timeline and state[self.timeline[self.localtime]] != self.state:
-            self.oldstate = self.state
             self.state = state[self.timeline[self.localtime]]
             self.flags = NEED_RESCHED
             print "%s[%d]: Cambio de estado: %s -> %s" % (self.name, self.localtime, self.oldstate, self.state)
-        self.flags = None
+        else:
+            self.flags = None
         
     def tick(self):
         self.update_state()
@@ -95,6 +97,7 @@ class task():
         else:
             x = DEF_TIMESLICE
         ret = max ( x*(MAX_PRIO-self.prio) / (MAX_USER_PRIO/2), MIN_TIMESLICE)
+        print "Nuevo timeslice de %s: %d" % (self.name, ret)
         return ret
     
     def effective_prio(self):
@@ -107,7 +110,7 @@ class task():
         return ret
     
     def interactive(self):
-        # TODO: Indica si la tarea es interactiva
+        # Indica si la tarea es interactiva
         return self.prio <= (self.static_prio - self.delta())
     
     def interactive_sleep(self):
@@ -139,15 +142,12 @@ class task():
         return escala + INTERACTIVE_DELTA
     
     def recalc_task_prio(self, now):
-        # TODO: Rellenar esta función :P
-        if now - self.timestamp > MAX_SLEEP_AVG:
-            self.time_slice = MAX_SLEEP_AVG
-        else:
-            self.time_slice = now - self.timestamp
+
+        sleep_time = min(now - self.timestamp, MAX_SLEEP_AVG)
 
         if sleep_time:
             if self.activated == -1 and sleep_time > self.interactive_sleep():
-                p.sleep_avg = MAX_SLEEP_AVG - DEF_TIMESLICE
+                self.sleep_avg = MAX_SLEEP_AVG - DEF_TIMESLICE
             else:
                 sleep_time *= max(MAX_BONUS - self.current_bonus(), 1)
                 if self.activated == -1:
@@ -161,16 +161,20 @@ class task():
                     self.sleep_avg = MAX_SLEEP_AVG
         
         self.prio = self.effective_prio()
-                    
+                   
 
     def timeslice_granularity(self):
-    #135#define TIMESLICE_GRANULARITY(p) (GRANULARITY * \
-    #136                (1 << (((MAX_BONUS - CURRENT_BONUS(p)) ? : 1) - 1)))
-        ret = max( GRANULARITY 
-            * (1 << (MAX_BONUS - self.current_bonus())), 1) -1
+        #135#define TIMESLICE_GRANULARITY(p) (GRANULARITY * \
+        #136                (1 << (((MAX_BONUS - CURRENT_BONUS(p)) ? : 1) - 1)))
+        ret = GRANULARITY * (1 << (MAX_BONUS - self.current_bonus()))
         return ret
 
-        
+    def deactivate(self):
+        self.run_list.nr_running -= 1
+        print "%s.deactivate()" % self.name
+        self.array.del_task(self)
+        self.array = None
+                
 if __name__ == "__main__":
     tmp = task("tasks/task1.tsk")
     print tmp

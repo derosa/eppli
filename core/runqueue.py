@@ -16,13 +16,16 @@ class runqueue():
         self.nr_running = 0
         self.current = None
         self.best_expired_prio = 0
+        self.nr_interruptible = 0
+        self.nr_uninterruptible = 0
+        self.nr_switches = 0
         
         print "Priority Arrays creados"
         
-    def starving(self):
+    def expired_starving(self):
         s1 = STARVATION_LIMIT and self.expired_timestamp \
-            and (cpu.clock - self.expired_timestamp >= STARVATION_LIMIT * 
-                 this.nr_running + 1)
-        s2 = this.current.static_prio > this.best_expired_prio
-        print "starving: s1: %d, s2 (%d > %d): %d" % (s1, this.current.static_prio, this.best_expired_prio, s2)
+            and (self.cpu.clock - self.expired_timestamp >= STARVATION_LIMIT * 
+                 self.nr_running + 1)
+        s2 = self.current.static_prio > self.best_expired_prio
+        print "starving: s1: %d, s2 (%d > %d): %d" % (s1, self.current.static_prio, self.best_expired_prio, s2)
         return s1 or s2

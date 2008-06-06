@@ -3,6 +3,7 @@
 from sys import argv
 from cpu import cpu
 from task import task
+import bitutils
 
 from const import *
 
@@ -18,12 +19,12 @@ class scheduler():
             
         self.tasks = []
         self.add_tasks(TASK_DIR)
-
-        # Alguna tarea tiene que ser current. Como llamamos al scheduler inmediatamente, 
-        # no problema en coger cualquiera para serlo.
-        self.current = self.tasks[0]
-        
+     
         self.cpu.start()
+
+        self.current = self.cpu.idle_task
+        
+        self.NEED_RESCHED = False
     
     def add_tasks(self, proc_dir):
         """ Añade todos los procesos de un directorio, excepto el IDLE"""
@@ -38,14 +39,23 @@ class scheduler():
         print "Tareas de '%s' añadidas" % proc_dir
         print "Haciendo fork de las tareas"
         for t in self.tasks:
-            self.do_fork(t)
             t.update_state()
+            self.do_fork(t)
         print "Tareas del sistema: ",len(self.tasks)
         #for t in self.tasks:
         #     print t
 
     def do_fork(self, task):
+        task.state = state["RUNNING"]
+        
+        task.run_list = self.cpu.rq
+        task.sleep_avg = 0
+        task.prio = task.effective_prio()
         self.cpu.rq.active.add_task(task)
+        task.array= self.cpu.rq.active
+        self.cpu.rq.nr_running += 1
+        task.time_slice = task.task_timeslice()
+        
         
     def update_n_check_tasks(self):
         #print "update_n_check_tasks:"
@@ -63,32 +73,22 @@ class scheduler():
         for t in self.tasks:
             #print "Comprobando tarea: ", t.name 
             t.tick()
-            # El proceso ya no está en ejecución, se saca de la rq de procesos activos
-            if t.oldstate == state["RUNNING"] and t.state != state["RUNNING"] and t.prio == self.cpu.rq.active:
-                self.cpu.rq.active.del_task(t)
+            # El proceso ha dejado de estr en ejecución, se necesita llamar al scheduler
+            if t.state != state["RUNNING"] and t.oldstate == state["RUNNING"]  and t.prio == self.cpu.rq.active:
+                self.NEED_RESCHED = True
+                continue
             
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
                 print "La tarea %s ha terminado!" % t.name
                 print "Tiempo de ejecución:", t.localtime
-                # Saco la tarea de la rq:
-                t.array.del_task(t)
-                del self.tasks[self.tasks.index(t)]
                 continue
+            
             if t.flags == NEED_RESCHED:
                 self.try_to_wake_up(t)
 
         if self.current.state != state["RUNNING"]:
             self.NEED_RESCHED = True
-            
-        need_idle = [i for i in self.tasks if i.state == state["RUNNING"]]
-        # print "Procesos activos: ", len(need_idle)
-        self.cpu.rq.nr_running = len(need_idle)
-        if not len(need_idle):
-            print "Conmutando a IDLE!"
-            self.current = self.cpu.idle_task
-            self.cpu.rq.current = self.current
-            
         
     def scheduler_tick(self):
         # print "Scheduler_tick"
@@ -119,6 +119,7 @@ class scheduler():
         
         # Si la tarea agota su timeslice...
         if not p.time_slice:
+            print "[%d] La tarea %s ha agotado su timeslice..." % (cpu.clock, p.name)
             rq.active.del_task(p)
             self.NEED_RESCHED = True
             p.flags = self.NEED_RESCHED
@@ -129,28 +130,23 @@ class scheduler():
                 rq.expired_timestamp = cpu.clock
             # si no es interactiva o hay cosas sin ejecutarse mucho tiempo,
             # a la cola de expirados
-            if not p.interactive() or rq.expired.starving():
+            if not p.interactive() or rq.expired_starving():
                 print "No interactiva o starving"
                 rq.expired.add_task(p)
                 if p.static_prio < rq.best_expired_prio:
                     rq.best_expired_prio = p.static_prio
             else:
                 rq.active.add_task(p)
-                
-        # Comprueba que la tarea actual no lleva demasiado tiempo en ejecución
-        # y divide su timeslice en porciones más pequeñas.
-# 2487                if (TASK_INTERACTIVE(p) && !((task_timeslice(p) -
-#2488                        p->time_slice) % TIMESLICE_GRANULARITY(p)) &&
-#2489                        (p->time_slice >= TIMESLICE_GRANULARITY(p)) &&
-#2490                        (p->array == rq->active)) {
-#2491
-#2492                        requeue_task(p, rq->active);
-#2493                        set_tsk_need_resched(p);
-#2494                }
+
         else:
-            if (p.interactive() and not ((p.task_timeslice() - p.time_slice) 
-            % p.timeslice_granularity()) and (p.time_slice >= p.timeslice_granularity()) and
+            p_interac = p.interactive()
+            p_t_tl = p.task_timeslice()
+            p_granu = p.timeslice_granularity()
+            print "p_granu:", p_granu
+            if (p_interac and not ((p_t_tl - p.time_slice) 
+            % p_granu) and (p.time_slice >= p_granu) and
             (p.array == rq.active)):
+                #print "Troceando el timeslice de %s: %d" %(p.name, p.time_slice)
                 rq.active.del_task(p)
                 rq.active.add_task(p)
                 p.flags = NEED_RESCHED
@@ -158,51 +154,132 @@ class scheduler():
             
                 
     def try_to_wake_up(self, t):
-        print "Intentando levantar: ", t.name
+        print "try_to_wake_up: ", t.name
         c = self.cpu
         rq = self.cpu.rq
         if t.array:
             return
         if t.state == state["UNINTERRUPTIBLE"]:
             rq.nr_uninterruptible -= 1
-            p.activated = -1
+            t.activated = -1
         
-        activate_task(t)
+        self.activate_task(t)
         
-        p.state = state["RUNNING"]
+        t.state = state["RUNNING"]
+        
+        t.flags = NEED_RESCHED
+        self.NEED_RESCHED=True
         
         
     def activate_task(self, t):
-        t.recalc_task_prio()
-        if not p.activated:
-            p.activated = 2
-        p.timestamp = self.cpu.clock
+        t.recalc_task_prio(self.cpu.clock)
+        if not t.activated:
+            t.activated = 2
+        t.timestamp = self.cpu.clock
         
         # __activate_task
         self.cpu.rq.nr_running += 1
-        self.cpu.rq.active.add_tsk(t)
-        self.cpu.rq.active.active += 1
-        p.array = self.cpu.rq.active
-        
+        self.cpu.rq.active.add_task(t)
         
     def schedule(self):
         print "schedule"
-        print "Procesos pendientes:", self.tasks
+        #print "Procesos pendientes:", self.tasks
+        prev = self.current
+        rq = self.cpu.rq
+        now = self.cpu.clock
 
+        print "[%d] Proceso actual: %s" % (now, prev.name)
+        
+        if now - prev.timestamp < MAX_SLEEP_AVG:
+            run_time = now - prev.timestamp
+        else:
+            run_time = MAX_SLEEP_AVG
+        
+        if prev.current_bonus():
+            run_time /= prev.current_bonus()
+
+        print "Estado de prev (%s): %d"  % (prev.name, prev.state)
+        if prev.state != state["RUNNING"]:
+            if prev.state == state["INTERRUPTIBLE"]:
+                prev.state = state["RUNNING"]
+            else:
+                if prev.state == state["UNINTERRUPTIBLE"]:
+                    print "Estado uninterruptible, aumentando en uno las stats"
+                    rq.nr_uninterruptible+=1
+                print "Desactivando la tarea", prev.name
+                prev.deactivate()
+                    
+        if not rq.nr_running:
+            print "Haciendo de IDLE el proceso next"
+            next = rq.idle
+            
+        if not rq.active.nr_active:
+            print "Intercambiando los arrays!"
+            rq.active, rq.expired = rq.expired, rq.active
+            rq.active.name="Active"
+            rq.expired.name = "Expired"
+            rq.expired_timestamp = 0
+            rq.best_expired_prio = MAX_PRIO
+            
+        array = rq.active
+        idx = bitutils.ffs(array.bitmap)
+        print "Primer bit activo de %s (%d): %d" %(array.name, array.bitmap, idx)
+        try:
+            next = array.queue[idx][0]
+        except KeyError:
+            # Esta excepción se da si el índice idx es -1, es decir, 
+            # el prio_array está vacio. Cambio a IDLE.
+            next = self.cpu.idle_task
+            
+        print "Proceso next:", next.name
+        
+        if next.policy == policy["NORMAL"] and next.activated > 0:
+            delta = now - next.timestamp
+            if next.activated == 1:
+                delta = delta * (ON_RUNQUEUE_WEIGHT * 128 / 100) / 128
+            array = next.array
+            array.del_task(next)
+            next.recalc_task_prio(next.timestamp + delta)
+            array.add_task(next)
+        
+        next.activated = 0
+        
+        prev.sleep_avg -= run_time
+        if prev.sleep_avg <= 0:
+            prev.sleep_avg = 0
+        
+        prev.timestamp = prev.last_ran = now
+
+        if prev != next:
+            next.timestamp = now
+            rq.nr_switches+=1
+            rq.curr = next
+
+        self.current = next
+        self.cpu.rq.current = next
+
+        if prev.state == state["EXIT"]:
+            self.tasks.remove(prev)
+            del prev
+        
     def do_ticks(self, step):
 
         # print "Avanzando %d tick(s)"% step
         while step:
             step-=1
             self.update_n_check_tasks()
-            self.cpu.tick()
             self.scheduler_tick()
             clock = self.cpu.clock
+            
+            if self.NEED_RESCHED:
+                print "[%d] Se necesita resched!" % clock
 
-            if self.current.flags == NEED_RESCHED or clock % HZ == 0:
+            if self.NEED_RESCHED or clock % HZ == 0:
                     self.current.flags = 0;
+                    self.NEED_RESCHED = False
                     self.schedule()
             
+            self.cpu.tick()
             sleep(0.01/HZ)
                 
                     

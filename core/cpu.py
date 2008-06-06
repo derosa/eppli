@@ -16,28 +16,29 @@ class cpu():
         self.rq = runqueue(self)
         self.idle_task = task(path.join(TASK_DIR, TASK_IDLE))
         self.init_idle_task(self.idle_task)
+        self.rq.idle = self.idle_task
         
     def init_idle_task(self, task):
         task.state = state["RUNNING"]
-        task.prio = None
+        task.prio = 0
         task.run_list = self.rq
         task.array = self.rq.active
-        task.sleep_avg = None
+        task.sleep_avg = 0
         task.timestamp = self.clock
-        task.last_ran = None
-        task.activated = None
+        task.last_ran = 0
+        task.activated = 0
         task.policy = policy["NORMAL"]
         # En sched_fork() se asigna la mitad del timeslice del proceso padre, 
         # del que carecemos, por lo que uso un time_slice por defecto.
         task.time_slice = 100
         task.first_time_slice = 1
-        task.rt_priority = None
+        task.rt_priority = 0
         task.flags = 0
         
-
     def start(self):
         print "CPU %d activada" % self.id
         self.running = True
+        
     def stop(self):
         self.running = False
         
