@@ -8,16 +8,35 @@ import gtk.glade
 
 from random import sample
 
+def pintar(cosa):
+	for t in (drawActive, drawExpired):
+		win = t.window
+		gc = win.new_gc()
+		win.clear()
+		X1 = 0
+		X2 = 280
+		Y = 25
+		celeste = win.get_colormap().alloc_color("light blue")
+		rojo = win.get_colormap().alloc_color("red")
+
+		gc.foreground = rojo
+				
+		win.draw_rectangle(gc, False, X1, 0, X2, Y+1)
+		gc.foreground = rojo
+
+		for x in sample(xrange(X1, X2, 2), 17):
+			win.draw_line(gc, x, 0, x, Y)
+			win.draw_line(gc, x+1, 0, x+1, Y)
+
 def crear_treeView(titulo):
 	# create a TreeStore with one string column to use as the model
-	treestore = gtk.TreeStore(str, str)
+	treestore = gtk.TreeStore(str)
 
 	# we'll add some data now - 4 rows with 3 child rows each
 	for parent in sample(xrange(139), 7):
-		piter = treestore.append(None, ['Prioridad %i' % parent, None ])
+		piter = treestore.append(None, ['Prioridad %i' % parent])
 		for child in range(3):
-		    treestore.append(piter, ['Proceso de prioridad %i' %
-		                                  (parent), '%d' %(parent*child)])
+		    treestore.append(piter, ['Proceso pepito'])
 
 	# create the TreeView using treestore
 	treeview = gtk.TreeView(treestore)
@@ -30,16 +49,13 @@ def crear_treeView(titulo):
 
 	# create a CellRendererText to render the data
 	cell = gtk.CellRendererText()
-	cell2 = gtk.CellRendererText()
 
 	# add the cell to the tvcolumn and allow it to expand
 	tvcolumn.pack_start(cell, True)
-	tvcolumn.pack_start(cell2, True)
 
 	# set the cell "text" attribute to column 0 - retrieve text
 	# from that column in treestore
 	tvcolumn.add_attribute(cell, 'text', 0)
-	tvcolumn.add_attribute(cell2, 'text', 1)
 
 	# make it searchable
 	treeview.set_search_column(1)
@@ -59,64 +75,35 @@ def botonSalir_clicked(widget):
 	global drawActive
 	global drawExpired
 
-	for t in (drawActive, drawExpired):
-		win = t.window
-		gc = t.get_style().fg_gc[gtk.STATE_NORMAL]
-		win.clear()
-		X1 = 20
-		X2 = 280
-		Y = 15
-		win.draw_rectangle(gc, False, X1, 0, X2, 15)
-		for x in sample(xrange(X1, X2, 2), 17):
-			win.draw_line(gc, x, 0, x, 15)
-			win.draw_line(gc, x+1, 0, x+1, 15)
-
 	if widget.get_label=="Iniciar":
 		print "Rellenando campos..."
 
 	
+def acerca_de_eppli(cosa):
+	global acercade_eppli
+	acercade_eppli.show()
 	
 eventos = { "on_botonSalir_clicked": botonSalir_clicked,
-"on_mainWindow_destroy": gtk.main_quit}
+"on_mainWindow_destroy": gtk.main_quit, "on_boton_nuevo_clicked": pintar}
 
 appXML = gtk.glade.XML("eppli-test1.glade")
-appXML.signal_autoconnect(eventos)
 
 mainWindow = appXML.get_widget("mainWindow")
+acercade_eppli = appXML.get_widget("acercade_eppli")
 toolbar = appXML.get_widget("toolbar")
 activos = appXML.get_widget("scrollWinActive")
 expirados =  appXML.get_widget("scrollWinExpired")
 drawActive =  appXML.get_widget("drawActive")
 drawExpired =  appXML.get_widget("drawExpired")
+boton_nuevo = appXML.get_widget("boton_nuevo")
 
-drawActive.set_size_request(140, 15)
+appXML.signal_autoconnect(eventos)
+
 drawActive.show()
-drawExpired.set_size_request(140, 15)
 drawExpired.show()
 
 # Ver http://library.gnome.org/devel/gtk/2.11/gtk-Stock-Items.html
 # para los iconitos stock :)
-
-boton_play = gtk.ToolButton(gtk.STOCK_MEDIA_PLAY)
-boton_play.connect("clicked", botonSalir_clicked)
-boton_play.set_label("Iniciar")
-
-boton_pause = gtk.ToolButton(gtk.STOCK_MEDIA_PAUSE)
-boton_pause.set_label("Pausar")
-boton_pause.connect("clicked", botonSalir_clicked)
-
-boton_step = gtk.ToolButton(gtk.STOCK_MEDIA_NEXT)
-boton_step.set_label("Avanzar")
-boton_step.connect("clicked", botonSalir_clicked)
-
-boton_new = gtk.ToolButton(gtk.STOCK_ADD)
-boton_new.set_label("Nuevo proceso")
-boton_new.connect("clicked", botonSalir_clicked)
-
-toolbar.add(boton_new)
-toolbar.add(boton_play)
-toolbar.add(boton_step)
-toolbar.add(boton_pause)
 
 
 tv1 = crear_treeView("Activos")
