@@ -1661,7 +1661,6 @@
 
 			  <child>
 			    <widget class="GtkLabel" id="label65">
-			      <property name="width_request">80</property>
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Bitmap &lt;i&gt;active&lt;/i&gt;</property>
 			      <property name="use_underline">False</property>
@@ -1687,7 +1686,6 @@
 
 			  <child>
 			    <widget class="GtkLabel" id="text_bitmap_num_active">
-			      <property name="width_request">80</property>
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">&lt;i&gt;NN procesos&lt;/i&gt;</property>
 			      <property name="use_underline">False</property>
@@ -1753,7 +1751,6 @@
 
 			  <child>
 			    <widget class="GtkLabel" id="label66">
-			      <property name="width_request">70</property>
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Bitmap &lt;i&gt;expired&lt;/i&gt;</property>
 			      <property name="use_underline">False</property>
@@ -1779,7 +1776,6 @@
 
 			  <child>
 			    <widget class="GtkLabel" id="text_bitmap_num_expired">
-			      <property name="width_request">80</property>
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">&lt;i&gt;NN procesos&lt;/i&gt;</property>
 			      <property name="use_underline">False</property>
