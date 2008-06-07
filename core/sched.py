@@ -56,7 +56,6 @@ class scheduler():
         self.cpu.rq.nr_running += 1
         task.time_slice = task.task_timeslice()
         
-        
     def update_n_check_tasks(self):
         #print "update_n_check_tasks:"
         #if len(self.tasks)==1:
@@ -80,11 +79,12 @@ class scheduler():
             
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
-                print "La tarea %s ha terminado!" % t.name
-                print "Tiempo de ejecución:", t.localtime
+                print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
+                print "Tiempo en ejecución:", t.localtime
+                print "Tiempo de ejecución:", self.cpu.clock
                 continue
             
-            if t.flags == NEED_RESCHED:
+            if t.flags == NEED_RESCHED and t.state != state["EXIT"]:
                 self.try_to_wake_up(t)
 
         if self.current.state != state["RUNNING"]:
@@ -204,7 +204,6 @@ class scheduler():
                 prev.state = state["RUNNING"]
             else:
                 if prev.state == state["UNINTERRUPTIBLE"]:
-                    print "Estado uninterruptible, aumentando en uno las stats"
                     rq.nr_uninterruptible+=1
                 print "Desactivando la tarea", prev.name
                 prev.deactivate()
@@ -254,13 +253,13 @@ class scheduler():
             next.timestamp = now
             rq.nr_switches+=1
             rq.curr = next
+            if prev.state == state["EXIT"]:
+                self.tasks.remove(prev)
+                del prev
 
         self.current = next
         self.cpu.rq.current = next
 
-        if prev.state == state["EXIT"]:
-            self.tasks.remove(prev)
-            del prev
         
     def do_ticks(self, step):
 
@@ -280,15 +279,12 @@ class scheduler():
                     self.schedule()
             
             self.cpu.tick()
-            sleep(0.01/HZ)
-                
+            sleep(1/HZ)
                     
     def run(self):
         print "Scheduler en ejecución"
         while len(self.tasks):
-            self.step = 1
-            self.do_ticks(self.step)
-            #sleep(0.01/HZ)
+            self.do_ticks(1)
     
 if __name__ == "__main__":
     if len(argv) != 2:
