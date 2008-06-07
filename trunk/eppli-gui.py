@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-from gui import eppli_gui
+from gui.eppli_gui import eppli_gui
 
 e = eppli_gui()
 e.run() 
