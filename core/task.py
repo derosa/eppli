@@ -18,7 +18,7 @@ class task():
         # Atributos para el emulador
         self.timeline = {}
         self.name = ""
-        self.localtime = -1
+        self.localtime = 0
         self.state = state["RUNNING"]
         self.oldstate = self.state
         self.static_prio = 0
@@ -178,11 +178,8 @@ class task():
 if __name__ == "__main__":
     tmp = task("tasks/task1.tsk")
     print tmp
-    
     print "Demo de ejecución y cambio de estado"
     while tmp.state != state["EXIT"]:
         print "Tick: ", tmp.localtime
         tmp.tick()
         sleep(0.1/HZ)
-
-        

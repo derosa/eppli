@@ -11,39 +11,42 @@ import os
 from time import sleep
 
 class scheduler():
-    def __init__(self, n_cpus = 1):
+    def __init__(self, ruta_procesos):
         """ Inicializa un nuevo planificador"""
         print "Inicializando scheduler"
-        
-        self.cpu = cpu(n_cpus)
-            
+        self.cpu = cpu()
         self.tasks = []
-        self.add_tasks(TASK_DIR)
-     
+        self.add_tasks(ruta_procesos)
         self.cpu.start()
-
         self.current = self.cpu.idle_task
-        
         self.NEED_RESCHED = False
     
     def add_tasks(self, proc_dir):
         """ Añade todos los procesos de un directorio, excepto el IDLE"""
+        tareas = None
         for dir, subdir, files in os.walk(proc_dir):
             if dir == proc_dir:
-                tareas = [d for d in files if d.endswith(".tsk") and not d.startswith("idle")]
+                tareas = [d for d in files if d.endswith(".tsk") and d != TASK_IDLE]
+                idle = [d for d in files if d == TASK_IDLE]
                 print "Ficheros a considerar: %s" % tareas
         for t in tareas:
             tmp = task(os.path.join(proc_dir, t))
             print "Intentando crear tarea desde", os.path.join(proc_dir, t)
             self.tasks.append(tmp); # Se inserta el proceso en la lista global.
+
+        for i in idle:
+            print "Creando proceso IDLE de la CPU (%s)" % os.path.join(proc_dir, i)
+            self.cpu.idle_task = task(os.path.join(proc_dir, i))
+            self.cpu.init_idle_task(self.cpu.idle_task)
+            self.cpu.rq.idle = self.cpu.idle_task
+
         print "Tareas de '%s' añadidas" % proc_dir
-        print "Haciendo fork de las tareas"
+        print "Haciendo 'fork' de las tareas."
         for t in self.tasks:
             t.update_state()
             self.do_fork(t)
-        print "Tareas del sistema: ",len(self.tasks)
-        #for t in self.tasks:
-        #     print t
+        
+        print "Número de tareas en el sistema: ",len(self.tasks)
 
     def do_fork(self, task):
         task.state = state["RUNNING"]
@@ -57,16 +60,12 @@ class scheduler():
         task.time_slice = task.task_timeslice()
         
     def update_n_check_tasks(self):
-        #print "update_n_check_tasks:"
-        #if len(self.tasks)==1:
-        #    print self.tasks[0]
-        
         #  Por cada tarea, comprueba si su nuevo estado según
         #  la línea temporal es != durmiente. Si es así se llama a
         #  try_to_wake_up. (Con esto se emula una waitqueue).
 
         # current se incrementa manualmente para evitar que tareas en estado running
-        # avancen su timeline sin tener realmente la CPU 
+        # avancen su timeline sin tener realmente la CPU. Ver task.tick() 
         self.current.localtime+=1
 
         for t in self.tasks:
@@ -284,12 +283,9 @@ class scheduler():
     def run(self):
         print "Scheduler en ejecución"
         while len(self.tasks):
-            self.do_ticks(1)
+            if self.cpu.running:
+                self.do_ticks(1)
     
 if __name__ == "__main__":
-    if len(argv) != 2:
-        sched = scheduler()
-    else:
-        sched = scheduler(int(argv[1]))
-        
+    sched = scheduler(TASK_DIR)
     sched.run()

@@ -5,18 +5,14 @@ from runqueue import runqueue
 from task import task
 from prio_array import prio_array
 
-from os import path
 
 class cpu():
-    def __init__(self, id):
+    def __init__(self, id=1):
         """ Inicializa una nueva CPU con todas sus estructuras"""
         print "Inicializando CPU", id
         self.id = id
         self.clock = 0
         self.rq = runqueue(self)
-        self.idle_task = task(path.join(TASK_DIR, TASK_IDLE))
-        self.init_idle_task(self.idle_task)
-        self.rq.idle = self.idle_task
         
     def init_idle_task(self, task):
         task.state = state["RUNNING"]
