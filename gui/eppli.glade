@@ -99,7 +99,7 @@
 	      <property name="is_important">False</property>
 
 	      <child>
-		<widget class="GtkEntry" id="text_num_pasos">
+		<widget class="GtkEntry" id="entry_num_pasos">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Indica el número de pasos a simular</property>
 		  <property name="can_focus">True</property>
@@ -111,8 +111,8 @@
 		  <property name="invisible_char">●</property>
 		  <property name="activates_default">False</property>
 		  <property name="width_chars">5</property>
-		  <signal name="activate" handler="on_text_num_pasos_activate" last_modification_time="Sat, 07 Jun 2008 13:31:43 GMT"/>
-		  <signal name="focus_in_event" handler="on_text_num_pasos_focus" last_modification_time="Sun, 08 Jun 2008 12:57:13 GMT"/>
+		  <signal name="activate" handler="on_entry_num_pasos_activate" last_modification_time="Sun, 08 Jun 2008 15:56:25 GMT"/>
+		  <signal name="focus_in_event" handler="on_entry_num_pasos_focus" last_modification_time="Sun, 08 Jun 2008 15:56:33 GMT"/>
 		</widget>
 	      </child>
 	    </widget>

@@ -32,10 +32,11 @@ class eppli_gui():
         self.appXML = gtk.glade.XML("gui/eppli.glade")
         self.appXML.signal_autoconnect(self.eventos)
         self.eppliWindow = self.appXML.get_widget("mainWindow")
-        self.text_steps = self.appXML.get_widget("text_num_pasos")
+        self.text_steps = self.appXML.get_widget("entry_num_pasos")
         self.boton_start_pause = self.appXML.get_widget("boton_start_pause")
         self.widgets = self.init_widgets()
         self.controller = eppli_controller(self)
+        self.clear_text()
 
         
     def run(self):
@@ -58,6 +59,7 @@ desea iniciar una nueva emulación?"):
             self.controller.del_scheduler()
             try:
                 self.controller.new_scheduler(self.ruta_tasks)
+                self.clear_text()
                 self.running = True
                 self.controller.sched_step()
             except NoTaskOrIdleDir, e:
@@ -265,6 +267,12 @@ Pauselo si desea avanzar por pasos.""")
         
         return res
     
+    def clear_text(self):
+        """ Elimina el texto de las etiquetas"""
+        ws = self.appXML.get_widget_prefix("text_")
+        for w in ws:
+            w.set_text("")
+            
     def show_error(self, msg):
         """ Muestra un mensaje de error"""
         d = gtk.MessageDialog(self.eppliWindow, 
