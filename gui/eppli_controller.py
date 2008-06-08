@@ -38,6 +38,7 @@ class eppli_controller():
     
     def sched_step(self, steps=1):
         """ Avanza n pasos en el planificador y actualiza la vista."""
+        self.stepping=True
         while steps:
             steps-=1
             # Avanza un tick en el emulador
@@ -46,6 +47,8 @@ class eppli_controller():
             self.view._update_all()
             if gtk.events_pending():
                 gtk.main_iteration()
+
+        self.stepping=False
         return True
     
     def get_current(self):
@@ -69,7 +72,7 @@ class eppli_controller():
         # Los procesos FIFO ignoran el timeslice y puede llegar a ser negativo.
         # Para evitar confusiones en el GUI, se muestra el siguiente mensaje
         if tarea.policy == 1:
-            res["timeslice"] = "Tipo de proceso sin timeslice"
+            res["timeslice"] = "Proceso sin timeslice"
         else:
             res["timeslice"] = tarea.time_slice
 
@@ -115,11 +118,25 @@ class eppli_controller():
             bitmap = clear_bit(bitmap, t)
         #print "GUI - Bits activos en %s: %s" % (name, res)
         return res
-            
-    def get_nr_expired(self):
-        """ Devuelve el número de procesos en el array expired."""
-        raise NotImplemented(inspect.stack()[1][3])
     
-    def get_nr_active(self):
-        """ Devuelve el número de procesos en el array active."""
-        raise NotImplemented(inspect.stack()[1][3])
+    def get_trees_data(self, name):
+        """ Devuelve una lista de prioridades con sus procesos""" 
+        res = {}
+        if name == "active":
+            data = self.sched.cpu.rq.active.queue
+        elif name == "expired":
+            data = self.sched.cpu.rq.expired.queue
+        
+        for k in data.keys():
+            res[k]=[]
+            for t in data[k]:
+                res[k].append(t.name)
+        return res
+        
+    def get_active_data(self):
+        """ Devuelve la lista de prioridades de la cola activa"""
+        return self.get_trees_data("active")
+    
+    def get_expired_data(self):
+        """ Devuelve la lista de prioridades de la cola expired"""
+        return self.get_trees_data("expired")
