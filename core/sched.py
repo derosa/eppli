@@ -269,7 +269,7 @@ class scheduler():
         self.cpu.rq.current = next
 
         
-    def do_ticks(self, step):
+    def do_ticks(self, step=1):
 
         # print "Avanzando %d tick(s)"% step
         while step:
@@ -287,13 +287,15 @@ class scheduler():
                     self.schedule()
             
             self.cpu.tick()
-            sleep(1/HZ)
+            
+        return len(self.tasks)
                     
     def run(self):
         print "Scheduler en ejecución"
         while len(self.tasks):
             if self.cpu.running:
                 self.do_ticks(1)
+                sleep(1/HZ)
     
 if __name__ == "__main__":
     sched = scheduler(TASK_DIR)

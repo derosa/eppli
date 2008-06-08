@@ -5,15 +5,17 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.glade
+import gobject
 
 from eppli_controller import eppli_controller
+from core.const import HZ
 from core.eppli_exceptions import *
 
 class eppli_gui():
     def __init__(self):
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_nuevo_clicked": self.new_emulation,
-                        "on_boton_start_pause_toggled": self.run_pause}
+                        "on_boton_start_pause_clicked": self.run_pause_clicked}
         
         self.appXML = gtk.glade.XML("gui/eppli.glade")
         self.appXML.signal_autoconnect(self.eventos)
@@ -21,6 +23,8 @@ class eppli_gui():
         self.controller = eppli_controller(self)
         self.ruta_tasks = None
         self.running = False
+        self.boton_running = False
+        self.SCHED_TIMER = 1.0/HZ
         
     def run(self):
         """ Inicia el GUI y el bucle principal de gtk."""
@@ -52,10 +56,16 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         """ Actualiza todos los datos en pantalla cada vez que se completa 
         una iteración del planificador. Esta función es llamada por el 
         controlador."""
-        raise NotImplemented()
+        print "GUI - Actualizando datos de la vista"
+        self.__update_stats_current()
+        self.__update_stats_selected()
+        self.__update_stats_scheduler()
+        self.__update_bitmap_active()
+        self.__update_bitmap_expired()
     
     def __update_stats_current(self):
         """ Actualiza las estadísticas del proceso current."""
+        current = self.controller.get_current()
         raise NotImplemented()
 
     def __update_stats_selected(self):
@@ -80,17 +90,39 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
        """ Actualiza la imagen de drawable con los valores pasados en bits"""
        raise NotImplemented()
     
-    def run_pause(self, boton):
+    def run_pause_check(self):
+        print "GUI - Comprobando run_pause_check"
+        if not self.running:
+            self.show_error("""No se ha inicializado correctamente el emulador.\n
+Por favor, seleccione un directorio con tareas.""")
+            return False
+        else:
+            return True
+    
+    def run_pause_clicked(self, boton):
         """ Ejecuta y pausa la ejecución del planificador.
         También alterna el aspecto del botón para reflejar la pausa."""
-        if not boton.get_active():
-            # El botón está no-pulsado
+        
+        if not self.run_pause_check():
+            return
+        
+        if self.boton_running:
             boton.set_label("Iniciar")
+            boton.set_stock_id("gtk-media-play")
+            print "GUI - Eliminando timer para sched_step"
+            # Pausa la ejecución
+            gobject.source_remove(self.timer)
+            self.timer_id = None
+            self.boton_running = False
         else:
             boton.set_label("Pausar")
+            boton.set_stock_id("gtk-media-pause")
+            t = int(self.SCHED_TIMER*1000)
+            print "GUI - Iniciando el timer para sched_step (%d)" % t
+            self.timer = gobject.timeout_add(int(self.SCHED_TIMER*1000), 
+                                             self.controller.sched_step)
+            self.boton_running = True
             
-        raise NotImplemented()
-    
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
         contiene las tareas a emular."""
@@ -111,6 +143,7 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         return res
     
     def show_error(self, msg):
+        """ Muestra un mensaje de error"""
         d = gtk.MessageDialog(self.eppliWindow, 
                               gtk.DIALOG_MODAL, 
                               gtk.MESSAGE_ERROR,
@@ -121,6 +154,8 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         d.destroy()
 
     def show_question(self, t):
+        """Realiza una pregunta al usuario. Devuelve True si responde SI, False
+        si se responde NO"""
         d = gtk.MessageDialog(self.eppliWindow, 
                               gtk.DIALOG_MODAL, 
                               gtk.MESSAGE_WARNING, 

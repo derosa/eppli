@@ -27,16 +27,26 @@ class eppli_controller():
     
     def sched_step(self, steps=1):
         """ Avanza n pasos en el planificador y actualiza la vista."""
-        raise NotImplemented()
-        # Pide a la vista que actualize los datos.
-        self.view._update_all()
+        while steps:
+            steps-=1
+            # Avanza un tick en el emulador
+            self.sched.do_ticks()
+            # Pide a la vista que actualize los datos.
+            self.view._update_all()
     
     def get_current(self):
         """ Devuelve la tarea current del sistema."""
-        raise NotImplemented()
+        return self.get_tasks(self.sched.current.name)
     
     def get_tasks(self, name):
         """ Devuelve la tarea de nombre name."""
+        res = {}
+        res["name"] = current.name
+        res["estado"] = current.state
+        res["timeslice"] = current.time_slice
+        res["prio"] = current.prio
+        res["static_prio"] = current.static_prio
+
         raise NotImplemented()
     
     def get_sched_stats(self):

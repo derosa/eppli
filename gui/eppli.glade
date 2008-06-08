@@ -56,17 +56,15 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToggleToolButton" id="boton_start_pause">
+	    <widget class="GtkToolButton" id="boton_start_pause">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inicia/pausa la ejecución de la emulación</property>
 	      <property name="label" translatable="yes">Iniciar</property>
 	      <property name="use_underline">True</property>
-	      <property name="stock_id">gtk-execute</property>
+	      <property name="stock_id">gtk-media-play</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <property name="active">False</property>
-	      <signal name="toggled" handler="on_boton_start_pause_toggled" last_modification_time="Sat, 07 Jun 2008 13:23:36 GMT"/>
+	      <signal name="clicked" handler="on_boton_start_pause_clicked" last_modification_time="Sun, 08 Jun 2008 09:52:38 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
