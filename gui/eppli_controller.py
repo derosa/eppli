@@ -106,14 +106,14 @@ class eppli_controller():
         elif name == "active":
             #print "GUI - Obteniendo bitmap de active"
             bitmap = long(self.sched.cpu.rq.active.bitmap)
-        print "GUI - El bitmap:", bitmap
+        #print "GUI - El bitmap:", bitmap
         
         while bitmap:
             t = ffs(bitmap)
             #print "GUI - Añadiendo %d al resultado" % t
             res.append(t)
             bitmap = clear_bit(bitmap, t)
-        print "GUI - Bits activos en %s: %s" % (name, res)
+        #print "GUI - Bits activos en %s: %s" % (name, res)
         return res
             
     def get_nr_expired(self):
