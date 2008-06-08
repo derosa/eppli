@@ -72,7 +72,7 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         """ Actualiza todos los datos en pantalla cada vez que se completa 
         una iteración del planificador. Esta función es llamada por el 
         controlador."""
-        print "GUI - Actualizando datos de la vista"
+        #print "GUI - Actualizando datos de la vista"
         self.__update_stats_current()
         #self.__update_stats_selected()
         self.__update_stats_scheduler()
@@ -200,7 +200,6 @@ Por favor, seleccione un directorio con tareas.""")
             self.show_error("""¡El emulador ya está en funcionamiento!\n
 Pauselo si desea avanzar por pasos.""")
             return
-            
         try:
             steps = int(self.text_steps.get_text())
         except ValueError:
@@ -263,7 +262,9 @@ Pauselo si desea avanzar por pasos.""")
             
         # Los Drawable donde pintar los bitmaps...
         res["treeActiveDraw"] = self.appXML.get_widget("drawActive")
-        res["treeExpiredDraw"] = self.appXML.get_widget("drawExpired") 
+        res["treeExpiredDraw"] = self.appXML.get_widget("drawExpired")
+        
+        res["treeActiveData"] = None
         
         return res
     
@@ -271,7 +272,7 @@ Pauselo si desea avanzar por pasos.""")
         """ Elimina el texto de las etiquetas"""
         ws = self.appXML.get_widget_prefix("text_")
         for w in ws:
-            w.set_text("")
+            w.set_label("")
             
     def show_error(self, msg):
         """ Muestra un mensaje de error"""
