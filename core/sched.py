@@ -6,9 +6,12 @@ from task import task
 import bitutils
 
 from const import *
+from eppli_exceptions import  *
 
 import os
 from time import sleep
+
+
 
 class scheduler():
     def __init__(self, ruta_procesos):
@@ -16,7 +19,10 @@ class scheduler():
         print "Inicializando scheduler"
         self.cpu = cpu()
         self.tasks = []
+
         self.add_tasks(ruta_procesos)
+        print "Número de tareas en el sistema: ",len(self.tasks)
+        
         self.cpu.start()
         self.current = self.cpu.idle_task
         self.NEED_RESCHED = False
@@ -29,6 +35,11 @@ class scheduler():
                 tareas = [d for d in files if d.endswith(".tsk") and d != TASK_IDLE]
                 idle = [d for d in files if d == TASK_IDLE]
                 print "Ficheros a considerar: %s" % tareas
+        
+        if not tareas or not idle:
+            error = "'%s' no contiene tareas adecuadas o idle.tsk" % proc_dir
+            raise NoTaskOrIdleDir(error)
+        
         for t in tareas:
             tmp = task(os.path.join(proc_dir, t))
             print "Intentando crear tarea desde", os.path.join(proc_dir, t)
@@ -45,8 +56,6 @@ class scheduler():
         for t in self.tasks:
             t.update_state()
             self.do_fork(t)
-        
-        print "Número de tareas en el sistema: ",len(self.tasks)
 
     def do_fork(self, task):
         task.state = state["RUNNING"]
