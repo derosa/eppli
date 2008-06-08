@@ -26,6 +26,7 @@ class scheduler():
         self.cpu.start()
         self.current = self.cpu.idle_task
         self.NEED_RESCHED = False
+        self.did_sched = False # Para el GUI
     
     def add_tasks(self, proc_dir):
         """ Añade todos los procesos de un directorio, excepto el IDLE"""
@@ -280,10 +281,14 @@ class scheduler():
             
             if self.NEED_RESCHED:
                 print "[%d] Se necesita resched!" % clock
-
+            
+            # Para que el GUI sepa que se ha ejecutado schedule()
+            self.did_sched = False
+            
             if self.NEED_RESCHED or clock % HZ == 0:
                     self.current.flags = 0;
                     self.NEED_RESCHED = False
+                    self.did_sched = True
                     self.schedule()
             
             self.cpu.tick()

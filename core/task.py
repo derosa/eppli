@@ -109,6 +109,7 @@ class task():
         # Devuelve la prioridad efectiva.
         bonus = self.current_bonus() - MAX_BONUS/2
         res = self.static_prio - bonus
+        res = max(MAX_RT_PRIO, min(res, MAX_PRIO-1))
         print "effective_prio [%s]: static_prio %d - bonus: %d = %d" %(self.name,
                                                                        self.static_prio,
                                                                        bonus,

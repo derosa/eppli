@@ -10,6 +10,8 @@ import inspect
 
 from eppli_controller import eppli_controller
 from core.const import HZ
+from core.const import MAX_RT_PRIO
+
 from core.eppli_exceptions import *
 
 class eppli_gui():
@@ -24,7 +26,8 @@ class eppli_gui():
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
                         "on_boton_steps_clicked": self.run_steps,
                         "on_text_num_pasos_activate": self.run_steps,
-                        "on_text_num_pasos_focus": self.clear_text}
+                        "on_drawActive_expose_event": self.expose_event,
+                        "on_drawExpired_expose_event": self.expose_event}
         
         self.appXML = gtk.glade.XML("gui/eppli.glade")
         self.appXML.signal_autoconnect(self.eventos)
@@ -92,6 +95,13 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         """ Actualiza las estadísticas del planificador."""
         procmap = self.controller.get_sched_stats()
         self.__update_stats_text("state", procmap)
+        
+        # Por hacer bonito, ponemos en negrita el valor del tiempo de ejecución
+        # si coincide con llamada a scheduler.
+        if self.controller.get_did_sched():
+            marca = "<b>%s</b>" % self.widgets["text_state_runtime"].get_text()
+            self.widgets["text_state_runtime"].set_label(marca)
+            
 
     def __update_stats_text(self, prefix, procmap):
         """ Actualiza los textos de las estadísticas."""
@@ -123,18 +133,35 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         win = draw.window
         gc = win.new_gc()
         win.clear()
-        X1 = 0
-        X2 = 280
-        Y = 25
-        celeste = win.get_colormap().alloc_color("light blue")
-        rojo = win.get_colormap().alloc_color("red")
-        gc.foreground = rojo
-        win.draw_rectangle(gc, False, X1, 0, X2, Y+1)
-        gc.foreground = rojo
+        x1 = 0
+        x2 = 280
+        y = 25
+        
+        # Colores de 
+        # http://sedition.com/perl/rgb.html
+        col_prio_normal = win.get_colormap().alloc_color("CornflowerBlue")
+        col_prio_rt = win.get_colormap().alloc_color("orange1")
+        col_rect = win.get_colormap().alloc_color("gray")
+        col_rect_fondo = win.get_colormap().alloc_color("gray100")
+        
+        gc.foreground = col_rect_fondo
+        win.draw_rectangle(gc, True, x1, 0, x2, y+1)
+
+        gc.foreground = col_rect
+        win.draw_rectangle(gc, False, x1, 0, x2, y+1)
+        
         for x in bits:
-           win.draw_line(gc, x*2, 0, x*2, Y)
-           win.draw_line(gc, x*2+1, 0, x*2+1, Y)
-        gtk.main_iteration()
+            if x <= MAX_RT_PRIO:
+                gc.foreground = col_prio_rt
+            else:
+                gc.foreground = col_prio_normal
+            win.draw_line(gc, x*2, 1, x*2, y)
+            win.draw_line(gc, x*2+1, 1, x*2+1, y)
+        
+    def expose_event(self, area, evento):
+        if self.running:
+            self.__update_bitmap_active()
+            self.__update_bitmap_expired()
         
     def check_sched_init(self):
         print "GUI - Comprobando run_pause_check"
@@ -226,7 +253,7 @@ Pauselo si desea avanzar por pasos.""")
                 res[name] = wobj
         
         # Objetos de las estadísticas del scheduler
-        atr = ["runtime", "nr", "nr_switch", "best_prio"]
+        atr = ["runtime", "nr", "nr_switch", "best_prio", "num_active", "num_expired"]
         for a in atr:
             name = "text_state_%s" % a
             wobj = self.appXML.get_widget(name)
@@ -237,9 +264,6 @@ Pauselo si desea avanzar por pasos.""")
         res["treeExpiredDraw"] = self.appXML.get_widget("drawExpired") 
         
         return res
-    
-    def clear_text(self, texto, nada):
-        self.text_steps.set_text("")
     
     def show_error(self, msg):
         """ Muestra un mensaje de error"""
