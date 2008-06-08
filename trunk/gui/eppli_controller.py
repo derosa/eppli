@@ -33,6 +33,9 @@ class eppli_controller():
             del self.sched
             self.sched = None
     
+    def get_did_sched(self):
+        return self.sched.did_sched
+    
     def sched_step(self, steps=1):
         """ Avanza n pasos en el planificador y actualiza la vista."""
         while steps:
@@ -79,6 +82,9 @@ class eppli_controller():
         res["nr"] = self.sched.cpu.rq.nr_running
         res["nr_switch"] = self.sched.cpu.rq.nr_switches
         res["best_prio"] = self.sched.cpu.rq.best_expired_prio
+        res["num_active"] = "<i>%d procesos</i>" % self.sched.cpu.rq.active.nr_active
+        res["num_expired"] = "<i>%d procesos</i>" % self.sched.cpu.rq.expired.nr_active
+        
         return res
     
     def get_bitmap_active(self):
@@ -95,16 +101,16 @@ class eppli_controller():
         """ Devuelve el bitmap del array solicitado."""
         res=[]
         if name == "expired":
-            print "GUI - Obteniendo bitmap de expired"
+            #print "GUI - Obteniendo bitmap de expired"
             bitmap = long(self.sched.cpu.rq.expired.bitmap)
         elif name == "active":
-            print "GUI - Obteniendo bitmap de active"
+            #print "GUI - Obteniendo bitmap de active"
             bitmap = long(self.sched.cpu.rq.active.bitmap)
         print "GUI - El bitmap:", bitmap
         
         while bitmap:
             t = ffs(bitmap)
-            print "GUI - Añadiendo %d al resultado" % t
+            #print "GUI - Añadiendo %d al resultado" % t
             res.append(t)
             bitmap = clear_bit(bitmap, t)
         print "GUI - Bits activos en %s: %s" % (name, res)
