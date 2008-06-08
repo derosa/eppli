@@ -35,7 +35,7 @@ class scheduler():
             if dir == proc_dir:
                 tareas = [d for d in files if d.endswith(".tsk") and d != TASK_IDLE]
                 idle = [d for d in files if d == TASK_IDLE]
-                print "Ficheros a considerar: %s" % tareas
+                #print "Ficheros a considerar: %s" % tareas
         
         if not tareas or not idle:
             error = "'%s' no contiene tareas adecuadas o idle.tsk" % proc_dir
@@ -43,7 +43,7 @@ class scheduler():
         
         for t in tareas:
             tmp = task(os.path.join(proc_dir, t))
-            print "Intentando crear tarea desde", os.path.join(proc_dir, t)
+            #print "Intentando crear tarea desde", os.path.join(proc_dir, t)
             self.tasks.append(tmp); # Se inserta el proceso en la lista global.
 
         for i in idle:
@@ -53,7 +53,7 @@ class scheduler():
             self.cpu.rq.idle = self.cpu.idle_task
 
         print "Tareas de '%s' añadidas" % proc_dir
-        print "Haciendo 'fork' de las tareas."
+        #print "Haciendo 'fork' de las tareas."
         for t in self.tasks:
             t.update_state()
             self.do_fork(t)
@@ -88,9 +88,9 @@ class scheduler():
             
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
-                print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
-                print "Tiempo en ejecución:", t.localtime
-                print "Tiempo de ejecución:", self.cpu.clock
+                #print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
+                #print "Tiempo en ejecución:", t.localtime
+                #print "Tiempo de ejecución:", self.cpu.clock
                 continue
             
             if t.flags == NEED_RESCHED and t.state != state["EXIT"]:
@@ -128,7 +128,7 @@ class scheduler():
         
         # Si la tarea agota su timeslice...
         if not p.time_slice:
-            print "[%d] La tarea %s ha agotado su timeslice..." % (cpu.clock, p.name)
+            #print "[%d] La tarea %s ha agotado su timeslice..." % (cpu.clock, p.name)
             rq.active.del_task(p)
             self.NEED_RESCHED = True
             p.flags = self.NEED_RESCHED
@@ -140,7 +140,7 @@ class scheduler():
             # si no es interactiva o hay cosas sin ejecutarse mucho tiempo,
             # a la cola de expirados
             if not p.interactive() or rq.expired_starving():
-                print "No interactiva o starving"
+                #print "No interactiva o starving"
                 rq.expired.add_task(p)
                 if p.static_prio < rq.best_expired_prio:
                     rq.best_expired_prio = p.static_prio
@@ -151,7 +151,6 @@ class scheduler():
             p_interac = p.interactive()
             p_t_tl = p.task_timeslice()
             p_granu = p.timeslice_granularity()
-            print "p_granu:", p_granu
             if (p_interac and not ((p_t_tl - p.time_slice) 
             % p_granu) and (p.time_slice >= p_granu) and
             (p.array == rq.active)):
@@ -163,7 +162,6 @@ class scheduler():
             
                 
     def try_to_wake_up(self, t):
-        print "try_to_wake_up: ", t.name
         c = self.cpu
         rq = self.cpu.rq
         if t.array:
@@ -191,14 +189,10 @@ class scheduler():
         self.cpu.rq.active.add_task(t)
         
     def schedule(self):
-        print "schedule"
-        #print "Procesos pendientes:", self.tasks
         prev = self.current
         rq = self.cpu.rq
         now = self.cpu.clock
 
-        print "[%d] Proceso actual: %s" % (now, prev.name)
-        
         if now - prev.timestamp < MAX_SLEEP_AVG:
             run_time = now - prev.timestamp
         else:
@@ -207,22 +201,22 @@ class scheduler():
         if prev.current_bonus():
             run_time /= prev.current_bonus()
 
-        print "Estado de prev (%s): %d"  % (prev.name, prev.state)
+        #print "Estado de prev (%s): %d"  % (prev.name, prev.state)
         if prev.state != state["RUNNING"]:
             if prev.state == state["INTERRUPTIBLE"]:
                 prev.state = state["RUNNING"]
             else:
                 if prev.state == state["UNINTERRUPTIBLE"]:
                     rq.nr_uninterruptible+=1
-                print "Desactivando la tarea", prev.name
+                #print "Desactivando la tarea", prev.name
                 prev.deactivate()
                     
         if not rq.nr_running:
-            print "Haciendo de IDLE el proceso next"
+            #print "Haciendo de IDLE el proceso next"
             next = rq.idle
             
         if not rq.active.nr_active:
-            print "Intercambiando los arrays!"
+            #print "Intercambiando los arrays!"
             rq.active, rq.expired = rq.expired, rq.active
             rq.active.name="Active"
             rq.expired.name = "Expired"
@@ -231,7 +225,7 @@ class scheduler():
             
         array = rq.active
         idx = bitutils.ffs(array.bitmap)
-        print "Primer bit activo de %s (%d): %d" %(array.name, array.bitmap, idx)
+        #print "Primer bit activo de %s (%d): %d" %(array.name, array.bitmap, idx)
         try:
             next = array.queue[idx][0]
         except KeyError:
@@ -239,7 +233,7 @@ class scheduler():
             # el prio_array está vacio. Cambio a IDLE.
             next = self.cpu.idle_task
             
-        print "Proceso next:", next.name
+        #print "Proceso next:", next.name
         
         if next.policy == policy["NORMAL"] and next.activated > 0:
             delta = now - next.timestamp
@@ -279,9 +273,6 @@ class scheduler():
             self.scheduler_tick()
             clock = self.cpu.clock
             
-            if self.NEED_RESCHED:
-                print "[%d] Se necesita resched!" % clock
-            
             # Para que el GUI sepa que se ha ejecutado schedule()
             self.did_sched = False
             
@@ -301,6 +292,7 @@ class scheduler():
             if self.cpu.running:
                 self.do_ticks(1)
                 sleep(1/HZ)
+        print "Fin de la planificación"
     
 if __name__ == "__main__":
     sched = scheduler(TASK_DIR)

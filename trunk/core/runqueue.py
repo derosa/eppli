@@ -27,5 +27,5 @@ class runqueue():
             and (self.cpu.clock - self.expired_timestamp >= STARVATION_LIMIT * 
                  self.nr_running + 1)
         s2 = self.current.static_prio > self.best_expired_prio
-        print "starving: s1: %d, s2 (%d > %d): %d" % (s1, self.current.static_prio, self.best_expired_prio, s2)
+        #print "starving: s1: %d, s2 (%d > %d): %d" % (s1, self.current.static_prio, self.best_expired_prio, s2)
         return s1 or s2
