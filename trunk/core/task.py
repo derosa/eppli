@@ -92,6 +92,11 @@ class task():
             self.localtime+=1
         
     def task_timeslice(self):
+        # Los procesos FIFO no tienen timeslice, se ejecutan hasta que acaban 
+        # o llega otro de mayor prioridad.
+        if self.policy == policy["FIFO"]:
+            return 0
+        
         if self.static_prio < 120:
             x = DEF_TIMESLICE*4
         else:
@@ -103,7 +108,12 @@ class task():
     def effective_prio(self):
         # Devuelve la prioridad efectiva.
         bonus = self.current_bonus() - MAX_BONUS/2
-        return self.static_prio - bonus
+        res = self.static_prio - bonus
+        print "effective_prio [%s]: static_prio %d - bonus: %d = %d" %(self.name,
+                                                                       self.static_prio,
+                                                                       bonus,
+                                                                       res)
+        return res
     
     def current_bonus(self):
         ret = self.sleep_avg * MAX_BONUS / MAX_SLEEP_AVG

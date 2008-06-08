@@ -1,11 +1,15 @@
-#/usr/bin/python
 #coding: utf-8
 
+import inspect
+import gtk
+
 from core.sched import scheduler
-from core.sched import NoTaskOrIdleDir
+from core.bitutils import ffs
+from core.bitutils import clear_bit
+ 
 
 from core.eppli_exceptions import NotImplemented
-
+from core.eppli_exceptions import NoTaskOrIdleDir
 
 class eppli_controller():
     def __init__(self, parent):
@@ -14,9 +18,13 @@ class eppli_controller():
         print "Iniciando controlador de EPPLI"
         self.view = parent
         self.sched = None
+        self.state_r = {0: "INTERRUPTIBLE", 1: "UNINTERRUPTIBLE", 
+                        2: "RUNNING", 3: "EXIT"}
+        self.policy_r = {0:"Tiempo Real - Round Robin", 1: "Tiempo Real - FIFO", 2: "Proceso normal"}
         
     def new_scheduler(self, ruta_tasks):
         """ Inicia un nuevo scheduler con las tareas de ruta_tasks."""
+        self.del_scheduler()
         self.sched = scheduler(ruta_tasks)
     
     def del_scheduler(self):
@@ -33,44 +41,79 @@ class eppli_controller():
             self.sched.do_ticks()
             # Pide a la vista que actualize los datos.
             self.view._update_all()
+            if gtk.events_pending():
+                gtk.main_iteration()
+        return True
     
     def get_current(self):
         """ Devuelve la tarea current del sistema."""
-        return self.get_tasks(self.sched.current.name)
+        return self.get_task(self.sched.current.name)
     
-    def get_tasks(self, name):
+    def get_task(self, name):
         """ Devuelve la tarea de nombre name."""
+        tareas = [t for t in self.sched.tasks if t.name == name]
+        tarea = tareas[0]
         res = {}
-        res["name"] = current.name
-        res["estado"] = current.state
-        res["timeslice"] = current.time_slice
-        res["prio"] = current.prio
-        res["static_prio"] = current.static_prio
+        res["name"] = tarea.name
+        res["state"] = self.state_r[tarea.state]
+        res["prio"] = tarea.prio
+        res["static_prio"] = tarea.static_prio
+        res["sleep_avg"] = tarea.sleep_avg
+        res["last_ran"] = tarea.last_ran
+        res["array"] = tarea.array.name
+        res["class"] = self.policy_r[tarea.policy]
+        
+        # Los procesos FIFO ignoran el timeslice y puede llegar a ser negativo.
+        # Para evitar confusiones en el GUI, se muestra el siguiente mensaje
+        if tarea.policy == 1:
+            res["timeslice"] = "Tipo de proceso sin timeslice"
+        else:
+            res["timeslice"] = tarea.time_slice
 
-        raise NotImplemented()
+        return res
     
     def get_sched_stats(self):
         """ Devuelve las estadísticas del planificador."""
-        raise NotImplemented()
-    
-    def _get_bitmap(self, name):
-        """ Devuelve el bitmap del array solicitado."""
-        raise NotImplemented()
+        res ={}
+        res["runtime"] = self.sched.cpu.clock
+        res["nr"] = self.sched.cpu.rq.nr_running
+        res["nr_switch"] = self.sched.cpu.rq.nr_switches
+        res["best_prio"] = self.sched.cpu.rq.best_expired_prio
+        return res
     
     def get_bitmap_active(self):
         """ Devuelve una lista de prioridades que representan los bits
         activados del bitmap del array active."""
-        raise NotImplemented()
-    
+        return self._get_bitmap("active")
+        
     def get_bitmap_expired(self):
         """ Devuelve una lista de prioridades que representan los bits
         activados del bitmap del array expired."""
-        raise NotImplemented()
+        return self._get_bitmap("expired")
     
+    def _get_bitmap(self, name):
+        """ Devuelve el bitmap del array solicitado."""
+        res=[]
+        if name == "expired":
+            print "GUI - Obteniendo bitmap de expired"
+            bitmap = long(self.sched.cpu.rq.expired.bitmap)
+        elif name == "active":
+            print "GUI - Obteniendo bitmap de active"
+            bitmap = long(self.sched.cpu.rq.active.bitmap)
+        print "GUI - El bitmap:", bitmap
+        
+        while bitmap:
+            t = ffs(bitmap)
+            print "GUI - Añadiendo %d al resultado" % t
+            res.append(t)
+            bitmap = clear_bit(bitmap, t)
+        print "GUI - Bits activos en %s: %s" % (name, res)
+        return res
+            
     def get_nr_expired(self):
         """ Devuelve el número de procesos en el array expired."""
-        raise NotImplemented()
+        raise NotImplemented(inspect.stack()[1][3])
     
     def get_nr_active(self):
         """ Devuelve el número de procesos en el array active."""
-        raise NotImplemented()
+        raise NotImplemented(inspect.stack()[1][3])
