@@ -3,11 +3,14 @@
 import inspect
 import gtk
 
+from time import sleep
+
 from core.sched import scheduler
 from core.bitutils import ffs
 from core.bitutils import clear_bit
- 
 
+from core.const import HZ
+ 
 from core.eppli_exceptions import NotImplemented
 from core.eppli_exceptions import NoTaskOrIdleDir
 
@@ -21,6 +24,7 @@ class eppli_controller():
         self.state_r = {0: "INTERRUPTIBLE", 1: "UNINTERRUPTIBLE", 
                         2: "RUNNING", 3: "EXIT"}
         self.policy_r = {0:"Tiempo Real - Round Robin", 1: "Tiempo Real - FIFO", 2: "Proceso normal"}
+        self.stats_grafica = []
         
     def new_scheduler(self, ruta_tasks):
         """ Inicia un nuevo scheduler con las tareas de ruta_tasks."""
@@ -36,7 +40,7 @@ class eppli_controller():
     def get_did_sched(self):
         return self.sched.did_sched
     
-    def sched_step(self, steps=1):
+    def sched_step(self, steps=1, HZ = 0):
         """ Avanza n pasos en el planificador y actualiza la vista."""
         self.stepping=True
         while steps:
@@ -47,7 +51,10 @@ class eppli_controller():
             self.view._update_all()
             if gtk.events_pending():
                 gtk.main_iteration()
-
+            
+            if HZ:
+                sleep(1.0/HZ)
+                
         self.stepping=False
         return True
     
@@ -132,7 +139,7 @@ class eppli_controller():
             for t in data[k]:
                 res[k].append(t.name)
         return res
-        
+    
     def get_active_data(self):
         """ Devuelve la lista de prioridades de la cola activa"""
         return self.get_trees_data("active")
@@ -140,3 +147,6 @@ class eppli_controller():
     def get_expired_data(self):
         """ Devuelve la lista de prioridades de la cola expired"""
         return self.get_trees_data("expired")
+    
+    def get_stats_grafica(self):
+        return self.stats_grafica

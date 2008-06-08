@@ -12,6 +12,8 @@ from eppli_controller import eppli_controller
 from core.const import HZ
 from core.const import MAX_RT_PRIO
 
+from gui.stats import dialogo_grafica
+
 from core.eppli_exceptions import *
 
 class eppli_gui():
@@ -23,6 +25,7 @@ class eppli_gui():
         self.timer_id = None
         self.selected_proc = None
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
+                        "on_boton_show_stats_toggled": self.show_stats,
                         "on_boton_nuevo_clicked": self.new_emulation,
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
                         "on_boton_acercade_clicked": self.show_about, 
@@ -40,7 +43,6 @@ class eppli_gui():
         self.controller = eppli_controller(self)
         self.init_trees()
         self.clear_text()
-
         
     def run(self):
         """ Inicia el GUI y el bucle principal de gtk."""
@@ -87,7 +89,7 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         
         self.__update_bitmap_active()
         self.__update_bitmap_expired()
-    
+        
     def __update_stats_current(self):
         """ Actualiza las estadísticas del proceso current."""
         current = self.controller.get_current()
@@ -125,11 +127,14 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         tv = self.widgets["tree_view_%s" % nombre]
         treestore = self.widgets["tree_store_%s" % nombre]
         treestore.clear()
-        for prio in data.keys():
+        keys = data.keys()
+        keys.sort()
+        for prio in keys:
              padre = treestore.append(None, ['Prioridad %d' % prio])
              for proc in data[prio]:
                  treestore.append(padre, ["%s" % proc])
                  
+        tv.get_column(0).set_sort_order(gtk.SORT_ASCENDING)
         tv.set_model(treestore)
         tv.expand_all()
     
@@ -188,11 +193,12 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
             win.draw_line(gc, x*2, 1, x*2, y)
             win.draw_line(gc, x*2+1, 1, x*2+1, y)
         
+    
     def expose_event(self, area, evento):
         if self.running:
             self.__update_bitmap_active()
             self.__update_bitmap_expired()
-        
+
     def check_sched_init(self):
         if not self.running:
             self.show_error("""No se ha inicializado correctamente el emulador.\n
@@ -236,7 +242,7 @@ Pauselo si desea avanzar por pasos.""")
         except ValueError:
             self.show_error("El valor de los pasos debe ser numérico")
             return
-        self.controller.sched_step(steps)
+        self.controller.sched_step(steps, 100)
 
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
@@ -258,7 +264,6 @@ Pauselo si desea avanzar por pasos.""")
         return res
     
     def start_timer(self):
-        t = int(self.SCHED_TIMER * 1000)
         print "GUI - Iniciando el timer para sched_step (%d)" % t
         self.timer_id = gobject.timeout_add(int(self.SCHED_TIMER * 1000), self.controller.sched_step)
         self.boton_running = True
@@ -371,6 +376,10 @@ Pauselo si desea avanzar por pasos.""")
         win.set_authors(["David Erosa García"])
         win.run()
         win.destroy()
+    
+    def show_stats(self, boton):
+        """ Inicia un temporizador para no sobrecargar el dibujado de la gráfica"""
+        self.controller.set_graph(boton.get_active())
         
 if __name__ == "__main__":
     e = eppli_gui()
