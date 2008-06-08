@@ -264,7 +264,6 @@ Pauselo si desea avanzar por pasos.""")
         return res
     
     def start_timer(self):
-        print "GUI - Iniciando el timer para sched_step (%d)" % t
         self.timer_id = gobject.timeout_add(int(self.SCHED_TIMER * 1000), self.controller.sched_step)
         self.boton_running = True
     
