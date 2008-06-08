@@ -1,7 +1,11 @@
 #/usr/bin/python
 #coding: utf-8
 
-class NotImplemented(Exception): pass
+from core.sched import scheduler
+from core.sched import NoTaskOrIdleDir
+
+from core.eppli_exceptions import NotImplemented
+
 
 class eppli_controller():
     def __init__(self, parent):
@@ -9,18 +13,22 @@ class eppli_controller():
         
         print "Iniciando controlador de EPPLI"
         self.view = parent
+        self.sched = None
         
     def new_scheduler(self, ruta_tasks):
         """ Inicia un nuevo scheduler con las tareas de ruta_tasks."""
-        raise NotImplemented()
+        self.sched = scheduler(ruta_tasks)
     
     def del_scheduler(self):
         """ Elimina los datos del scheduler."""
-        raise NotImplemented()
+        if self.sched:
+            del self.sched
+            self.sched = None
     
     def sched_step(self, steps=1):
         """ Avanza n pasos en el planificador y actualiza la vista."""
         raise NotImplemented()
+        # Pide a la vista que actualize los datos.
         self.view._update_all()
     
     def get_current(self):

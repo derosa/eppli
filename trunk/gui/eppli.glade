@@ -40,6 +40,7 @@
 	  <child>
 	    <widget class="GtkToolButton" id="boton_nuevo">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Selecciona un directorio que contiene los archivos de tareas a emular</property>
 	      <property name="label" translatable="yes">Nueva emulación</property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-new</property>
@@ -101,7 +102,7 @@
 	      <child>
 		<widget class="GtkEntry" id="text_num_pasos">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Indique el número de pasos a simular</property>
+		  <property name="tooltip" translatable="yes">Indica el número de pasos a simular</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">True</property>

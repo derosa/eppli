@@ -13,6 +13,7 @@ class cpu():
         self.id = id
         self.clock = 0
         self.rq = runqueue(self)
+        self.idle_task = None
         
     def init_idle_task(self, task):
         task.state = state["RUNNING"]
