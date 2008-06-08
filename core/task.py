@@ -79,7 +79,7 @@ class task():
         if self.localtime in self.timeline and state[self.timeline[self.localtime]] != self.state:
             self.state = state[self.timeline[self.localtime]]
             self.flags = NEED_RESCHED
-            print "%s[%d]: Cambio de estado: %s -> %s" % (self.name, self.localtime, self.oldstate, self.state)
+            #print "%s[%d]: Cambio de estado: %s -> %s" % (self.name, self.localtime, self.oldstate, self.state)
         else:
             self.flags = None
         
@@ -102,7 +102,7 @@ class task():
         else:
             x = DEF_TIMESLICE
         ret = max ( x*(MAX_PRIO-self.prio) / (MAX_USER_PRIO/2), MIN_TIMESLICE)
-        print "Nuevo timeslice de %s: %d" % (self.name, ret)
+        #print "Nuevo timeslice de %s: %d" % (self.name, ret)
         return ret
     
     def effective_prio(self):
@@ -110,10 +110,6 @@ class task():
         bonus = self.current_bonus() - MAX_BONUS/2
         res = self.static_prio - bonus
         res = max(MAX_RT_PRIO, min(res, MAX_PRIO-1))
-        print "effective_prio [%s]: static_prio %d - bonus: %d = %d" %(self.name,
-                                                                       self.static_prio,
-                                                                       bonus,
-                                                                       res)
         return res
     
     def current_bonus(self):
@@ -182,7 +178,7 @@ class task():
 
     def deactivate(self):
         self.run_list.nr_running -= 1
-        print "%s.deactivate()" % self.name
+        #print "%s.deactivate()" % self.name
         self.array.del_task(self)
         self.array = None
                 
