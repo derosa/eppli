@@ -8,7 +8,7 @@ def ffs(i):
     """Fórmula mágica para encontrar el primer bit a 1 de un numero.
 Se usa esto en lugar de la función ffsl de C por la longitud de los números
 de 140 bits que son necesarios en el BITMAP_SIZE."""
-    print "ffs(%d)" % i
+    #print "ffs(%d)" % i
     try:
         res = int(round(log(i & (~i+1)) / log(2)))
     except:
