@@ -25,6 +25,7 @@ class eppli_gui():
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_nuevo_clicked": self.new_emulation,
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
+                        "on_boton_acercade_clicked": self.show_about, 
                         "on_boton_steps_clicked": self.run_steps,
                         "on_entry_num_pasos_activate": self.run_steps,
                         "on_drawActive_expose_event": self.expose_event,
@@ -362,6 +363,20 @@ Pauselo si desea avanzar por pasos.""")
         res = d.run()
         d.destroy()
         return ( res == gtk.RESPONSE_YES )
+    
+    def show_about(self, boton):
+        print "about"
+        
+        win = gtk.AboutDialog()
+        win.set_comments("Emulador del Planificador de Procesos de Linux\n2.6.11")
+        win.set_program_name("EPPLI")
+        win.set_version("0.1")
+        win.set_copyright("David Erosa García, 2008")
+        win.set_authors(["David Erosa García"])
+        win.run()
+        win.destroy()
+        
+        
         
 if __name__ == "__main__":
     e = eppli_gui()
