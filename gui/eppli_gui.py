@@ -237,7 +237,7 @@ Pauselo si desea avanzar por pasos.""")
             self.show_error("El valor de los pasos debe ser numérico")
             return
         self.controller.sched_step(steps)
-            
+
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
         contiene las tareas a emular."""
@@ -297,7 +297,6 @@ Pauselo si desea avanzar por pasos.""")
         res["tree_view_expired"] = self.appXML.get_widget("tree_view_expired")
         res["tree_store_active"] = gtk.TreeStore(str)
         res["tree_store_expired"] = gtk.TreeStore(str)
-        
         return res
     
     def init_trees(self):
@@ -305,7 +304,7 @@ Pauselo si desea avanzar por pasos.""")
         for name in ["active", "expired"]:
             tv = self.widgets["tree_view_%s" % name]
             model = self.widgets["tree_store_%s" % name]
-            tvcolumn = gtk.TreeViewColumn("Procesos")
+            tvcolumn = gtk.TreeViewColumn("Procesos en '%s'" % name)
             tv.append_column(tvcolumn)
             cell = gtk.CellRendererText()
             tvcolumn.pack_start(cell, True)
@@ -315,7 +314,6 @@ Pauselo si desea avanzar por pasos.""")
             select = tv.get_selection()
             select.set_mode(gtk.SELECTION_SINGLE)
             select.connect("changed", self.get_selected_task)
-            
 
     def get_selected_task(self, sel):
         """Establece el nombre del proceso seleccionado en un árbol"""
@@ -365,8 +363,6 @@ Pauselo si desea avanzar por pasos.""")
         return ( res == gtk.RESPONSE_YES )
     
     def show_about(self, boton):
-        print "about"
-        
         win = gtk.AboutDialog()
         win.set_comments("Emulador del Planificador de Procesos de Linux\n2.6.11")
         win.set_program_name("EPPLI")
@@ -375,8 +371,6 @@ Pauselo si desea avanzar por pasos.""")
         win.set_authors(["David Erosa García"])
         win.run()
         win.destroy()
-        
-        
         
 if __name__ == "__main__":
     e = eppli_gui()
