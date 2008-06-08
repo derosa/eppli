@@ -21,14 +21,15 @@ class eppli_gui():
         self.boton_running = False
         self.SCHED_TIMER = 1.0/HZ
         self.timer_id = None
+        self.selected_proc = None
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_nuevo_clicked": self.new_emulation,
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
                         "on_boton_steps_clicked": self.run_steps,
-                        "on_text_num_pasos_activate": self.run_steps,
+                        "on_entry_num_pasos_activate": self.run_steps,
                         "on_drawActive_expose_event": self.expose_event,
                         "on_drawExpired_expose_event": self.expose_event}
-        
+                
         self.appXML = gtk.glade.XML("gui/eppli.glade")
         self.appXML.signal_autoconnect(self.eventos)
         self.eppliWindow = self.appXML.get_widget("mainWindow")
@@ -36,6 +37,7 @@ class eppli_gui():
         self.boton_start_pause = self.appXML.get_widget("boton_start_pause")
         self.widgets = self.init_widgets()
         self.controller = eppli_controller(self)
+        self.init_trees()
         self.clear_text()
 
         
@@ -52,7 +54,8 @@ class eppli_gui():
             if not self.show_question("La emulación actual se perderá, ¿Seguro que \
 desea iniciar una nueva emulación?"):
                 return
-            self.stop_timer()
+            if self.timer_id:
+                self.stop_timer()
 
         self.ruta_tasks = self.select_tasks_dir()
         if self.ruta_tasks:
@@ -74,9 +77,13 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
         controlador."""
         #print "GUI - Actualizando datos de la vista"
         self.__update_stats_current()
-        #self.__update_stats_selected()
+        self.__update_stats_selected()
         self.__update_stats_scheduler()
-        #self.__update_trees()
+
+        if self.controller.get_did_sched():
+            self.__update_active_tree()
+            self.__update_expired_tree()
+        
         self.__update_bitmap_active()
         self.__update_bitmap_expired()
     
@@ -87,12 +94,20 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
 
     def __update_stats_selected(self):
         """ Actualiza las estadísticas del proceso seleccionado."""
-        raise NotImplemented(inspect.stack()[1][3])
-#        # TODO: Hay que obtener el nombre del proceso seleccionado en el TreeView...
-#        selected = self.controller.get_task(procname)
-#        self.__update_stats_text("selected", selected)
+        # Buscar procname en los árboles...
+        if self.selected_proc:
+            selected = self.controller.get_task(self.selected_proc)
+            self.__update_stats_text("selected", selected)
+            self.clear_selections()
         return
-    
+
+    def __update_stats_text(self, prefix, procmap):
+        """ Actualiza los textos de las estadísticas."""
+        for k in procmap.keys():
+            name ="text_%s_%s" % (prefix, k)
+            cadena = str(procmap[k])
+            self.widgets[name].set_label(cadena) 
+                
     def __update_stats_scheduler(self):
         """ Actualiza las estadísticas del planificador."""
         procmap = self.controller.get_sched_stats()
@@ -104,30 +119,42 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
             marca = "<b>%s</b>" % self.widgets["text_state_runtime"].get_text()
             self.widgets["text_state_runtime"].set_label(marca)
             
-
-    def __update_stats_text(self, prefix, procmap):
-        """ Actualiza los textos de las estadísticas."""
-        for k in procmap.keys():
-            name ="text_%s_%s" % (prefix, k)
-            cadena = str(procmap[k])
-            self.widgets[name].set_label(cadena) 
-
-    def __update_trees(self):
+    def __update_trees(self, nombre, data):
         """ Actualiza el contenido de los árboles"""
-        raise NotImplemented(inspect.stack()[0][3])
+        tv = self.widgets["tree_view_%s" % nombre]
+        treestore = self.widgets["tree_store_%s" % nombre]
+        treestore.clear()
+        for prio in data.keys():
+             padre = treestore.append(None, ['Prioridad %d' % prio])
+             for proc in data[prio]:
+                 treestore.append(padre, ["%s" % proc])
+                 
+        tv.set_model(treestore)
+        tv.expand_all()
     
+    def __update_active_tree(self):
+        """ Actualiza el árbol de procesos activos"""
+        active_data = self.controller.get_active_data()
+        #print "Datos para el activeTree:", active_data
+        self.__update_trees("active", active_data)
+        
+    def __update_expired_tree(self):
+        expired_data = self.controller.get_expired_data()
+        #print "Datos para el expiredTree:", expired_data
+        self.__update_trees("expired", expired_data)
+        
     def __update_bitmap_active(self):
         """ Actualiza la imagen del bitmap active y el número de procesos
         que tiene asignados."""
         bits = self.controller.get_bitmap_active()
-        draw = self.widgets["treeActiveDraw"]
+        draw = self.widgets["bitmapActiveDraw"]
         self.__update_bitmap(draw, bits)
     
     def __update_bitmap_expired(self):
         """ Actualiza la imagen del bitmap expired y el número de procesos
         que tiene asignados."""
         bits = self.controller.get_bitmap_expired()
-        draw = self.widgets["treeExpiredDraw"]
+        draw = self.widgets["bitmapExpiredDraw"]
         self.__update_bitmap(draw, bits)
    
     def __update_bitmap(self, draw, bits):
@@ -166,19 +193,22 @@ contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
             self.__update_bitmap_expired()
         
     def check_sched_init(self):
-        print "GUI - Comprobando run_pause_check"
         if not self.running:
             self.show_error("""No se ha inicializado correctamente el emulador.\n
 Por favor, seleccione un directorio con tareas.""")
-            return False
-        else:
-            return True
-    
+
+        return self.running
+        
     def run_pause_clicked(self, boton):
         """ Ejecuta y pausa la ejecución del planificador.
         También alterna el aspecto del botón para reflejar la pausa."""
         
         if not self.check_sched_init():
+            return
+        
+        if self.controller.stepping:
+            self.show_error("""¡El emulador ya está en funcionamiento en modo de pasos!\n
+Espere a que finalicen los pasos solicitados.""")
             return
         
         if self.boton_running:
@@ -205,9 +235,7 @@ Pauselo si desea avanzar por pasos.""")
         except ValueError:
             self.show_error("El valor de los pasos debe ser numérico")
             return
-        self.boton_start_pause.unset_flags(gtk.SENSITIVE)
         self.controller.sched_step(steps)
-        self.boton_start_pause.set_flags(gtk.SENSITIVE)
             
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
@@ -261,18 +289,56 @@ Pauselo si desea avanzar por pasos.""")
             res[name] = wobj
             
         # Los Drawable donde pintar los bitmaps...
-        res["treeActiveDraw"] = self.appXML.get_widget("drawActive")
-        res["treeExpiredDraw"] = self.appXML.get_widget("drawExpired")
+        res["bitmapActiveDraw"] = self.appXML.get_widget("drawActive")
+        res["bitmapExpiredDraw"] = self.appXML.get_widget("drawExpired")
         
-        res["treeActiveData"] = None
+        res["tree_view_active"] = self.appXML.get_widget("tree_view_active")
+        res["tree_view_expired"] = self.appXML.get_widget("tree_view_expired")
+        res["tree_store_active"] = gtk.TreeStore(str)
+        res["tree_store_expired"] = gtk.TreeStore(str)
         
         return res
     
+    def init_trees(self):
+        """Inicializa la estructura de los árboles active y expired"""
+        for name in ["active", "expired"]:
+            tv = self.widgets["tree_view_%s" % name]
+            model = self.widgets["tree_store_%s" % name]
+            tvcolumn = gtk.TreeViewColumn("Procesos")
+            tv.append_column(tvcolumn)
+            cell = gtk.CellRendererText()
+            tvcolumn.pack_start(cell, True)
+            tvcolumn.add_attribute(cell, 'text', 0)
+            tvcolumn.set_sort_column_id(0)
+            tv.set_model(model)
+            select = tv.get_selection()
+            select.set_mode(gtk.SELECTION_SINGLE)
+            select.connect("changed", self.get_selected_task)
+            
+
+    def get_selected_task(self, sel):
+        """Establece el nombre del proceso seleccionado en un árbol"""
+        (store, iter) = sel.get_selected()
+        print "Lo de la selección: %s, %s" % (store, iter)
+        if iter and store.iter_depth(iter):
+            self.selected_proc = store.get_value(iter, 0)
+        else:
+            self.selected_proc = None
+        self.__update_stats_selected()
+
     def clear_text(self):
         """ Elimina el texto de las etiquetas"""
         ws = self.appXML.get_widget_prefix("text_")
         for w in ws:
             w.set_label("")
+    
+    def clear_selections(self):
+        """ Elimina las selecciones de los treeview para evitar tener una 
+        selección en cada árbol"""
+        for t in ["active", "expired"]:
+            tv = self.widgets["tree_view_%s" % t]
+            sel = tv.get_selection()
+            sel.unselect_all()
             
     def show_error(self, msg):
         """ Muestra un mensaje de error"""
@@ -296,9 +362,6 @@ Pauselo si desea avanzar por pasos.""")
         res = d.run()
         d.destroy()
         return ( res == gtk.RESPONSE_YES )
-
-
-
         
 if __name__ == "__main__":
     e = eppli_gui()
