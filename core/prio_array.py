@@ -21,7 +21,7 @@ class prio_array():
             self.queue[t.prio] = []
             self.queue[t.prio].append(t)
             
-        #print "Cola %s :: Activando bit %d en %d" % (self.name, t.prio, self.bitmap)
+        print "Cola %s :: Activando bit %d en %d" % (self.name, t.prio, self.bitmap)
         self.bitmap = bitutils.set_bit(self.bitmap, t.prio)
         self.nr_active+=1
         t.array = self
