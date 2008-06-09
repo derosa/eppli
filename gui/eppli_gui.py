@@ -225,6 +225,9 @@ Espere a que finalicen los pasos solicitados.""")
             # Pausa la ejecución
             self.stop_timer()
         else:
+            if self.controller.done:
+                self.show_info("La emulación ha terminado.")
+                return
             boton.set_label("Pausar")
             boton.set_stock_id("gtk-media-pause")
             self.start_timer()
@@ -242,7 +245,11 @@ Pauselo si desea avanzar por pasos.""")
         except ValueError:
             self.show_error("El valor de los pasos debe ser numérico")
             return
-        self.controller.sched_step(steps, 100)
+
+        if self.controller.done:
+            self.show_info("La emulación a terminado.")
+
+        self.controller.sched_step(steps)
 
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
@@ -264,7 +271,10 @@ Pauselo si desea avanzar por pasos.""")
         return res
     
     def start_timer(self):
-        self.timer_id = gobject.timeout_add(int(self.SCHED_TIMER * 1000), self.controller.sched_step)
+        """ Inicia el temporizador que ejecuta periodicamente los pasos del 
+        planificador"""
+        self.timer_id = gobject.timeout_add(int(self.SCHED_TIMER * 1000), 
+                                            self.controller.sched_step)
         self.boton_running = True
     
     def stop_timer(self):
@@ -334,6 +344,9 @@ Pauselo si desea avanzar por pasos.""")
         ws = self.appXML.get_widget_prefix("text_")
         for w in ws:
             w.set_label("")
+        for t in ["active", "expired"]:
+            treestore = self.widgets["tree_store_%s" % t]
+            treestore.clear()
     
     def clear_selections(self):
         """ Elimina las selecciones de los treeview para evitar tener una 
@@ -348,6 +361,17 @@ Pauselo si desea avanzar por pasos.""")
         d = gtk.MessageDialog(self.eppliWindow, 
                               gtk.DIALOG_MODAL, 
                               gtk.MESSAGE_ERROR,
+                              gtk.BUTTONS_OK,
+                              None)
+        d.set_markup(msg)
+        res = d.run()
+        d.destroy()
+
+    def show_info(self, msg):
+        """ Muestra un mensaje de información"""
+        d = gtk.MessageDialog(self.eppliWindow, 
+                              gtk.DIALOG_MODAL, 
+                              gtk.MESSAGE_INFO,
                               gtk.BUTTONS_OK,
                               None)
         d.set_markup(msg)
