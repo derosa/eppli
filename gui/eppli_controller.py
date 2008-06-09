@@ -140,7 +140,7 @@ class eppli_controller():
         #print "GUI - Bits activos en %s: %s" % (name, res)
         return res
     
-    def get_trees_data(self, name):
+    def get_tree_data(self, name):
         """ Devuelve una lista de prioridades con sus procesos""" 
         res = {}
         if name == "active":
@@ -152,15 +152,16 @@ class eppli_controller():
             res[k]=[]
             for t in data[k]:
                 res[k].append(t.name)
+
         return res
     
     def get_active_data(self):
         """ Devuelve la lista de prioridades de la cola activa"""
-        return self.get_trees_data("active")
+        return self.get_tree_data("active")
     
     def get_expired_data(self):
         """ Devuelve la lista de prioridades de la cola expired"""
-        return self.get_trees_data("expired")
+        return self.get_tree_data("expired")
     
     def get_stats_grafica(self):
         return self.stats_grafica
