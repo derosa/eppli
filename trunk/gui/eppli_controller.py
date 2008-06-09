@@ -24,12 +24,12 @@ class eppli_controller():
         self.state_r = {0: "INTERRUPTIBLE", 1: "UNINTERRUPTIBLE", 
                         2: "RUNNING", 3: "EXIT"}
         self.policy_r = {0:"Tiempo Real - Round Robin", 1: "Tiempo Real - FIFO", 2: "Proceso normal"}
-        self.stats_grafica = []
         
     def new_scheduler(self, ruta_tasks):
         """ Inicia un nuevo scheduler con las tareas de ruta_tasks."""
         self.del_scheduler()
         self.sched = scheduler(ruta_tasks)
+        self.done = False
     
     def del_scheduler(self):
         """ Elimina los datos del scheduler."""
@@ -40,21 +40,33 @@ class eppli_controller():
     def get_did_sched(self):
         return self.sched.did_sched
     
-    def sched_step(self, steps=1, HZ = 0):
+    def sched_step(self, steps=1):
         """ Avanza n pasos en el planificador y actualiza la vista."""
+        if self.done:
+            return
+        # Indica que estamos ejecutándonos por el método de pasos
         self.stepping=True
+
         while steps:
             steps-=1
             # Avanza un tick en el emulador
-            self.sched.do_ticks()
+            procs = self.sched.do_ticks()
             # Pide a la vista que actualize los datos.
             self.view._update_all()
             if gtk.events_pending():
                 gtk.main_iteration()
+            if not procs:
+                # Ya no nos estamos ejecutando por pasos
+                self.stepping=False
+                # Emulación finalizada
+                self.done=True
+                # Devuelvo False por si nos ejecutamos con el temporizados, 
+                # para cancelarlo.
+                self.view.show_info("La emulación ha terminado con éxito.")
+                return False
+
+            sleep(0.1/HZ)
             
-            if HZ:
-                sleep(1.0/HZ)
-                
         self.stepping=False
         return True
     
@@ -65,6 +77,8 @@ class eppli_controller():
     def get_task(self, name):
         """ Devuelve la tarea de nombre name."""
         tareas = [t for t in self.sched.tasks if t.name == name]
+        if not tareas:
+            tareas = [self.sched.cpu.idle_task]
         tarea = tareas[0]
         res = {}
         res["name"] = tarea.name

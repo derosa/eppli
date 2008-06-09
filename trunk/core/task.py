@@ -5,7 +5,7 @@ from time import sleep
 
 class task():
     """ Un tarea a partir de un archivo de texto descriptivo"""
-    def __init__(self, source):
+    def __init__(self, source=None):
         """ Crea una nueva tarea a partir de un archivo de texto. 
         Asumimos que todas las tareas comienzan en el estado RUNNING
         El formato del archivo es:
@@ -37,11 +37,18 @@ class task():
         self.rt_priority = 0
         self.flags = 0
         
-        try: 
-            self._fill_timeline(source)
-        except IOError:
-            print "Error al procesar la tarea de fuente %s" % source
-            return None
+        if source:
+            try: 
+                self._fill_timeline(source)
+            except IOError:
+                print "Error al procesar la tarea de fuente %s" % source
+                return None
+        else:
+            self.name="IDLE"
+            self.prio=140
+            self.policy = policy["NORMAL"]
+            self.time_slice=-1
+            self.timeline[0]=state["RUNNING"]
 
     def __str__(self):
         """ Representación en texto de una tarea"""
@@ -178,7 +185,7 @@ class task():
 
     def deactivate(self):
         self.run_list.nr_running -= 1
-        #print "%s.deactivate()" % self.name
+        print "%s.deactivate()" % self.name
         self.array.del_task(self)
         self.array = None
                 

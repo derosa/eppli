@@ -29,16 +29,14 @@ class scheduler():
         self.did_sched = False # Para el GUI
     
     def add_tasks(self, proc_dir):
-        """ Añade todos los procesos de un directorio, excepto el IDLE"""
+        """ Añade todos los procesos de un directorio y crea un proceso idle"""
         tareas = None
         for dir, subdir, files in os.walk(proc_dir):
             if dir == proc_dir:
                 tareas = [d for d in files if d.endswith(".tsk") and d != TASK_IDLE]
-                idle = [d for d in files if d == TASK_IDLE]
-                #print "Ficheros a considerar: %s" % tareas
         
-        if not tareas or not idle:
-            error = "'%s' no contiene tareas adecuadas o idle.tsk" % proc_dir
+        if not tareas:
+            error = "'%s' no contiene ficheros con tareas." % proc_dir
             raise NoTaskOrIdleDir(error)
         
         for t in tareas:
@@ -46,11 +44,10 @@ class scheduler():
             #print "Intentando crear tarea desde", os.path.join(proc_dir, t)
             self.tasks.append(tmp); # Se inserta el proceso en la lista global.
 
-        for i in idle:
-            print "Creando proceso IDLE de la CPU (%s)" % os.path.join(proc_dir, i)
-            self.cpu.idle_task = task(os.path.join(proc_dir, i))
-            self.cpu.init_idle_task(self.cpu.idle_task)
-            self.cpu.rq.idle = self.cpu.idle_task
+        print "Creando proceso IDLE de la CPU."
+        self.cpu.idle_task = task()
+        self.cpu.init_idle_task(self.cpu.idle_task)
+        self.cpu.rq.idle = self.cpu.idle_task
 
         print "Tareas de '%s' añadidas" % proc_dir
         #print "Haciendo 'fork' de las tareas."
@@ -88,7 +85,7 @@ class scheduler():
             
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
-                #print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
+                print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
                 #print "Tiempo en ejecución:", t.localtime
                 #print "Tiempo de ejecución:", self.cpu.clock
                 continue
@@ -128,7 +125,7 @@ class scheduler():
         
         # Si la tarea agota su timeslice...
         if not p.time_slice:
-            #print "[%d] La tarea %s ha agotado su timeslice..." % (cpu.clock, p.name)
+            print "[%d] La tarea %s ha agotado su timeslice..." % (cpu.clock, p.name)
             rq.active.del_task(p)
             self.NEED_RESCHED = True
             p.flags = self.NEED_RESCHED
@@ -208,7 +205,7 @@ class scheduler():
             else:
                 if prev.state == state["UNINTERRUPTIBLE"]:
                     rq.nr_uninterruptible+=1
-                #print "Desactivando la tarea", prev.name
+                print "Desactivando la tarea", prev.name
                 prev.deactivate()
                     
         if not rq.nr_running:
@@ -216,7 +213,7 @@ class scheduler():
             next = rq.idle
             
         if not rq.active.nr_active:
-            #print "Intercambiando los arrays!"
+            print "Intercambiando los arrays!"
             rq.active, rq.expired = rq.expired, rq.active
             rq.active.name="Active"
             rq.expired.name = "Expired"
@@ -233,7 +230,7 @@ class scheduler():
             # el prio_array está vacio. Cambio a IDLE.
             next = self.cpu.idle_task
             
-        #print "Proceso next:", next.name
+        print "Proceso next:", next.name
         
         if next.policy == policy["NORMAL"] and next.activated > 0:
             delta = now - next.timestamp
@@ -265,7 +262,6 @@ class scheduler():
 
         
     def do_ticks(self, step=1):
-
         # print "Avanzando %d tick(s)"% step
         while step:
             step-=1

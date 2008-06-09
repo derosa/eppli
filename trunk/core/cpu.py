@@ -16,17 +16,17 @@ class cpu():
         self.idle_task = None
         
     def init_idle_task(self, task):
+        task.name="IDLE"
+        task.prio=140
+        task.policy = policy["NORMAL"]
+        task.time_slice=-1
         task.state = state["RUNNING"]
-        task.prio = 0
         task.run_list = self.rq
         task.array = self.rq.active
         task.sleep_avg = 0
         task.timestamp = self.clock
         task.last_ran = 0
         task.activated = 0
-        task.policy = policy["NORMAL"]
-        # En sched_fork() se asigna la mitad del timeslice del proceso padre, 
-        # del que carecemos, por lo que uso un time_slice por defecto.
         task.time_slice = 100
         task.first_time_slice = 1
         task.rt_priority = 0
