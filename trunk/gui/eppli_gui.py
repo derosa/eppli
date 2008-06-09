@@ -6,7 +6,6 @@ pygtk.require('2.0')
 import gtk
 import gtk.glade
 import gobject
-import inspect
 
 from eppli_controller import eppli_controller
 from core.const import HZ
@@ -24,6 +23,7 @@ class eppli_gui():
         self.SCHED_TIMER = 1.0/HZ
         self.timer_id = None
         self.selected_proc = None
+        
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_show_stats_toggled": self.show_stats,
                         "on_boton_nuevo_clicked": self.new_emulation,
@@ -332,7 +332,7 @@ Pauselo si desea avanzar por pasos.""")
     def get_selected_task(self, sel):
         """Establece el nombre del proceso seleccionado en un árbol"""
         (store, iter) = sel.get_selected()
-        print "Lo de la selección: %s, %s" % (store, iter)
+        #print "Lo de la selección: %s, %s" % (store, iter)
         if iter and store.iter_depth(iter):
             self.selected_proc = store.get_value(iter, 0)
         else:
@@ -401,7 +401,7 @@ Pauselo si desea avanzar por pasos.""")
         win.destroy()
     
     def show_stats(self, boton):
-        """ Inicia un temporizador para no sobrecargar el dibujado de la gráfica"""
+        """ Muestra el cuadro de la gráfica estadísticas"""
         self.controller.set_graph(boton.get_active())
         
 if __name__ == "__main__":
