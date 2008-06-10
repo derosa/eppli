@@ -4,6 +4,7 @@ import inspect
 import gtk
 
 from time import sleep
+import os
 
 from core.sched import scheduler
 from core.bitutils import ffs
@@ -21,6 +22,7 @@ class eppli_controller():
         print "Iniciando controlador de EPPLI"
         self.view = parent
         self.sched = None
+        self.stepping = False
         self.state_r = {0: "INTERRUPTIBLE", 1: "UNINTERRUPTIBLE", 
                         2: "RUNNING", 3: "EXIT"}
         self.policy_r = {0:"Tiempo Real - Round Robin", 1: "Tiempo Real - FIFO", 2: "Proceso normal"}
@@ -30,20 +32,34 @@ class eppli_controller():
         self.del_scheduler()
         self.sched = scheduler(ruta_tasks)
         self.done = False
+        self.sched_step()
     
     def del_scheduler(self):
         """ Elimina los datos del scheduler."""
         if self.sched:
             del self.sched
             self.sched = None
+            self.stepping = False
      
     def has_sched(self):
         return (self.sched != None)
 
+    def new_task_dir(self, ruta):
+        for dir, subdir, files in os.walk(ruta):
+                if dir == ruta:                    
+                    tareas = [os.path.join(ruta, d) for d in files if d.endswith(".tsk")]
+                    print "new_task_dir: tareas actuales:", tareas
+        if not self.sched:
+            self.new_scheduler(tareas)
+        else:
+            self.sched.add_tasks(tareas)
+    
     def add_single_task(self, task_name):
         # No se pueden añadir tareas sin un scheduler creado.
         if not self.sched:
-            self.new_scheduler(task_name)
+            t = [task_name]
+            print "Añadiendo proceso: ", t
+            self.new_scheduler(t)
         else:
             self.sched.add_single_task(task_name)
 

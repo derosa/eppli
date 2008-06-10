@@ -29,23 +29,22 @@ class scheduler():
         self.NEED_RESCHED = False
         self.did_sched = False # Para el GUI
     
-    def add_tasks(self, proc_dir):
+    def add_tasks(self, tareas):
         """ Añade todos los procesos de un directorio y crea un proceso idle"""
-        tareas = None
-        if not proc_dir.endswith(".tsk"):
-            for dir, subdir, files in os.walk(proc_dir):
-                if dir == proc_dir:
-                    tareas = [d for d in files if d.endswith(".tsk")]
-        else:
-            # Se ha pasado una única tarea
-            tareas = [proc_dir]    
+##        if not proc_dir.endswith(".tsk"):
+##            for dir, subdir, files in os.walk(proc_dir):
+##                if dir == proc_dir:
+##                    tareas = [d for d in files if d.endswith(".tsk")]
+##        else:
+##            # Se ha pasado una única tarea
+##            tareas = [proc_dir]    
 
         if not tareas:
-            error = "'%s' no contiene ficheros con tareas." % proc_dir
+            error = "'%s' no contiene ficheros con tareas." % tareas
             raise NoTaskOrIdleDir(error)
         
         for t in tareas:
-            self.add_single_task(os.path.join(proc_dir, t))
+            self.add_single_task(t)
             #tmp = task(os.path.join(proc_dir, t))
             #print "Intentando crear tarea desde", os.path.join(proc_dir, t)
             #self.tasks.append(tmp); # Se inserta el proceso en la lista global.
@@ -56,12 +55,11 @@ class scheduler():
             self.cpu.init_idle_task(self.cpu.idle_task)
             self.cpu.rq.idle = self.cpu.idle_task
 
-        print "Tareas de '%s' añadidas." % proc_dir
+        print "Tareas de '%s' añadidas." % tareas
 
     def add_single_task(self, task_path):
         tmp = task(task_path)
-        #print "Intentando crear tarea desde", os.path.join(proc_dir, 
-        self.tasks.append(tmp); # Se inserta el proceso en la lista global.
+        self.tasks.append(tmp)
         # preparación para do_fork
         tmp.update_state()
         self.do_fork(tmp)

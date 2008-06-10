@@ -27,6 +27,7 @@ class eppli_gui():
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_show_stats_toggled": self.show_stats,
                         "on_boton_nuevo_clicked": self.new_emulation,
+                        "on_boton_nuevas_tasks_dir_clicked": self.new_tasks_dir,
                         "on_boton_nueva_task_clicked": self.add_single_task,
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
                         "on_boton_acercade_clicked": self.show_about, 
@@ -54,41 +55,49 @@ class eppli_gui():
     def new_emulation(self, widget):
         """ Inicia una nueva emulación a partir de un directorio con procesos
         a emular"""
-        if self.running:
-            if not self.show_question("La emulación actual se perderá, ¿Seguro que \
+        if not self.show_question("La emulación actual se perderá, ¿Seguro que \
 desea iniciar una nueva emulación?"):
-                return
+            return
+        print "Iniciando nueva emulación"
+        if self.running:
             if self.timer_id:
                 self.stop_timer()
-        self.ruta_tasks = self.select_tasks_dir()
-        if self.ruta_tasks:
-            self.create_sched(self.ruta_tasks)
+            self.controller.del_scheduler()
+            self.clear_text()
+            self.running = True
 
-    def create_sched(self, ruta_tasks):
+    def new_tasks_dir(self, boton):
+        ruta_tasks = self.select_tasks_dir()
+        print "Directorio:", ruta_tasks
+        if ruta_tasks:
             try:
-                self.controller.new_scheduler(ruta_tasks)
+                self.controller.new_task_dir(ruta_tasks)
             except NoTaskOrIdleDir, e:
                 print "Error al lanzar el planificador"
                 self.show_error("No se pudo inicializar el planificador con el \
-contenido del directorio o proceso seleccionado:\n<b>%s</b>" % e.message )
+contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
                 self.running = False
                 return
-            self.clear_text()
-            self.running = True
-            self.controller.sched_step()
-                
+            self.running = True            
+            self._update_all()
+
     def add_single_task(self, boton):
         task_name = self.select_single_task()
         print "Tarea:", task_name
         if task_name:
-            if self.controller.has_sched():
+            try:
                 self.controller.add_single_task(task_name)
-                self._update_all()
-            else:
-                print "create_sched(%s)" % task_name
-                self.create_sched(task_name)
+            except NoTaskOrIdleDir, e:
+                print "Error al lanzar el planificador"
+                self.show_error("No se pudo inicializar el planificador con el \
+proceso seleccionado:\n<b>%s</b>" % e.message )
+                self.running = False
+                return
+            self.running = True
+            self._update_all()
 
     def select_single_task(self):
+        res = None
         file = gtk.FileChooserDialog("Selección de tarea",
                                      self.eppliWindow, 
                                      gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -106,7 +115,6 @@ contenido del directorio o proceso seleccionado:\n<b>%s</b>" % e.message )
             res = file.get_filename()
             print "Seleccionada la tarea", res
         elif respuesta == gtk.RESPONSE_CANCEL:
-            res = None
             print "Ninguna tarea seleccionada."
         file.destroy()
         return res
