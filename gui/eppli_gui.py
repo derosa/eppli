@@ -27,6 +27,7 @@ class eppli_gui():
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_show_stats_toggled": self.show_stats,
                         "on_boton_nuevo_clicked": self.new_emulation,
+                        "on_boton_nueva_task_clicked": self.add_single_task,
                         "on_boton_start_pause_clicked": self.run_pause_clicked,
                         "on_boton_acercade_clicked": self.show_about, 
                         "on_boton_steps_clicked": self.run_steps,
@@ -34,7 +35,7 @@ class eppli_gui():
                         "on_drawActive_expose_event": self.expose_event,
                         "on_drawExpired_expose_event": self.expose_event}
                 
-        self.appXML = gtk.glade.XML("gui/eppli.glade")
+        self.appXML = gtk.glade.XML("gui/eppli-glade3.glade")
         self.appXML.signal_autoconnect(self.eventos)
         self.eppliWindow = self.appXML.get_widget("mainWindow")
         self.text_steps = self.appXML.get_widget("entry_num_pasos")
@@ -59,21 +60,57 @@ desea iniciar una nueva emulación?"):
                 return
             if self.timer_id:
                 self.stop_timer()
-
         self.ruta_tasks = self.select_tasks_dir()
         if self.ruta_tasks:
-            self.controller.del_scheduler()
+            self.create_sched(self.ruta_tasks)
+
+    def create_sched(self, ruta_tasks):
             try:
-                self.controller.new_scheduler(self.ruta_tasks)
-                self.clear_text()
-                self.running = True
-                self.controller.sched_step()
+                self.controller.new_scheduler(ruta_tasks)
             except NoTaskOrIdleDir, e:
                 print "Error al lanzar el planificador"
                 self.show_error("No se pudo inicializar el planificador con el \
-contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
+contenido del directorio o proceso seleccionado:\n<b>%s</b>" % e.message )
                 self.running = False
-    
+                return
+            self.clear_text()
+            self.running = True
+            self.controller.sched_step()
+                
+    def add_single_task(self, boton):
+        task_name = self.select_single_task()
+        print "Tarea:", task_name
+        if task_name:
+            if self.controller.has_sched():
+                self.controller.add_single_task(task_name)
+                self._update_all()
+            else:
+                print "create_sched(%s)" % task_name
+                self.create_sched(task_name)
+
+    def select_single_task(self):
+        file = gtk.FileChooserDialog("Selección de tarea",
+                                     self.eppliWindow, 
+                                     gtk.FILE_CHOOSER_ACTION_OPEN,
+                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+        file.set_select_multiple(False)
+
+        filtro =  gtk.FileFilter()
+        filtro.add_pattern("*.tsk")
+        filtro.set_name("Procesos de EPPLI")
+        file.set_filter(filtro)
+
+        respuesta = file.run()
+        if respuesta == gtk.RESPONSE_OK:
+            res = file.get_filename()
+            print "Seleccionada la tarea", res
+        elif respuesta == gtk.RESPONSE_CANCEL:
+            res = None
+            print "Ninguna tarea seleccionada."
+        file.destroy()
+        return res
+        
     def _update_all(self):
         """ Actualiza todos los datos en pantalla cada vez que se completa 
         una iteración del planificador. Esta función es llamada por el 
