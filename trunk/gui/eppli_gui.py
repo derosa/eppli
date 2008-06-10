@@ -439,7 +439,7 @@ Pauselo si desea avanzar por pasos.""")
     def show_about(self, boton):
         win = gtk.AboutDialog()
         win.set_comments("Emulador del Planificador de Procesos de Linux\n2.6.11")
-        win.set_program_name("EPPLI")
+        win.set_name("EPPLI")
         win.set_version("0.1")
         win.set_copyright("David Erosa García, 2008")
         win.set_authors(["David Erosa García"])
