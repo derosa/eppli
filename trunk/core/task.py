@@ -91,6 +91,8 @@ class task():
             self.flags = None
         
     def tick(self):
+        """Avanza la tarea en el tiempo.
+        Solo actualizamos la hora para saber si pasamos a estar activos."""
         self.update_state()
         # Solo actualizamos la hora para saber si pasamos a estar activos.
         # Si actualizara también en RUNNING, parecería que hemos tenido la CPU
@@ -99,11 +101,11 @@ class task():
             self.localtime+=1
         
     def task_timeslice(self):
+        """ Timeslice que corresponde al proceso"""
         # Los procesos FIFO no tienen timeslice, se ejecutan hasta que acaban 
         # o llega otro de mayor prioridad.
         if self.policy == policy["FIFO"]:
             return 0
-        
         if self.static_prio < 120:
             x = DEF_TIMESLICE*4
         else:
@@ -124,7 +126,7 @@ class task():
         return ret
     
     def interactive(self):
-        # Indica si la tarea es interactiva
+        """ Indica si la tarea es interactiva"""
         return self.prio <= (self.static_prio - self.delta())
     
     def interactive_sleep(self):
@@ -156,9 +158,9 @@ class task():
         return escala + INTERACTIVE_DELTA
     
     def recalc_task_prio(self, now):
-
+        """ Recalcula la prioridad dinámica del proceso"""
+        
         sleep_time = min(now - self.timestamp, MAX_SLEEP_AVG)
-
         if sleep_time:
             if self.activated == -1 and sleep_time > self.interactive_sleep():
                 self.sleep_avg = MAX_SLEEP_AVG - DEF_TIMESLICE
@@ -168,14 +170,10 @@ class task():
                     if self.sleep_avg >= self.interactive_sleep():
                         self.sleep_avg = self.interactive_sleep()
                         sleep_time = 0
-                
                 self.sleep_avg+=sleep_time
-                
                 if self.sleep_avg > MAX_SLEEP_AVG:
                     self.sleep_avg = MAX_SLEEP_AVG
-        
         self.prio = self.effective_prio()
-                   
 
     def timeslice_granularity(self):
         #135#define TIMESLICE_GRANULARITY(p) (GRANULARITY * \
@@ -184,6 +182,7 @@ class task():
         return ret
 
     def deactivate(self):
+        """ Desactiva la tarea y la saca de su prio_array"""
         self.run_list.nr_running -= 1
         print "%s.deactivate()" % self.name
         self.array.del_task(self)

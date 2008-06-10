@@ -30,7 +30,7 @@ class prio_array():
         
     
     def del_task(self, t):
-        idx = None
+
         try:
             idx = self.queue[t.prio].index(t)
         except:
