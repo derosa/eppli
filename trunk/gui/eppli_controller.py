@@ -32,7 +32,8 @@ class eppli_controller():
         self.del_scheduler()
         self.sched = scheduler(ruta_tasks)
         self.done = False
-        self.sched_step()
+        #Actualiza la vista
+        self.view._update_all()
     
     def del_scheduler(self):
         """ Elimina los datos del scheduler."""
@@ -79,8 +80,6 @@ class eppli_controller():
             procs = self.sched.do_ticks()
             # Pide a la vista que actualize los datos.
             self.view._update_all()
-            if gtk.events_pending():
-                gtk.main_iteration()
             if not procs:
                 # Ya no nos estamos ejecutando por pasos
                 self.stepping=False
@@ -149,7 +148,9 @@ class eppli_controller():
     
     def _get_bitmap(self, name):
         """ Devuelve el bitmap del array solicitado."""
-        res=[]
+        res = []
+        if not self.has_sched():
+            return res
         if name == "expired":
             #print "GUI - Obteniendo bitmap de expired"
             bitmap = long(self.sched.cpu.rq.expired.bitmap)

@@ -134,6 +134,9 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         
         self.__update_bitmap_active()
         self.__update_bitmap_expired()
+        if gtk.events_pending():
+            gtk.main_iteration()
+
         
     def __update_stats_current(self):
         """ Actualiza las estadísticas del proceso current."""
