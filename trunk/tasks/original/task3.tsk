@@ -1,4 +1,4 @@
-NAME=task3_de_la_muerte
+NAME=Proceso FIFO 1
 CLASS=FIFO
 PRIO=50
 0=RUNNING
