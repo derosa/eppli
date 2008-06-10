@@ -90,7 +90,7 @@ class eppli_controller():
                 self.view.toggle_run_button(start_emu=False)
                 # Devuelvo False por si nos ejecutamos con el temporizados, 
                 # para cancelarlo.
-                self.view.show_info("La emulación ha terminado con éxito.")
+                self.view.show_info("La emulación ha terminado.")
                 return False
             sleep(0.1/HZ)
         self.stepping=False

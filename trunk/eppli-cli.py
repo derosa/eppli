@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from sys import argv
+
 from core.sched import scheduler
 
 import pycallgraph
