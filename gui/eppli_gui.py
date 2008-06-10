@@ -60,11 +60,11 @@ desea iniciar una nueva emulación?"):
             return
         print "Iniciando nueva emulación"
         if self.running:
-            if self.timer_id:
-                self.stop_timer()
+            self.toggle_run_button(start_emu=False)
             self.controller.del_scheduler()
+            self.expose_event(None, None)
             self.clear_text()
-            self.running = True
+            self.running = False
 
     def new_tasks_dir(self, boton):
         ruta_tasks = self.select_tasks_dir()
@@ -78,7 +78,8 @@ desea iniciar una nueva emulación?"):
 contenido del directorio seleccionado:\n<b>%s</b>" % e.message )
                 self.running = False
                 return
-            self.running = True            
+            self.running = True    
+            self.controller.done = False        
             self._update_all()
 
     def add_single_task(self, boton):
@@ -94,6 +95,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
                 self.running = False
                 return
             self.running = True
+            self.controller.done = False
             self._update_all()
 
     def select_single_task(self):
@@ -119,7 +121,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         file.destroy()
         return res
         
-    def _update_all(self):
+    def _update_all(self, include_trees = False):
         """ Actualiza todos los datos en pantalla cada vez que se completa 
         una iteración del planificador. Esta función es llamada por el 
         controlador."""
@@ -128,7 +130,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         self.__update_stats_selected()
         self.__update_stats_scheduler()
 
-        if self.controller.get_did_sched():
+        if self.controller.get_did_sched() or include_trees:
             self.__update_active_tree()
             self.__update_expired_tree()
         
@@ -157,7 +159,10 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         for k in procmap.keys():
             name ="text_%s_%s" % (prefix, k)
             cadena = str(procmap[k])
-            self.widgets[name].set_label(cadena) 
+            try:
+                self.widgets[name].set_label(cadena)
+            except KeyError:
+                print "Error al establecer %s a %s" % (name, cadena) 
                 
     def __update_stats_scheduler(self):
         """ Actualiza las estadísticas del planificador."""
@@ -243,14 +248,12 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         
     
     def expose_event(self, area, evento):
-        if self.running:
-            self.__update_bitmap_active()
-            self.__update_bitmap_expired()
+        self.__update_bitmap_active()
+        self.__update_bitmap_expired()
 
     def check_sched_init(self):
         if not self.running:
-            self.show_error("""No se ha inicializado correctamente el emulador.\n
-Por favor, seleccione un directorio con tareas.""")
+            self.show_error("""¡El emulador no tiene tareas! Añada alguna.""")
 
         return self.running
         
@@ -260,25 +263,17 @@ Por favor, seleccione un directorio con tareas.""")
         
         if not self.check_sched_init():
             return
-        
         if self.controller.stepping:
             self.show_error("""¡El emulador ya está en funcionamiento en modo de pasos!\n
 Espere a que finalicen los pasos solicitados.""")
             return
-        
         if self.boton_running:
-            boton.set_label("Iniciar")
-            boton.set_stock_id("gtk-media-play")
-            print "GUI - Eliminando timer para sched_step"
-            # Pausa la ejecución
-            self.stop_timer()
+            self.toggle_run_button(start_emu=False)
         else:
             if self.controller.done:
                 self.show_info("La emulación ha terminado.")
                 return
-            boton.set_label("Pausar")
-            boton.set_stock_id("gtk-media-pause")
-            self.start_timer()
+            self.toggle_run_button(start_emu=True)
             
     def run_steps(self, boton):
         if not self.check_sched_init():
@@ -337,7 +332,7 @@ Pauselo si desea avanzar por pasos.""")
         # Objetos con los datos de current y selected
         proc = ["current", "selected"]
         atr = ["name", "state", "timeslice", "prio", "static_prio", "sleep_avg",
-               "last_ran", "array", "class"]
+               "last_ran", "array", "class", "interactive"]
         for p in proc:
             for a in atr:
                 name = "text_%s_%s" % (p, a)
@@ -359,6 +354,9 @@ Pauselo si desea avanzar por pasos.""")
         res["tree_view_expired"] = self.appXML.get_widget("tree_view_expired")
         res["tree_store_active"] = gtk.TreeStore(str)
         res["tree_store_expired"] = gtk.TreeStore(str)
+        
+        res["boton_start_pause"] = self.appXML.get_widget("boton_start_pause")
+        
         return res
     
     def init_trees(self):
@@ -451,6 +449,27 @@ Pauselo si desea avanzar por pasos.""")
     def show_stats(self, boton):
         """ Muestra el cuadro de la gráfica estadísticas"""
         self.controller.set_graph(boton.get_active())
+
+    def toggle_run_button(self, start_emu):
+        """ Alterna el estado del botón de ejecución/pausa
+        True - Inicia la emulación.
+        False - Detiene la emulación"""
+        boton = self.widgets["boton_start_pause"]
+        if start_emu:
+            # Inicia el timer del emulador y pone el botón en modo "pausa"
+            self.start_timer()
+            boton.set_label("Pausar")
+            boton.set_stock_id("gtk-media-pause")
+        else:
+            # Detiene el timer del emulador y pone el boton en modo "play"
+            if self.timer_id:
+                self.stop_timer()
+            boton.set_label("Iniciar")
+            boton.set_stock_id("gtk-media-play")
+            print "GUI - Eliminando timer para sched_step"
+            # Pausa la ejecución
+
+
         
 if __name__ == "__main__":
     e = eppli_gui()
