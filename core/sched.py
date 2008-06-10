@@ -65,6 +65,8 @@ class scheduler():
         self.do_fork(tmp)
 
     def do_fork(self, task):
+        """Inicializa una tarea recién creada a ciertos valores, 
+        la añade al prio_array active y recalcula su timeslice."""
         task.state = state["RUNNING"]
         
         task.run_list = self.cpu.rq
@@ -76,14 +78,13 @@ class scheduler():
         task.time_slice = task.task_timeslice()
         
     def update_n_check_tasks(self):
-        #  Por cada tarea, comprueba si su nuevo estado según
-        #  la línea temporal es != durmiente. Si es así se llama a
-        #  try_to_wake_up. (Con esto se emula una waitqueue).
+        """ Por cada tarea, comprueba si su nuevo estado según
+        la línea temporal es != durmiente. Si es así se llama a
+        try_to_wake_up. (Con esto se emula una waitqueue)."""
 
         # current se incrementa manualmente para evitar que tareas en estado running
         # avancen su timeline sin tener realmente la CPU. Ver task.tick() 
         self.current.localtime+=1
-
         for t in self.tasks:
             #print "Comprobando tarea: ", t.name 
             t.tick()
@@ -91,14 +92,12 @@ class scheduler():
             if t.state != state["RUNNING"] and t.oldstate == state["RUNNING"]  and t.prio == self.cpu.rq.active:
                 self.NEED_RESCHED = True
                 continue
-            
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
                 print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
                 #print "Tiempo en ejecución:", t.localtime
                 #print "Tiempo de ejecución:", self.cpu.clock
                 continue
-            
             if t.flags == NEED_RESCHED and t.state != state["EXIT"]:
                 self.try_to_wake_up(t)
 
@@ -106,6 +105,8 @@ class scheduler():
             self.NEED_RESCHED = True
         
     def scheduler_tick(self):
+        """Se ejecuta en cada tick para comprobar los estados y 
+        actualizar la prioridad de la tarea actual (current)"""
         # print "Scheduler_tick"
         cpu = self.cpu  
         rq = cpu.rq
@@ -114,7 +115,7 @@ class scheduler():
         
         if self.current == cpu.idle_task:
             return
-        
+
         if p.array != cpu.rq.active:
             self.NEED_RESCHED = True
             return
@@ -144,7 +145,7 @@ class scheduler():
             if rq.expired_timestamp == 0:
                 rq.expired_timestamp = cpu.clock
             # si no es interactiva o hay cosas sin ejecutarse mucho tiempo,
-            # a la cola de expirados
+            # pasa a la cola de expirados
             if not p.interactive() or rq.expired_starving():
                 #print "No interactiva o starving"
                 rq.expired.add_task(p)
@@ -168,6 +169,7 @@ class scheduler():
             
                 
     def try_to_wake_up(self, t):
+        """ Intenta levantar una tarea"""
         c = self.cpu
         rq = self.cpu.rq
         if t.array:
@@ -185,16 +187,21 @@ class scheduler():
         
         
     def activate_task(self, t):
+        """ Activa una tarea recalculando su prioridad dinámica y 
+        reinsertándola en el prio_array activo"""
+        
         t.recalc_task_prio(self.cpu.clock)
         if not t.activated:
             t.activated = 2
         t.timestamp = self.cpu.clock
-        
-        # __activate_task
+        # Lo siguiente es __activate_task()
         self.cpu.rq.nr_running += 1
         self.cpu.rq.active.add_task(t)
         
     def schedule(self):
+        """Función principal del planificador, que selecciona la siguiente
+        tarea a ejecutar"""
+        
         prev = self.current
         rq = self.cpu.rq
         now = self.cpu.clock
@@ -271,6 +278,7 @@ class scheduler():
 
         
     def do_ticks(self, step=1):
+        """ Ejecuta step veces el bucle de planificación."""
         # print "Avanzando %d tick(s)"% step
         while step:
             step-=1
@@ -292,6 +300,7 @@ class scheduler():
         return len(self.tasks)
                     
     def run(self):
+        """ Inicia la planificación hasta que no quedan procesos ejecutables"""
         print "Scheduler en ejecución"
         while len(self.tasks):
             if self.cpu.running:
