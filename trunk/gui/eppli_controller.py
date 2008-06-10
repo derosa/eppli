@@ -32,8 +32,6 @@ class eppli_controller():
         self.del_scheduler()
         self.sched = scheduler(ruta_tasks)
         self.done = False
-        #Actualiza la vista
-        self.view._update_all()
     
     def del_scheduler(self):
         """ Elimina los datos del scheduler."""
@@ -41,6 +39,7 @@ class eppli_controller():
             del self.sched
             self.sched = None
             self.stepping = False
+            self.done = True
      
     def has_sched(self):
         return (self.sched != None)
@@ -54,6 +53,7 @@ class eppli_controller():
             self.new_scheduler(tareas)
         else:
             self.sched.add_tasks(tareas)
+        self.view._update_all(True)
     
     def add_single_task(self, task_name):
         # No se pueden añadir tareas sin un scheduler creado.
@@ -63,6 +63,7 @@ class eppli_controller():
             self.new_scheduler(t)
         else:
             self.sched.add_single_task(task_name)
+        self.view._update_all(True)
 
     def get_did_sched(self):
         return self.sched.did_sched
@@ -85,13 +86,13 @@ class eppli_controller():
                 self.stepping=False
                 # Emulación finalizada
                 self.done=True
+                # Pongo el boton de inicio/pausa en el estado inicial
+                self.view.toggle_run_button(start_emu=False)
                 # Devuelvo False por si nos ejecutamos con el temporizados, 
                 # para cancelarlo.
                 self.view.show_info("La emulación ha terminado con éxito.")
                 return False
-
             sleep(0.1/HZ)
-            
         self.stepping=False
         return True
     
@@ -114,6 +115,8 @@ class eppli_controller():
         res["last_ran"] = tarea.last_ran
         res["array"] = tarea.array.name
         res["class"] = self.policy_r[tarea.policy]
+        res["interactive"] = (tarea.interactive() and "<b>Interactiva</b>") or ("No interactiva")
+        #print "Datos de la tarea:\n%s" % res
         
         # Los procesos FIFO ignoran el timeslice y puede llegar a ser negativo.
         # Para evitar confusiones en el GUI, se muestra el siguiente mensaje
@@ -175,6 +178,7 @@ class eppli_controller():
         elif name == "expired":
             data = self.sched.cpu.rq.expired.queue
         
+        #print "GUI - get_tree_data: %s" % data
         for k in data.keys():
             res[k]=[]
             for t in data[k]:

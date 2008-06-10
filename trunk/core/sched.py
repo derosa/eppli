@@ -71,7 +71,9 @@ class scheduler():
         
         task.run_list = self.cpu.rq
         task.sleep_avg = 0
-        task.prio = task.effective_prio()
+        if task.policy ==policy["NORMAL"]:
+            print "do_fork: Recalculando prioridad dinámica de %s(%d)" % (task.name, task.policy) 
+            task.prio = task.effective_prio()
         self.cpu.rq.active.add_task(task)
         task.array= self.cpu.rq.active
         self.cpu.rq.nr_running += 1
@@ -190,7 +192,8 @@ class scheduler():
         """ Activa una tarea recalculando su prioridad dinámica y 
         reinsertándola en el prio_array activo"""
         
-        t.recalc_task_prio(self.cpu.clock)
+        if t.policy == policy["NORMAL"]:
+            t.recalc_task_prio(self.cpu.clock)
         if not t.activated:
             t.activated = 2
         t.timestamp = self.cpu.clock

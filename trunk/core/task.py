@@ -116,6 +116,8 @@ class task():
     
     def effective_prio(self):
         # Devuelve la prioridad efectiva.
+        if self.policy != policy["NORMAL"]:
+            return self.static_prio
         bonus = self.current_bonus() - MAX_BONUS/2
         res = self.static_prio - bonus
         res = max(MAX_RT_PRIO, min(res, MAX_PRIO-1))
