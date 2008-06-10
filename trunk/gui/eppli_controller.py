@@ -36,7 +36,17 @@ class eppli_controller():
         if self.sched:
             del self.sched
             self.sched = None
-    
+     
+    def has_sched(self):
+        return (self.sched != None)
+
+    def add_single_task(self, task_name):
+        # No se pueden añadir tareas sin un scheduler creado.
+        if not self.sched:
+            self.new_scheduler(task_name)
+        else:
+            self.sched.add_single_task(task_name)
+
     def get_did_sched(self):
         return self.sched.did_sched
     
