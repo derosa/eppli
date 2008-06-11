@@ -49,6 +49,11 @@ class eppli_controller():
                 if dir == ruta:                    
                     tareas = [os.path.join(ruta, d) for d in files if d.endswith(".tsk")]
                     print "new_task_dir: tareas actuales:", tareas
+        
+        if not tareas:
+            error = "'%s' no contiene ficheros con procesos." % ruta
+            raise NoTaskOrIdleDir(error)
+        
         if not self.sched:
             self.new_scheduler(tareas)
         else:
@@ -90,7 +95,7 @@ class eppli_controller():
                 self.view.toggle_run_button(start_emu=False)
                 # Devuelvo False por si nos ejecutamos con el temporizados, 
                 # para cancelarlo.
-                self.view.show_info("La emulación ha terminado.")
+                self.view.show_info("La emulación ha finalizado.")
                 return False
             sleep(0.1/HZ)
         self.stepping=False

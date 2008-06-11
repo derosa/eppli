@@ -55,7 +55,7 @@ class eppli_gui():
     def new_emulation(self, widget):
         """ Inicia una nueva emulación a partir de un directorio con procesos
         a emular"""
-        if not self.show_question("La emulación actual se perderá, ¿Seguro que \
+        if not self.show_question("La emulación actual se perderá.\n¿Seguro que \
 desea iniciar una nueva emulación?"):
             return
         print "Iniciando nueva emulación"
@@ -100,7 +100,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
 
     def select_single_task(self):
         res = None
-        file = gtk.FileChooserDialog("Selección de tarea",
+        file = gtk.FileChooserDialog("Selección de proceso",
                                      self.eppliWindow, 
                                      gtk.FILE_CHOOSER_ACTION_OPEN,
                                      buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -115,7 +115,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
         respuesta = file.run()
         if respuesta == gtk.RESPONSE_OK:
             res = file.get_filename()
-            print "Seleccionada la tarea", res
+            print "Seleccionado el proceso", res
         elif respuesta == gtk.RESPONSE_CANCEL:
             print "Ninguna tarea seleccionada."
         file.destroy()
@@ -253,7 +253,7 @@ proceso seleccionado:\n<b>%s</b>" % e.message )
 
     def check_sched_init(self):
         if not self.running:
-            self.show_error("""¡El emulador no tiene tareas! Añada alguna.""")
+            self.show_error("""¡El emulador no tiene procesos! Añada alguno.""")
 
         return self.running
         
@@ -298,7 +298,7 @@ Pauselo si desea avanzar por pasos.""")
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
         contiene las tareas a emular."""
         res = None
-        file = gtk.FileChooserDialog("Selección de carpeta de tareas",
+        file = gtk.FileChooserDialog("Selección de carpeta de procesos",
                                      self.eppliWindow, 
                                      gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                      buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
