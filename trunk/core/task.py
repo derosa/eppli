@@ -49,6 +49,8 @@ class task():
             self.policy = policy["NORMAL"]
             self.time_slice=-1
             self.timeline[0]=state["RUNNING"]
+            
+        print "Datos de la tarea: %s" % self
 
     def __str__(self):
         """ Representación en texto de una tarea"""
@@ -68,6 +70,8 @@ class task():
         
         for linea in fsource:
             tmp = linea.split("=")
+            if tmp[0].startswith("#"):
+                continue
             if tmp[0] == "NAME":
                 self.name = tmp[1].strip()
             elif tmp[0] == "PRIO":
@@ -79,6 +83,13 @@ class task():
                 when = int(tmp[0])
                 what = tmp[1].strip()
                 self.timeline[when] = what
+                
+        # Para evitar que el proceso se quede colgado, se añade un estado RUNNING
+        # justo antes de EXIT
+        for when,what in self.timeline.items():
+            if what == "EXIT":
+                self.timeline[when] = "RUNNING"
+                self.timeline[when + 1] = what
 
     def update_state(self):
         """ Comprueba el estado del proceso y lo actualiza si ha cambiado"""
@@ -186,7 +197,7 @@ class task():
     def deactivate(self):
         """ Desactiva la tarea y la saca de su prio_array"""
         self.run_list.nr_running -= 1
-        print "%s.deactivate()" % self.name
+        print "%s.deactivate()" % (self.name)
         self.array.del_task(self)
         self.array = None
                 

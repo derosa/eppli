@@ -30,14 +30,12 @@ class prio_array():
         
     
     def del_task(self, t):
-
         try:
             idx = self.queue[t.prio].index(t)
         except:
-            #print "El proceso %s (%d) no existe en la prio_array %s!!!" % (t.name, t.prio, self.name)
-            #print " contenido de la queue: ", self.queue
+            print "El proceso %s (%d) no existe en la prio_array %s!!!" % (t.name, t.prio, self.name)
+            print " contenido de la queue: ", self.queue
             return
-
         print "prio_array %s :: Eliminando tarea: %s[%d]" % (self.name, t.name, t.prio)
         self.nr_active-=1
         del self.queue[t.prio][idx]

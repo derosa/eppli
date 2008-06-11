@@ -273,6 +273,7 @@ class scheduler():
             rq.nr_switches+=1
             rq.curr = next
             if prev.state == state["EXIT"]:
+                print "Eliminando %s de la lista de procesos global" % prev.name
                 self.tasks.remove(prev)
                 del prev
 
