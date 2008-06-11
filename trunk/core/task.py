@@ -85,11 +85,12 @@ class task():
                 self.timeline[when] = what
                 
         # Para evitar que el proceso se quede colgado, se añade un estado RUNNING
-        # justo antes de EXIT
+        # justo antes de EXIT y al comienzo del proceso
         for when,what in self.timeline.items():
             if what == "EXIT":
                 self.timeline[when] = "RUNNING"
                 self.timeline[when + 1] = what
+        self.timeline[0] = "RUNNING"
 
     def update_state(self):
         """ Comprueba el estado del proceso y lo actualiza si ha cambiado"""
