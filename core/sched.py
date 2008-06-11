@@ -89,19 +89,18 @@ class scheduler():
         self.current.localtime+=1
         for t in self.tasks:
             #print "Comprobando tarea: ", t.name 
-            t.tick()
             # El proceso ha dejado de estr en ejecución, se necesita llamar al scheduler
             if t.state != state["RUNNING"] and t.oldstate == state["RUNNING"]  and t.prio == self.cpu.rq.active:
                 self.NEED_RESCHED = True
-                continue
             if t.state == state["EXIT"]:
                 self.NEED_RESCHED = True
                 print "[%d] La tarea %s ha terminado!" % (self.cpu.clock, t.name)
                 #print "Tiempo en ejecución:", t.localtime
                 #print "Tiempo de ejecución:", self.cpu.clock
-                continue
             if t.flags == NEED_RESCHED and t.state != state["EXIT"]:
                 self.try_to_wake_up(t)
+            t.tick()
+
 
         if self.current.state != state["RUNNING"]:
             self.NEED_RESCHED = True
