@@ -18,23 +18,29 @@ class sched_stats():
     def update_task(self, name, data):
         """Actualiza los datos de un proceso"""
         # data es del estilo [ticks,prio] o [ticks, tslice] o [ticks,completed])
+        #print "Actualizando datos: %s:%s" %(name, data)
         try:
             self.tasks[name].append(data)
+            #print " *** Acumulado de %s: %s" %(name, self.tasks[name])
         except KeyError:
+            #print "*** Creando la primera key de %s" % name
             self.tasks[name] = []
             self.tasks[name].append(data)
+            #print " *** Primer dato de %s: %s" %(name, self.tasks[name])
         
     def get_task_data(self, name):
         try:
-            res = self.tasks[name]
+            res = [ x for x in self.tasks[name]]
         except KeyError:
+            #print "******* MEEEEEEEEEEEC ********* No hay datos de la tarea %s" % name
             res = None
+        #print "Devolviendo datos de %s: %s" %(name, res)
         return res
     
     def get_sched_data(self):
         # Hay que devolver los datos formateados para el uso en eppli_graph:
         # devolver una lista de listas
-        res = [[x,self.sched_switches[x]] for x in self.sched_switches.keys()]
+        res = [[x, self.sched_switches[x]] for x in self.sched_switches.keys()]
         return res
     
     

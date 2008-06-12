@@ -122,7 +122,7 @@ class task():
             x = DEF_TIMESLICE*4
         else:
             x = DEF_TIMESLICE
-        ret = max ( x*(MAX_PRIO-self.prio) / (MAX_USER_PRIO/2), MIN_TIMESLICE)
+        ret = max ( x*(MAX_PRIO-self.static_prio) / (MAX_USER_PRIO/2), MIN_TIMESLICE)
         #print "Nuevo timeslice de %s: %d" % (self.name, ret)
         return ret
     

@@ -12,6 +12,7 @@ from core.const import HZ
 from core.const import MAX_RT_PRIO
 
 from gui.stats import dialogo_grafica
+from gui.eppli_graph import eppli_graph_stats
 
 from core.eppli_exceptions import *
 
@@ -23,9 +24,15 @@ class eppli_gui():
         self.SCHED_TIMER = 1.0/HZ
         self.timer_id = None
         self.selected_proc = None
+        self.graph_type = "TSLICE"
+        self.graph_description={"TSLICE": "Timeslice disponible",
+                                "PRIO": "Prioridad dinámica",
+                                "PERCENT": "Porcentaje completado",
+                                "SWITCHES": "Cambios de contexto"}
         
         self.eventos = { "on_mainWindow_destroy": gtk.main_quit,
                         "on_boton_show_stats_toggled": self.show_stats,
+                        "on_combo_procesos_changed": self.change_stat_graph,
                         "on_boton_nuevo_clicked": self.new_emulation,
                         "on_boton_nuevas_tasks_dir_clicked": self.new_tasks_dir,
                         "on_boton_nueva_task_clicked": self.add_single_task,
@@ -37,6 +44,7 @@ class eppli_gui():
                         "on_drawExpired_expose_event": self.expose_event}
                 
         self.appXML = gtk.glade.XML("gui/eppli-glade3.glade")
+        
         self.appXML.signal_autoconnect(self.eventos)
         self.eppliWindow = self.appXML.get_widget("mainWindow")
         self.text_steps = self.appXML.get_widget("entry_num_pasos")
@@ -59,6 +67,11 @@ class eppli_gui():
 desea iniciar una nueva emulación?"):
             return
         print "Iniciando nueva emulación"
+        
+        if self.widgets["boton_graph"].get_active():
+            print "Boton pulsado, fuera!"
+            self.widgets["boton_graph"].set_active(False)
+
         if self.running:
             self.toggle_run_button(start_emu=False)
             self.controller.del_scheduler()
@@ -279,6 +292,10 @@ Espere a que finalicen los pasos solicitados.""")
         if not self.check_sched_init():
             return
         
+        #Ya hemos pulsado el botón o enter en la cajita de texto
+        if self.controller.stepping:
+            return
+        
         if self.timer_id:
             self.show_error("""¡El emulador ya está en funcionamiento!\n
 Pauselo si desea avanzar por pasos.""")
@@ -290,9 +307,9 @@ Pauselo si desea avanzar por pasos.""")
             return
 
         if self.controller.done:
-            self.show_info("La emulación a terminado.")
+            self.show_info("La emulación ha terminado.")
 
-        self.controller.sched_step(steps)
+        self.controller.sched_step(steps, True)
 
     def select_tasks_dir(self):
         """ Abre un cuadro de diálogo para seleccionar el directorio que 
@@ -350,12 +367,31 @@ Pauselo si desea avanzar por pasos.""")
         res["bitmapActiveDraw"] = self.appXML.get_widget("drawActive")
         res["bitmapExpiredDraw"] = self.appXML.get_widget("drawExpired")
         
+        res["bitmapActiveDraw"].connect("expose-event", self.expose_event)
+        res["bitmapExpiredDraw"].connect("expose-event", self.expose_event)
+        
         res["tree_view_active"] = self.appXML.get_widget("tree_view_active")
         res["tree_view_expired"] = self.appXML.get_widget("tree_view_expired")
         res["tree_store_active"] = gtk.TreeStore(str)
         res["tree_store_expired"] = gtk.TreeStore(str)
         
         res["boton_start_pause"] = self.appXML.get_widget("boton_start_pause")
+        
+        res["boton_graph"] =self.appXML.get_widget("boton_show_stats")
+        res["window_stats"] = self.appXML.get_widget("window_stats")
+        res["combo_procesos"] = self.appXML.get_widget("combo_procesos")
+        res["image_stats"] = self.appXML.get_widget("image_stats_graph")
+        
+        res["radio_prio"] = self.appXML.get_widget("radio_prio")
+        res["radio_tslice"] = self.appXML.get_widget("radio_tslice")
+        res["radio_percent"] = self.appXML.get_widget("radio_percent")
+        res["radio_sched"] = self.appXML.get_widget("radio_scheduler")
+        
+        res["radio_prio"].connect("toggled", self.select_graph_type, "PRIO")
+        res["radio_tslice"].connect("toggled", self.select_graph_type, "TSLICE")
+        res["radio_percent"].connect("toggled", self.select_graph_type, "PERCENT")
+        res["radio_sched"].connect("toggled", self.select_graph_type, "SWITCHES")
+        
         
         return res
     
@@ -445,10 +481,6 @@ Pauselo si desea avanzar por pasos.""")
         win.set_authors(["David Erosa García"])
         win.run()
         win.destroy()
-    
-    def show_stats(self, boton):
-        """ Muestra el cuadro de la gráfica estadísticas"""
-        self.controller.set_graph(boton.get_active())
 
     def toggle_run_button(self, start_emu):
         """ Alterna el estado del botón de ejecución/pausa
@@ -469,7 +501,54 @@ Pauselo si desea avanzar por pasos.""")
             print "GUI - Eliminando timer para sched_step"
             # Pausa la ejecución
 
+    def show_stats(self, boton):
+        """ Muestra el cuadro de la gráfica estadísticas"""        
+        if not self.controller.has_sched():
+            return
+        win = self.widgets["window_stats"]
+        if boton.get_active():
+            combo = self.widgets["combo_procesos"]
+            combo.get_model().clear()
+            for t in self.controller.sched.stats["TSLICE"].tasks:
+                combo.append_text(t)
+            win.show()
+        else:
+            self.hide_stats()
+            
+    def hide_stats(self):
+        """Oculta la ventana de gráficas estadísticas"""
+        self.widgets["window_stats"].hide()
+        
+    def change_stat_graph(self, combo):
+        """ Actualiza los datos de la gráfica"""
+        if self.graph_type=="SWITCHES":
+            self.render_stats()
+            return
+            
+        activo = combo.get_active_text()
+        if not activo: 
+            return
+        else:
+            self.render_stats(activo)
+            
+    def render_stats(self, proceso= None):
+        if not proceso:
+            datos = self.controller.get_sched_stat_data()
+        else:
+            datos = self.controller.get_task_stat_data(self.graph_type, proceso)
+        #print "Representando estadísticas: %s" % datos
+        egs = eppli_graph_stats()
+        egs.set_axis_title("Ticks", self.graph_description[self.graph_type])
+        self.widgets["image_stats"].set_from_pixbuf((egs.generate_graph(datos)))
 
+        
+    def select_graph_type(self, radio, dato):
+        
+        print "Radio: %s: %s" % (dato, radio.get_active())
+        if radio.get_active():
+            self.graph_type = dato
+            print "Seleccionado: %s" % self.graph_type
+        self.change_stat_graph(self.widgets["combo_procesos"])    
         
 if __name__ == "__main__":
     e = eppli_gui()
