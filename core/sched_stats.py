@@ -13,8 +13,9 @@ class sched_stats():
         
     def update_sched(self, tick, switches):
         """Actualiza los datos del scheduler"""
+        print "sched_stat actualiando scheduler data: %d, %d" % (tick, switches)
         self.sched_switches[tick] = switches
-        
+
     def update_task(self, name, data):
         """Actualiza los datos de un proceso"""
         # data es del estilo [ticks,prio] o [ticks, tslice] o [ticks,completed])
@@ -40,7 +41,12 @@ class sched_stats():
     def get_sched_data(self):
         # Hay que devolver los datos formateados para el uso en eppli_graph:
         # devolver una lista de listas
-        res = [[x, self.sched_switches[x]] for x in self.sched_switches.keys()]
+        # Hay que ordenar la salida para que no se escogorcie la gráfica (pychar no ordena 
+        # los datos de entrada...)
+        keys = self.sched_switches.keys()
+        keys.sort()
+        res = [[x, self.sched_switches[x]] for x in keys]
+        #print "Se devuelven los datos de sched: %s" % res
         return res
     
     

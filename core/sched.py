@@ -37,6 +37,7 @@ class scheduler():
         tick = self.cpu.clock
         self.stats["SWITCHES"].update_sched(tick, 
                                             self.cpu.rq.nr_switches)
+        #print "Actualizando switches: %d, %d" %(tick, self.cpu.rq.nr_switches)
 
         for t in self.tasks:
             prioridad = t.prio
