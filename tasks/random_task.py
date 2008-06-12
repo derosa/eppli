@@ -3,7 +3,7 @@
 
 from random import randrange
 
-### Genera tareas aleatoriamente
+### Genera tareas aleatorias
 
 state = {0: "INTERRUPTIBLE", 1: "UNINTERRUPTIBLE", 2: "RUNNING", 3: "EXIT"}
 salida={}
