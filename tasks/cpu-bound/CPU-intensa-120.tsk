@@ -1,6 +1,6 @@
-# Uso intenso de CPU
-NAME=Solo CPU 100
+# Proceso que solo usa la CPU, nada de IO
+NAME=Solo CPU 120
 CLASS=NORMAL
-PRIO=100
-0=RUNNING
+PRIO=120
+0=RUNNING 
 500=EXIT
