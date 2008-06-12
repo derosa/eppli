@@ -1,4 +1,4 @@
-NAME=Proceso baja prio 2
+NAME=Proceso Normal 139
 CLASS=NORMAL
 PRIO=139
 0=RUNNING 

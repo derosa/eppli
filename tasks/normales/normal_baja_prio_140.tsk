@@ -1,4 +1,4 @@
-NAME=Tarea baja static prio
+NAME=Normal baja prio 140
 CLASS=NORMAL
 PRIO=140
 0=RUNNING
