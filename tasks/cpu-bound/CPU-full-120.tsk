@@ -1,4 +1,5 @@
-NAME=CPU intensa
+# Proceso que solo usa la CPU, nada de IO
+NAME=CPU Full 120
 CLASS=NORMAL
 PRIO=120
 0=RUNNING 
