@@ -29,6 +29,7 @@ class eppli_graph_stats():
     
     def generate_graph(self, datos_proc):
         """ Devuelve un pixbuf a partir de los datos para la gráfica"""
+	#print "Datos a procesar: %s" % datos_proc
         # Buffer donde generar el gráfico
         tmp_data = StringIO.StringIO()
         
