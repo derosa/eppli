@@ -1,0 +1,11 @@
+Para ejecutar EPPLI en una distribución linux son necesarios los 
+paquetes:
+
+* python (>=2.5.2)
+* pygtk (>= 2.12.1)
+* gtk (>=2.12.9)
+* pychart (>=1.39)
+
+En distribuciones basadas en paquetes .deb pueden instalarse con:
+
+apt-get install python python-gtk2 python-pychart

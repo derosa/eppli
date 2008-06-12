@@ -1,0 +1,6 @@
+#Solo CPU a la mínima prioridad
+NAME=Solo CPU 139
+CLASS=NORMAL
+PRIO=139
+0=RUNNING 
+500=EXIT
