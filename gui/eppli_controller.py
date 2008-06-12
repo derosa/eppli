@@ -73,12 +73,12 @@ class eppli_controller():
     def get_did_sched(self):
         return self.sched.did_sched
     
-    def sched_step(self, steps=1):
+    def sched_step(self, steps=1, stepping=False):
         """ Avanza n pasos en el planificador y actualiza la vista."""
         if self.done:
             return
         # Indica que estamos ejecutándonos por el método de pasos
-        self.stepping=True
+        self.stepping=stepping
 
         while steps:
             steps-=1
@@ -199,5 +199,15 @@ class eppli_controller():
         """ Devuelve la lista de prioridades de la cola expired"""
         return self.get_tree_data("expired")
     
-    def get_stats_grafica(self):
-        return self.stats_grafica
+    def get_task_stat_data(self, type, name):
+        # De momento muestro la de current, luego ya se verá...
+        try:
+            #print "Devolviendo datos de %s sobre %s" % (name, type)
+            ret = self.sched.stats[type].get_task_data(name)
+        except KeyError:
+            ret = None
+        return ret
+    
+    def get_sched_stat_data(self):
+        return self.sched.stats["SWITCHES"].get_sched_data()
+        

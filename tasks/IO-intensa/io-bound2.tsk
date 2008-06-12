@@ -1,0 +1,9 @@
+#Lee mucho al principio y luego calcula algo
+NAME=IO-bound
+CLASS=NORMAL
+PRIO=120
+0=RUNNING
+1=INTERRUPTIBLE
+100=RUNNING
+101=INTERRUPTIBLE
+102=EXIT

@@ -8,10 +8,10 @@ import bitutils
 from const import *
 from eppli_exceptions import  *
 
+from sched_stats import sched_stats
+
 import os
 from time import sleep
-
-
 
 class scheduler():
     def __init__(self, ruta_procesos):
@@ -28,7 +28,33 @@ class scheduler():
         self.current = self.cpu.idle_task
         self.NEED_RESCHED = False
         self.did_sched = False # Para el GUI
+        self.stats = {"PRIO": sched_stats(),
+                      "TSLICE": sched_stats(),
+                      "PERCENT": sched_stats(),
+                      "SWITCHES": sched_stats() } # Para las estadísticaas
     
+    def update_stats(self):
+        tick = self.cpu.clock
+        self.stats["SWITCHES"].update_sched(tick, 
+                                            self.cpu.rq.nr_switches)
+
+        for t in self.tasks:
+            prioridad = t.prio
+            timeslice = t.task_timeslice()
+            max_tick = max([s for s in t.timeline.keys() ])
+            percent = t.localtime*100.0/(max_tick-1)
+        
+            print "Tarea %s:[tick %s],prio(%s), ts(%s) -> %s%%" % (t.name, 
+                                                                   tick, 
+                                                                   prioridad, 
+                                                                   timeslice, 
+                                                                   percent)
+            
+            self.stats["PRIO"].update_task(t.name, [tick, prioridad])
+            self.stats["TSLICE"].update_task(t.name, [tick,timeslice])
+            self.stats["PERCENT"].update_task(t.name, [tick, percent])
+            
+            
     def add_tasks(self, tareas):
         """ Añade todos los procesos de un directorio y crea un proceso idle"""
 ##        if not proc_dir.endswith(".tsk"):
@@ -289,6 +315,7 @@ class scheduler():
             self.scheduler_tick()
             clock = self.cpu.clock
             
+            
             # Para que el GUI sepa que se ha ejecutado schedule()
             self.did_sched = False
             
@@ -297,7 +324,7 @@ class scheduler():
                     self.NEED_RESCHED = False
                     self.did_sched = True
                     self.schedule()
-            
+                    self.update_stats()
             self.cpu.tick()
             
         return len(self.tasks)
