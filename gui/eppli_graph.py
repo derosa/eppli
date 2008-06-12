@@ -45,8 +45,8 @@ class eppli_graph_stats():
                     legend=None, 
                     y_range = (0.1, max_y*1.10),
                     x_range = (0.1, max_x*1.10),
-                    x_axis = axis.X(format="/12/H%s", label=self.xaxis),
-                    y_axis = axis.Y(format="/12/H%s", label=self.yaxis)) 
+                    x_axis = axis.X(format="/12/H%.2f", label=self.xaxis),
+                    y_axis = axis.Y(format="/12/H%.2f", label=self.yaxis)) 
         
         ar.add_plot(line_plot.T(data=datos_proc))
         ar.draw()
