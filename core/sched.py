@@ -187,8 +187,8 @@ class scheduler():
             p_t_tl = p.task_timeslice()
             p_granu = p.timeslice_granularity()
             if (p_interac and not ((p_t_tl - p.time_slice) 
-            % p_granu) and (p.time_slice >= p_granu) and
-            (p.array == rq.active)):
+                % p_granu) and (p.time_slice >= p_granu) and
+                (p.array == rq.active)):
                 #print "Troceando el timeslice de %s: %d" %(p.name, p.time_slice)
                 rq.active.del_task(p)
                 rq.active.add_task(p)
