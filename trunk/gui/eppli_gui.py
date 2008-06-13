@@ -11,7 +11,6 @@ from eppli_controller import eppli_controller
 from core.const import HZ
 from core.const import MAX_RT_PRIO
 
-from gui.stats import dialogo_grafica
 from gui.eppli_graph import eppli_graph_stats
 
 from core.eppli_exceptions import *
