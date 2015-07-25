@@ -1,0 +1,1 @@
+Este es mi TFC (trabajo final de carrera), y pretende emulador el planificador de procesos de algunas versiones del kernel linux usando python y pygtk para el GUI. Inicialmente se emularán las versiones 2.6.8.1 / 2.6.11 por ser las más significativas y mejor documentadas.
